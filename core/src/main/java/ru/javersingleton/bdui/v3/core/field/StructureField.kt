@@ -35,8 +35,6 @@ data class RawStructureField(
     override val fields: Map<String, Field?>
 ) : StructureField {
 
-    private val isResolvable: Boolean = getBoolean("_resolvable") ?: true
-
     override fun getString(fieldName: String): String? = getField(fieldName)?.toStringValue()
 
     override fun getBoolean(fieldName: String): Boolean? = getField(fieldName)?.toBooleanValue()
@@ -58,10 +56,6 @@ data class RawStructureField(
         RawStructureField(fields + structureField.fields)
 
     override fun resolve(source: FieldsHolder): Field {
-        if (!isResolvable) {
-            return ResolvedStructureField(this)
-        }
-
         val builder = StructureFieldBuilder(source)
         var checkableFields = fields
         while (checkableFields.isNotEmpty()) {

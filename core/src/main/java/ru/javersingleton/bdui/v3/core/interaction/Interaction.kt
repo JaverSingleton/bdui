@@ -9,35 +9,18 @@ interface InteractionProcessor {
 
 }
 
-data class Interaction(
-    val type: String,
-    val name: String,
-    val params: StructureField?,
-) {
+interface Interaction {
 
-    constructor(fieldsHolder: FieldsHolder): this(
-        type = fieldsHolder.extractType(),
-        name = fieldsHolder.extractName(),
-        params = fieldsHolder.getStructureField("params")
-    )
+    val type: String
 
-    companion object {
+    val name: String
 
-        private fun FieldsHolder.extractType(): String = when {
-            hasField("actionName") -> "action"
-            hasField("effectName") -> "effect"
-            hasField("eventName") -> "event"
-            else -> throw IllegalArgumentException()
-        }
-
-        private fun FieldsHolder.extractName() =
-            getString("${extractType()}Name")!!
-    }
+    val params: StructureField?
 
 }
 
 fun FieldsHolder.getInteraction(refName: String): Interaction? =
-    getStructureField(refName)?.let { Interaction(it) }
+    getField(refName) as Interaction?
 
 class CompositeInteractionFactory(
     private val actionFactories: Map<String, Action.Factory>,
