@@ -6,20 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import ru.javersingleton.bdui.v3.*
+import ru.javersingleton.bdui.v3.core.component.Template
+import ru.javersingleton.bdui.v3.core.component.getTemplate
 
 
 class BoxComponent : ViewComponent() {
 
-    override fun onBindView(state: State) {
+    override fun onRenderState(state: State) {
         // TODO Поддержать переинфлейтинг детей при смене состояния
     }
 
     override fun onCreateView(context: Context, emptyState: State): View =
         FrameLayout(context).apply {
-            addComponent(emptyState.getComponentBlueprint("child"))
+            addComponent(emptyState.getTemplate("child"))
         }
 
-    private fun FrameLayout.addComponent(blueprint: ComponentBlueprint?) {
+    private fun FrameLayout.addComponent(blueprint: Template?) {
         if (blueprint == null) {
             return
         }

@@ -2,10 +2,12 @@ package ru.javersingleton.bdui.v3
 
 import android.content.Context
 import android.view.View
+import ru.javersingleton.bdui.v3.core.component.RawTemplate
+import ru.javersingleton.bdui.v3.core.component.Template
 
 interface ComponentInflater {
 
-    fun inflateComponent(template: ComponentTemplate): Component
+    fun inflateComponent(template: RawTemplate): Component
 
     fun inflateComponent(name: String): Component
 
@@ -13,7 +15,7 @@ interface ComponentInflater {
 
 interface ViewComponentInflater : ComponentInflater {
 
-    override fun inflateComponent(template: ComponentTemplate): ViewComponent
+    override fun inflateComponent(template: RawTemplate): ViewComponent
 
     override fun inflateComponent(name: String): ViewComponent
 
@@ -35,7 +37,7 @@ interface Component {
 }
 
 abstract class ViewComponent(
-    private val defaultState: RawState = EmptyState
+    private val defaultState: RawState = RawState.EMPTY
 ) : Component {
 
     private lateinit var _view: Lazy<View>
@@ -57,11 +59,11 @@ abstract class ViewComponent(
     }
 
     override fun render(statePatch: StatePatch) {
-        onBindView(defaultState.applyPatch(statePatch).resolve())
+        onRenderState(defaultState.applyPatch(statePatch).resolve())
     }
 
-    protected fun inflateChild(blueprint: ComponentBlueprint): ViewComponent =
-        inflateChild(blueprint.name, blueprint.statePatch)
+    protected fun inflateChild(template: Template): ViewComponent =
+        inflateChild(template.name, template.statePatch)
 
     protected fun inflateChild(name: String, statePatch: StatePatch): ViewComponent {
         val component = inflater.inflateComponent(name)
@@ -71,10 +73,6 @@ abstract class ViewComponent(
 
     protected abstract fun onCreateView(context: Context, emptyState: State): View
 
-    protected abstract fun onBindView(state: State)
+    protected abstract fun onRenderState(state: State)
 
-}
-
-fun ViewComponent.render(template: ComponentBlueprint) {
-    render(template.statePatch)
 }

@@ -3,10 +3,11 @@ package ru.javersingleton.bdui.v3.component
 import android.content.Context
 import android.view.View
 import ru.javersingleton.bdui.v3.*
+import ru.javersingleton.bdui.v3.core.component.RawTemplate
 
 class MetaComponent(
     defaultState: RawState,
-    private val rootTemplate: ComponentTemplate
+    private val rootTemplate: RawTemplate
 ) : ViewComponent(defaultState) {
 
     private lateinit var rootComponent: ViewComponent
@@ -16,8 +17,8 @@ class MetaComponent(
         return rootComponent.view
     }
 
-    override fun onBindView(state: State) {
-        rootComponent.render(rootTemplate.resolve(state))
+    override fun onRenderState(state: State) {
+        rootComponent.render(rootTemplate.resolve(state).statePatch)
     }
 
 }
@@ -25,5 +26,5 @@ class MetaComponent(
 
 data class MetaComponentData(
     val defaultFields: RawState,
-    val root: ComponentTemplate
+    val rootComponent: RawTemplate
 )
