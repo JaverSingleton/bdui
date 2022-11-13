@@ -1,17 +1,20 @@
 package ru.javersingleton.bdui.v6.field
 
-import ru.javersingleton.bdui.v6.ConstState
 import ru.javersingleton.bdui.v6.Lambda
+import ru.javersingleton.bdui.v6.State
 
-class PrimitiveField(
+data class PrimitiveField(
     override val id: String,
     private val value: String,
 ) : Field {
 
-    override fun resolve(scope: Lambda.Scope): Field = scope.run {
+    override fun resolve(
+        scope: Lambda.Scope,
+        args: Map<String, State<*>>
+    ): Field = scope.run {
         ResolvedField(
             id = id,
-            state = ConstState(value),
+            state = rememberState(id, value) { value },
         )
     }
 

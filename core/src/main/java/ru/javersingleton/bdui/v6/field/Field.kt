@@ -5,15 +5,17 @@ import ru.javersingleton.bdui.v6.State
 
 interface Field {
 
-    fun resolve(scope: Lambda.Scope): Field?
+    fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field?
 
     val id: String
 
 }
 
-class ResolvedField(
+data class ResolvedField(
     override val id: String,
-    val state: State,
-): Field {
-    override fun resolve(scope: Lambda.Scope): Field = this
+    val state: State<*>,
+) : Field {
+
+    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field = this
+
 }

@@ -15,7 +15,7 @@ interface Component {
         private val componentType: String,
     ): StateFactory<List<Any>>() {
 
-        override fun ComponentLambda.Scope.getState(): List<Any> {
+        override fun Lambda.Scope.getState(): List<Any> {
             val defaultFields = remember("componentTypeDefaultFields", componentType) {
                 context.inflateComponentFields(componentType)
             }

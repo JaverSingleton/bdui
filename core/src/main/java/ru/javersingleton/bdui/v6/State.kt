@@ -1,12 +1,12 @@
 package ru.javersingleton.bdui.v6
 
-interface State
+interface State<T : Any?>
 
-interface ReadableState : State {
+interface ReadableState<T> : State<T> {
 
-    val currentValue: Any?
+    val currentValue: T
 
-    fun subscribe(callback: (State) -> Unit): Subscription
+    fun subscribe(callback: (State<*>) -> Unit): Subscription
 
     interface Subscription {
 
@@ -16,52 +16,16 @@ interface ReadableState : State {
 
 }
 
-class ConstState(
-    override val currentValue: Any?
-): ReadableState {
+class LambdaState<T : Any?>(private val lambda: Lambda) : ReadableState<T> {
 
-    override fun subscribe(callback: (State) -> Unit): ReadableState.Subscription = Subscription
+    @Suppress("UNCHECKED_CAST")
+    override val currentValue: T
+        get() = lambda.currentValue as T
 
-    object Subscription: ReadableState.Subscription {
-        override fun unsubscribe() { /*Do Nothing*/ }
-    }
-
-}
-
-class MutableState(
-    defaultValue: Any?
-) : ReadableState {
-    private val callbacks: MutableSet<(State) -> Unit> = mutableSetOf()
-
-    override var currentValue: Any? = defaultValue
-        set(value) {
-            if (field != value) {
-                field = value
-                notifyStateChanged()
-            }
-        }
-
-    private fun notifyStateChanged() {
-        callbacks.forEach { callback ->
-            callback(this)
-        }
-    }
-
-    override fun subscribe(callback: (State) -> Unit): ReadableState.Subscription =
-        Subscription(callback)
-
-    inner class Subscription(
-        private val callback: (State) -> Unit
-    ) : ReadableState.Subscription {
-
-        init {
-            callbacks.add(callback)
-        }
-
-        override fun unsubscribe() {
-            callbacks.remove(callback)
-        }
-
-    }
+    override fun subscribe(callback: (State<*>) -> Unit): ReadableState.Subscription =
+        lambda.subscribe(callback)
 
 }
+
+@Suppress("UNCHECKED_CAST")
+internal fun <T : Any?> State<T>.getValueQuiet(): T = (this as ReadableState).currentValue

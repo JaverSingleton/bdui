@@ -2,20 +2,32 @@ package ru.javersingleton.bdui.v6
 
 import kotlinx.coroutines.flow.*
 import ru.javersingleton.bdui.v6.field.Structure
-import ru.javersingleton.bdui.v6.field.Transform
 
-abstract class Lambda : ReadableState {
+class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
 
-    private var _value: Lazy<Any> = emptyValue()
-    override val currentValue: Any get() = _value.value
+    private var script: Scope.() -> Any? = { throw IllegalStateException() }
 
-    private var args: Map<String, State> = mapOf()
-    private val cache: MutableMap<Any?, CachedState> = mutableMapOf()
-    private var subscriptions: MutableMap<ReadableState, ReadableState.Subscription> = mutableMapOf()
-    private val callbacks: MutableSet<(State) -> Unit> = mutableSetOf()
+    fun setBody(
+        script: Scope.() -> Any? = this.script
+    ) {
+        if (this.script != script) {
+            this.script = script
+            invalidate()
+        }
+    }
+
+    private var _value: Lazy<Any?> = emptyValue()
+    override val currentValue: Any? get() = _value.value
+
+    private fun emptyValue(): Lazy<Any?> = lazy { privateInvoke() }
+
+    private var cache: Map<Any?, CachedState> = mapOf()
+    private var dependencies: Map<State<*>, ReadableState.Subscription> = mapOf()
+
+    private val changesListeners: MutableSet<(State<*>) -> Unit> = mutableSetOf()
 
     private fun notifyStateChanged() {
-        callbacks.forEach { callback ->
+        changesListeners.forEach { callback ->
             callback(this)
         }
     }
@@ -25,56 +37,59 @@ abstract class Lambda : ReadableState {
         notifyStateChanged()
     }
 
-    override fun subscribe(callback: (State) -> Unit): ReadableState.Subscription =
+    override fun subscribe(callback: (State<*>) -> Unit): ReadableState.Subscription =
         Subscription(callback)
 
-    fun setArguments(
-        args: Map<String, State>
-    ) {
-        if (this.args != args) {
-            invalidate()
-        }
+    private fun privateInvoke(): Any? {
+        val call = Call()
+        val result = call.script()
+
+        dependencies.values.forEach { it.unsubscribe() }
+        dependencies = call.targetDependencies
+        cache = call.targetCache
+
+        return result
     }
 
-    private fun privateInvoke(): Any = Call().invoke { invoke() }
+    inner class Call : Scope, BeduinContext by context {
+        private val cache = Cache(lastCache = this@Lambda.cache)
+        val targetDependencies: MutableMap<State<*>, ReadableState.Subscription> = mutableMapOf()
+        val targetCache: MutableMap<Any?, CachedState> get() = cache.targetCache
 
-    protected abstract fun Call.invoke(): Any
-
-    inner class Call : Scope {
-        fun invoke(func: Call.() -> Any): Any {
-            val result = func()
-            return result
-        }
-
-        override fun argument(name: String): State =
-            (args[name] ?: throw IllegalArgumentException())
-
-        override fun remember(
-            callId: Any,
+        override fun <T> rememberState(
+            callId: String,
             key: Any?,
-            func: Scope.() -> Any
-        ): State {
+            func: Scope.() -> T
+        ): State<T> {
             val cachedState = when {
-                cache.containsKey(key) -> cache[key]
+                cache.containsKey(callId) -> cache[callId]
                 else -> null
             }
-            return if (cachedState?.input == key) {
-                cachedState?.output ?: ConstState(null)
+            return if (cachedState != null && cachedState.input != key) {
+                cachedState.output
             } else {
                 val newCachedState = CachedState(
                     key,
-                    cachedState?.output.updateOrCreate(func())
+                    if (cachedState?.output is Lambda) {
+                        cachedState.output.apply {
+                            setBody(func)
+                        }
+                    } else {
+                        Lambda(context).apply {
+                            setBody(func)
+                        }
+                    }
                 )
-                cache[key] = newCachedState
+                cache[callId] = newCachedState
                 newCachedState.output
-            }
+            }.let { LambdaState(lambda = it) }
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <R> State.value(): R {
+        override fun <R> State<*>.value(): R {
             val readableValue = this as ReadableState
-            if (!subscriptions.containsKey(readableValue)) {
-                subscriptions[readableValue] = this.subscribe {
+            if (!targetDependencies.containsKey(readableValue)) {
+                targetDependencies[readableValue] = this.subscribe {
                     invalidate()
                 }
             }
@@ -82,69 +97,67 @@ abstract class Lambda : ReadableState {
         }
 
         override fun <T> toTyped(
-            state: State,
+            state: State<*>,
             func: Structure.() -> T
         ): T = state.value<Structure>().func()
 
-        override fun inflateComponent(componentType: String): ComponentLambda {
-            TODO("Not yet implemented")
-        }
+    }
 
-        override fun inflateTransform(transformType: String): Transform {
-            TODO("Not yet implemented")
-        }
+    class Cache(
+        private val lastCache: Map<Any?, CachedState>,
+        val targetCache: MutableMap<Any?, CachedState> = mutableMapOf(),
+    ) {
 
-        private fun State?.updateOrCreate(value: Any): State =
-            if (this is MutableState) {
-                currentValue = value
-                this
-            } else {
-                MutableState(value)
+        fun containsKey(key: Any?): Boolean =
+            targetCache.containsKey(key) || lastCache.containsKey(key)
+
+        operator fun get(key: Any?): CachedState? =
+            when {
+                targetCache.containsKey(key) -> targetCache[key]
+                lastCache.containsKey(key) -> lastCache[key]
+                else -> null
             }
 
+        operator fun set(key: Any?, value: CachedState) {
+            targetCache[key] = value
+        }
     }
 
     inner class Subscription(
-        private val callback: (State) -> Unit
+        private val callback: (State<*>) -> Unit
     ) : ReadableState.Subscription {
 
         init {
-            callbacks.add(callback)
+            changesListeners.add(callback)
         }
 
         override fun unsubscribe() {
-            callbacks.remove(callback)
+            changesListeners.remove(callback)
         }
 
     }
 
-    private fun emptyValue(): Lazy<Any> = lazy { privateInvoke() }
-
     data class CachedState(
         val input: Any?,
-        val output: State
+        val output: Lambda
     )
 
-    interface Scope {
+    interface Scope : BeduinContext {
 
-        fun argument(name: String): State
-
-        fun remember(
-            callId: Any,
+        fun <T : Any?> rememberState(
+            callId: String,
             key: Any?,
-            func: Scope.() -> Any
-        ): State
+            func: Scope.() -> T
+        ): State<T>
 
-        fun <T> State.value(): T
+        val <T> State<T>.value: T get() = value()
+
+        fun <T> State<*>.value(): T
 
         fun <T> toTyped(
-            state: State,
+            state: State<*>,
             func: Structure.() -> T
         ): T
-
-        fun inflateComponent(componentType: String): ComponentLambda
-
-        fun inflateTransform(transformType: String): Transform
 
     }
 

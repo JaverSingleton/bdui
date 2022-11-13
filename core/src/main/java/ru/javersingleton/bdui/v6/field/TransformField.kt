@@ -9,8 +9,8 @@ data class TransformField(
     private val transformType: String,
 ) : Field {
 
-    override fun resolve(scope: Lambda.Scope): Field? = scope.run {
-        val params = params?.resolve(this)
+    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field = scope.run {
+        val params = params?.resolve(this, args)
         if (params !is ResolvedField?) {
             return TransformField(
                 id,
@@ -20,9 +20,13 @@ data class TransformField(
         }
 
         val transform = inflateTransform(transformType)
+
         ResolvedField(
             id = id,
-            state = transform.calculate(params?.state)
+            state = rememberState(
+                id,
+                setOf(this@TransformField.params, transform)
+            ) { transform.calculate(params?.state?.value) }
         )
     }
 
@@ -31,6 +35,6 @@ data class TransformField(
 
 interface Transform {
 
-    fun calculate(params: State?): State
+    fun calculate(params: Any?): Any?
 
 }
