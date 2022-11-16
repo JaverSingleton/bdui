@@ -9,21 +9,23 @@ object BoxComponent {
 
         override fun Scope.create(componentType: String): BoxState =
             BoxState(
-                child = toComponentWithParams("child") { component ->
-                    Child(
-                        component,
-                        Child.Params(
-                            alignment = toString("alignment"),
+                children = prop("children").toArray {
+                    toComponentWithParams { component ->
+                        Child(
+                            component,
+                            Child.Params(
+                                alignment = prop("alignment").toStringValue(),
+                            )
                         )
-                    )
+                    }
                 },
-                backgroundColor = toInt("backgroundColor")
+                backgroundColor = prop("alignment").toInt()
             )
 
     }
 
     data class BoxState(
-        val child: Child,
+        val children: List<Child>,
         val backgroundColor: Int,
     )
 

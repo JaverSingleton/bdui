@@ -45,9 +45,9 @@ data class Structure(
     internal val fields: Map<String, ResolvedField>
 ) {
 
-    fun getProp(name: String): State<*>? = fields[name]?.state
+    fun prop(name: String): State<*> = fields[name]?.state!!
 
-    fun contains(name: String): Boolean = fields.containsKey(name)
+    fun hasProp(name: String): Boolean = fields.containsKey(name)
 
     fun unbox(): Map<String, State<*>> = fields.mapValues { it.value.state }
 

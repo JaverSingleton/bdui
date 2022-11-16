@@ -1,6 +1,8 @@
 package ru.javersingleton.bdui.core
 
+import ru.javersingleton.bdui.core.field.ArrayData
 import ru.javersingleton.bdui.core.field.ComponentStructure
+import ru.javersingleton.bdui.core.field.Primitive
 import ru.javersingleton.bdui.core.field.Structure
 
 object ComponentState {
@@ -20,69 +22,50 @@ object ComponentState {
             val args: Structure?,
         ) : Lambda.Scope by scope {
 
-            fun Structure.toComponent(name: String): ComponentStructure {
-                TODO()
+            fun State<*>.toComponent(): ComponentStructure = value()
+
+            fun <T> State<*>.toLayoutParams(func: Structure.() -> T): T {
+                val componentStructure: ComponentStructure = value()
+                return componentStructure.params!!.func()
             }
 
-            fun <T> Structure.toLayoutParams(name: String, func: Structure.() -> T): T {
-                TODO()
-            }
-
-            fun <T> Structure.toComponentWithParams(
-                name: String,
-                func: Structure.(ComponentStructure) -> T
+            fun <T> State<*>.toComponentWithParams(
+                func: Structure.(component: ComponentStructure) -> T
             ): T {
-                TODO()
+                val componentStructure: ComponentStructure = value()
+                return componentStructure.params!!.func(componentStructure)
             }
 
-            fun <T> Structure.toObject(
-                name: String,
+            fun <T> State<*>.toObject(
                 func: Structure.() -> T
             ): T {
-                TODO()
+                val structure: Structure = value()
+                return structure.func()
             }
 
-            fun Structure.toString(name: String): String {
-                TODO()
+            fun State<*>.toStringValue(): String {
+                val primitive: Primitive = value()
+                return primitive.toString()
             }
 
-            fun Structure.toInt(name: String): Int {
-                TODO()
+
+            fun State<*>.toInt(): Int {
+                val primitive: Primitive = value()
+                return primitive.toInt()
             }
 
-            fun Structure.hasProp(name: String): Boolean = args?.contains(name) == true
-
-            fun toComponent(name: String): ComponentStructure {
-                TODO()
+            fun <T> State<*>.toArray(mapIndexed: State<*>.(index: Int) -> T): List<T> {
+                val array: ArrayData = value()
+                val result: MutableList<T> = mutableListOf()
+                for (index in 0 until array.size) {
+                    result.add(array[index].mapIndexed(index))
+                }
+                return result.toList()
             }
 
-            fun <T> toLayoutParams(name: String, func: Structure.() -> T): T {
-                TODO()
-            }
+            fun prop(name: String): State<*> = args?.prop(name)!!
 
-            fun <T> toComponentWithParams(
-                name: String,
-                func: Structure.(ComponentStructure) -> T
-            ): T {
-                TODO()
-            }
-
-            fun <T> toObject(
-                name: String,
-                func: Structure.() -> T
-            ): T {
-                TODO()
-            }
-
-            fun toString(name: String): String {
-                TODO()
-            }
-
-            fun toInt(name: String): Int {
-                TODO()
-            }
-
-            fun hasProp(name: String): Boolean = args?.contains(name) == true
+            fun hasProp(name: String): Boolean = args?.hasProp(name) == true
 
         }
 
