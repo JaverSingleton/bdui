@@ -1,7 +1,6 @@
-package ru.javersingleton.bdui.v6
+package ru.javersingleton.bdui.core
 
 import kotlinx.coroutines.flow.*
-import ru.javersingleton.bdui.v6.field.Structure
 
 class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
 
@@ -19,15 +18,23 @@ class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
     private var _value: Lazy<Any?> = emptyValue()
     override val currentValue: Any? get() = _value.value
 
-    private fun emptyValue(): Lazy<Any?> = lazy { privateInvoke() }
+    private fun emptyValue(): Lazy<Any?> = lazy { invoke() }
 
     private var cache: Map<Any?, CachedState> = mapOf()
-    private var dependencies: Map<State<*>, ReadableState.Subscription> = mapOf()
 
-    private val changesListeners: MutableSet<(State<*>) -> Unit> = mutableSetOf()
+    private var subscriptions: List<ReadableState.Subscription> = listOf()
+    private val subscribers: MutableSet<(State<*>) -> Unit> = mutableSetOf()
+
+    private var isInvalidating = false
+    // TODO Возможно стоить поддержать reInvalidation если считанная ранее переменная изменилась
 
     private fun notifyStateChanged() {
-        changesListeners.forEach { callback ->
+        if (isInvalidating) {
+            return
+        }
+
+        isInvalidating = true
+        subscribers.forEach { callback ->
             callback(this)
         }
     }
@@ -40,12 +47,12 @@ class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
     override fun subscribe(callback: (State<*>) -> Unit): ReadableState.Subscription =
         Subscription(callback)
 
-    private fun privateInvoke(): Any? {
+    private fun invoke(): Any? {
         val call = Call()
         val result = call.script()
 
-        dependencies.values.forEach { it.unsubscribe() }
-        dependencies = call.targetDependencies
+        subscriptions.forEach { it.unsubscribe() }
+        subscriptions = call.targetDependencies.map { it.subscribe { invalidate() } }
         cache = call.targetCache
 
         return result
@@ -53,7 +60,7 @@ class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
 
     inner class Call : Scope, BeduinContext by context {
         private val cache = Cache(lastCache = this@Lambda.cache)
-        val targetDependencies: MutableMap<State<*>, ReadableState.Subscription> = mutableMapOf()
+        val targetDependencies: MutableSet<ReadableState<*>> = mutableSetOf()
         val targetCache: MutableMap<Any?, CachedState> get() = cache.targetCache
 
         override fun <T> rememberState(
@@ -88,18 +95,9 @@ class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
         @Suppress("UNCHECKED_CAST")
         override fun <R> State<*>.value(): R {
             val readableValue = this as ReadableState
-            if (!targetDependencies.containsKey(readableValue)) {
-                targetDependencies[readableValue] = this.subscribe {
-                    invalidate()
-                }
-            }
+            targetDependencies.add(readableValue)
             return readableValue.currentValue as R
         }
-
-        override fun <T> toTyped(
-            state: State<*>,
-            func: Structure.() -> T
-        ): T = state.value<Structure>().func()
 
     }
 
@@ -114,7 +112,9 @@ class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
         operator fun get(key: Any?): CachedState? =
             when {
                 targetCache.containsKey(key) -> targetCache[key]
-                lastCache.containsKey(key) -> lastCache[key]
+                lastCache.containsKey(key) -> lastCache[key]?.apply {
+                    targetCache[key] = this
+                }
                 else -> null
             }
 
@@ -128,11 +128,11 @@ class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
     ) : ReadableState.Subscription {
 
         init {
-            changesListeners.add(callback)
+            subscribers.add(callback)
         }
 
         override fun unsubscribe() {
-            changesListeners.remove(callback)
+            subscribers.remove(callback)
         }
 
     }
@@ -146,18 +146,13 @@ class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
 
         fun <T : Any?> rememberState(
             callId: String,
-            key: Any?,
+            key: Any? = "",
             func: Scope.() -> T
         ): State<T>
 
         val <T> State<T>.value: T get() = value()
 
         fun <T> State<*>.value(): T
-
-        fun <T> toTyped(
-            state: State<*>,
-            func: Structure.() -> T
-        ): T
 
     }
 

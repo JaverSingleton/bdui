@@ -1,7 +1,7 @@
-package ru.javersingleton.bdui.v6.field
+package ru.javersingleton.bdui.core.field
 
-import ru.javersingleton.bdui.v6.Lambda
-import ru.javersingleton.bdui.v6.State
+import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.State
 
 
 data class StructureField(
@@ -45,7 +45,9 @@ data class Structure(
     internal val fields: Map<String, ResolvedField>
 ) {
 
-    fun structureField(name: String): State<*>? = fields[name]?.state
+    fun getProp(name: String): State<*>? = fields[name]?.state
+
+    fun contains(name: String): Boolean = fields.containsKey(name)
 
     fun unbox(): Map<String, State<*>> = fields.mapValues { it.value.state }
 

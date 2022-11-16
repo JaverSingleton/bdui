@@ -1,7 +1,7 @@
-package ru.javersingleton.bdui.v6.field
+package ru.javersingleton.bdui.core.field
 
-import ru.javersingleton.bdui.v6.Lambda
-import ru.javersingleton.bdui.v6.State
+import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.State
 
 data class TransformField(
     override val id: String,
@@ -35,6 +35,7 @@ data class TransformField(
 
 interface Transform {
 
+    // TODO Переписать Transform
     fun calculate(params: Any?): Any?
 
 }

@@ -1,4 +1,4 @@
-package ru.javersingleton.bdui.v6
+package ru.javersingleton.bdui.core
 
 interface State<T : Any?>
 
