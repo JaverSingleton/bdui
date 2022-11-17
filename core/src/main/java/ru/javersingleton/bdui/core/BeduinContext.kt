@@ -23,7 +23,8 @@ class MainBeduinContext() : BeduinContext {
             MetaComponentBlueprint(
                 state = StructureField(
                     "title" to PrimitiveField(""),
-                    "subtitle" to PrimitiveField("")
+                    "subtitle" to PrimitiveField(""),
+                    "hint" to ReferenceField("subtitle"),
                 ),
                 rootComponent = ComponentField(
                     type = "Column",
@@ -38,6 +39,12 @@ class MainBeduinContext() : BeduinContext {
                             type = "Text",
                             "text" to ReferenceField("subtitle"),
                             "textSize" to PrimitiveField("12"),
+                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                        ),
+                        ComponentField(
+                            type = "Text",
+                            "text" to ReferenceField("hint"),
+                            "textSize" to PrimitiveField("8"),
                             "layout_width" to PrimitiveField("fillMaxWidth"),
                         )
                     )

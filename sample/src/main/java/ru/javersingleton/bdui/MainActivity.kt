@@ -43,16 +43,23 @@ class MainActivity : AppCompatActivity() {
                     state = field.value,
                     modifier = Modifier.clickable {
                         field.value = ComponentField(
-                            type = "Column",
-                            "children" to ArrayField(
-                                ComponentField(
-                                    "ListItem",
-                                    "title" to PrimitiveField("Title"),
-                                    "subtitle" to PrimitiveField("Subtitle"),
-                                    "layout_width" to PrimitiveField("100")
+                                type = "Column",
+                                "children" to ArrayField(
+                                    ComponentField(
+                                        "Text",
+                                        "text" to PrimitiveField("Meta"),
+                                        "textSize" to PrimitiveField("100"),
+                                        "layout_width" to PrimitiveField("fillMaxWidth")
+                                    ),
+                                    ComponentField(
+                                        "ListItem",
+                                        "title" to PrimitiveField("Title"),
+                                        "subtitle" to PrimitiveField("Subtitle"),
+                                        "hint" to PrimitiveField("SCIENCE!!!"),
+                                        "layout_width" to PrimitiveField("100")
+                                    )
                                 )
                             )
-                        )
                     }
                 )
             }

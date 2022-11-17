@@ -74,7 +74,7 @@ class Lambda(
                 cache.containsKey(callId) -> cache[callId]
                 else -> null
             }
-            return if (cachedState != null && cachedState.input != key) {
+            return if (cachedState != null && cachedState.input == key) {
                 cachedState.output
             } else {
                 val newCachedState = CachedState(
