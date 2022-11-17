@@ -11,17 +11,19 @@ object MetaComponent {
     object StateFactory : ComponentState.Factory<MetaState>() {
 
         override fun Scope.create(componentType: String): MetaState {
-            val defaultParams = inflateDefaultFields(componentType)
-            val currentParams = defaultParams.mergeWith(args)
+            val blueprint = rememberValue("componentType", componentType) {
+                inflateMetaComponentBlueprint(componentType)
+            }.current
+            val currentParams = blueprint.state.mergeWith(args)
 
-            val args: Structure? = resolveThemselves(
-                id = defaultParams.id,
+            val args: Structure = resolveThemselves(
+                id = blueprint.state.id,
                 params = currentParams
-            ).value.current()
+            ).value.current
 
-            val rootComponent = inflateRootComponent(componentType)
-            val componentField = rootComponent.resolve(this, args?.unbox() ?: mapOf())
-            return MetaState((componentField as ResolvedField).value.current())
+
+            val componentField = blueprint.rootComponent.resolve(this, args.unbox())
+            return MetaState((componentField as ResolvedField).value.current)
         }
 
     }

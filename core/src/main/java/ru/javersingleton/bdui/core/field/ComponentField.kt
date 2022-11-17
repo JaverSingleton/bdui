@@ -42,6 +42,16 @@ data class ComponentField(
 
 }
 
+fun ComponentField(
+    type: String,
+    vararg fields: Pair<String, Field<*>>
+): ComponentField  =
+    ComponentField(
+        id = newId(),
+        componentType = type,
+        params = StructureField(*fields)
+    )
+
 data class ComponentStructure(
     val componentType: String,
     val params: Structure?,

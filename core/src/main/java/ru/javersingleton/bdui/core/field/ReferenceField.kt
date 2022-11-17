@@ -21,3 +21,11 @@ data class ReferenceField(
     }
 
 }
+
+fun ReferenceField(
+    refFieldName: String
+): ReferenceField =
+    ReferenceField(
+        id = newId(),
+        refFieldName = refFieldName
+    )

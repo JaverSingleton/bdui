@@ -20,6 +20,14 @@ data class PrimitiveField(
 
 }
 
+fun PrimitiveField(
+    value: String
+): PrimitiveField =
+    PrimitiveField(
+        id = newId(),
+        value
+    )
+
 data class Primitive(private val value: String) {
 
     override fun toString(): String = value

@@ -23,10 +23,17 @@ data class ArrayField(
             }
         }
 
-    private fun List<Field<*>?>.hasUnresolvedFields(): Boolean =
-        firstOrNull { it !is ResolvedField? } != null
+    private fun List<Field<*>>.hasUnresolvedFields(): Boolean =
+        firstOrNull { it !is ResolvedField } != null
 
 }
+
+fun ArrayField(
+    vararg fields: Field<*>
+): ArrayField = ArrayField(
+    id = newId(),
+    fields = fields.toList()
+)
 
 data class ArrayData(
     internal val fields: List<ResolvedField<*>>

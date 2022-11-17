@@ -41,6 +41,14 @@ data class StructureField(
 
 }
 
+fun StructureField(
+    vararg fields: Pair<String, Field<*>>
+): StructureField =
+    StructureField(
+        id = newId(),
+        fields.toMap()
+    )
+
 data class Structure(
     internal val fields: Map<String, ResolvedField<*>>
 ) {

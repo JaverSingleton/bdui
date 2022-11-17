@@ -2,6 +2,7 @@ package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
+import java.util.UUID
 
 interface Field<T> {
 
@@ -38,3 +39,5 @@ fun Lambda.Scope.resolveThemselves(
         resolveThemselves(id, processedParams, newArgs)
     }
 }
+
+fun newId(): String = UUID.randomUUID().toString()
