@@ -11,12 +11,12 @@ import androidx.compose.ui.graphics.Color
 import ru.javersingleton.bdui.component.compose.BduiComponent
 import ru.javersingleton.bdui.component.compose.asState
 import ru.javersingleton.bdui.component.state.BoxState
-import ru.javersingleton.bdui.core.State
+import ru.javersingleton.bdui.core.Value
 
 @Composable
 fun BoxComponent(
     modifier: Modifier = Modifier,
-    componentState: State<BoxState>
+    componentState: Value<BoxState>
 ) {
     val state = componentState.asState().value
     Box(

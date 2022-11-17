@@ -17,11 +17,11 @@ object MetaComponent {
             val args: Structure? = resolveThemselves(
                 id = defaultParams.id,
                 params = currentParams
-            ).state.value()
+            ).value.current()
 
             val rootComponent = inflateRootComponent(componentType)
             val componentField = rootComponent.resolve(this, args?.unbox() ?: mapOf())
-            return MetaState((componentField as ResolvedField).state.value())
+            return MetaState((componentField as ResolvedField).value.current())
         }
 
     }

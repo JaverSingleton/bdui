@@ -14,6 +14,7 @@ fun Beduin(
     modifier: Modifier = Modifier,
     field: ComponentField
 ) {
+    // TODO Провести сюда контекст
     val lambda = remember { Lambda() }
     val componentStructure = remember(key1 = field, lambda) {
         lambda.setBody {
@@ -27,7 +28,7 @@ fun Beduin(
                 throw IllegalArgumentException()
             }
 
-            processedField.state.value<ComponentStructure>()
+            processedField.value.current<ComponentStructure>()
         }
         lambda.currentValue as ComponentStructure
     }

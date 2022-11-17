@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.*
 class Lambda(
     private val context: BeduinContext,
     private var script: Scope.() -> Any? = { throw IllegalStateException() }
-) : ReadableState<Any?> {
+) : ReadableValue<Any?> {
 
 
     fun setBody(
@@ -24,8 +24,8 @@ class Lambda(
 
     private var cache: Map<Any?, CachedState> = mapOf()
 
-    private var subscriptions: List<ReadableState.Subscription> = listOf()
-    private val subscribers: MutableSet<(State<*>) -> Unit> = mutableSetOf()
+    private var subscriptions: List<ReadableValue.Subscription> = listOf()
+    private val subscribers: MutableSet<(Value<*>) -> Unit> = mutableSetOf()
 
     private var isInvalidating = false
     // TODO Возможно стоить поддержать reInvalidation если считанная ранее переменная изменилась
@@ -46,7 +46,7 @@ class Lambda(
         notifyStateChanged()
     }
 
-    override fun subscribe(callback: (State<*>) -> Unit): ReadableState.Subscription =
+    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
         Subscription(callback)
 
     private fun invoke(): Any? {
@@ -62,14 +62,14 @@ class Lambda(
 
     inner class Call : Scope, BeduinContext by context {
         private val cache = Cache(lastCache = this@Lambda.cache)
-        val targetDependencies: MutableSet<ReadableState<*>> = mutableSetOf()
+        val targetDependencies: MutableSet<ReadableValue<*>> = mutableSetOf()
         val targetCache: MutableMap<Any?, CachedState> get() = cache.targetCache
 
-        override fun <T> rememberState(
+        override fun <T> rememberValue(
             callId: String,
             key: Any?,
             func: Scope.() -> T
-        ): State<T> {
+        ): Value<T> {
             val cachedState = when {
                 cache.containsKey(callId) -> cache[callId]
                 else -> null
@@ -91,12 +91,12 @@ class Lambda(
                 )
                 cache[callId] = newCachedState
                 newCachedState.output
-            }.let { LambdaState(lambda = it) }
+            }.let { LambdaValue(lambda = it) }
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <R> State<*>.value(): R {
-            val readableValue = this as ReadableState
+        override fun <R> Value<*>.current(): R {
+            val readableValue = this as ReadableValue
             targetDependencies.add(readableValue)
             return readableValue.currentValue as R
         }
@@ -126,8 +126,8 @@ class Lambda(
     }
 
     inner class Subscription(
-        private val callback: (State<*>) -> Unit
-    ) : ReadableState.Subscription {
+        private val callback: (Value<*>) -> Unit
+    ) : ReadableValue.Subscription {
 
         init {
             subscribers.add(callback)
@@ -146,15 +146,15 @@ class Lambda(
 
     interface Scope : BeduinContext {
 
-        fun <T : Any?> rememberState(
+        fun <T : Any?> rememberValue(
             callId: String,
             key: Any? = "",
             func: Scope.() -> T
-        ): State<T>
+        ): Value<T>
 
-        val <T> State<T>.value: T get() = value()
+        val <T> Value<T>.current: T get() = current()
 
-        fun <T> State<*>.value(): T
+        fun <T> Value<*>.current(): T
 
     }
 

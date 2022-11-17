@@ -22,40 +22,40 @@ object ComponentState {
             val args: Structure?,
         ) : Lambda.Scope by scope {
 
-            fun State<*>.toComponent(): ComponentStructure = value()
+            fun Value<*>.toComponent(): ComponentStructure = current()
 
-            fun <T> State<*>.toLayoutParams(func: Structure.() -> T): T {
-                val componentStructure: ComponentStructure = value()
+            fun <T> Value<*>.toLayoutParams(func: Structure.() -> T): T {
+                val componentStructure: ComponentStructure = current()
                 return componentStructure.params!!.func()
             }
 
-            fun <T> State<*>.toComponentWithParams(
+            fun <T> Value<*>.toComponentWithParams(
                 func: Structure.(component: ComponentStructure) -> T
             ): T {
-                val componentStructure: ComponentStructure = value()
+                val componentStructure: ComponentStructure = current()
                 return componentStructure.params!!.func(componentStructure)
             }
 
-            fun <T> State<*>.toObject(
+            fun <T> Value<*>.toObject(
                 func: Structure.() -> T
             ): T {
-                val structure: Structure = value()
+                val structure: Structure = current()
                 return structure.func()
             }
 
-            fun State<*>.toStringValue(): String {
-                val primitive: Primitive = value()
+            fun Value<*>.toStringValue(): String {
+                val primitive: Primitive = current()
                 return primitive.toString()
             }
 
 
-            fun State<*>.toInt(): Int {
-                val primitive: Primitive = value()
+            fun Value<*>.toInt(): Int {
+                val primitive: Primitive = current()
                 return primitive.toInt()
             }
 
-            fun <T> State<*>.toArray(mapIndexed: State<*>.(index: Int) -> T): List<T> {
-                val array: ArrayData = value()
+            fun <T> Value<*>.toArray(mapIndexed: Value<*>.(index: Int) -> T): List<T> {
+                val array: ArrayData = current()
                 val result: MutableList<T> = mutableListOf()
                 for (index in 0 until array.size) {
                     result.add(array[index].mapIndexed(index))
@@ -63,7 +63,7 @@ object ComponentState {
                 return result.toList()
             }
 
-            fun prop(name: String): State<*> = args?.prop(name)!!
+            fun prop(name: String): Value<*> = args?.prop(name)!!
 
             fun hasProp(name: String): Boolean = args?.hasProp(name) == true
 

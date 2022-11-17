@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
-import ru.javersingleton.bdui.core.State
+import ru.javersingleton.bdui.core.Value
 
 data class ComponentField(
     override val id: String,
@@ -9,27 +9,27 @@ data class ComponentField(
     val params: Field<Structure>
 ) : Field<ComponentStructure> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field<ComponentStructure> = scope.run {
+    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ComponentStructure> = scope.run {
         val externalParamsField = params.resolve(scope, args)
         if (externalParamsField !is ResolvedField) {
             return ComponentField(id, componentType, externalParamsField as StructureField)
         }
 
-        val externalParamsState = externalParamsField.state
+        val externalParamsState = externalParamsField.value
 
         return ResolvedField(
             id,
-            rememberState(id, componentType) {
-                val stateFactory = rememberState("$id@stateFactory", componentType) {
+            rememberValue(id, componentType) {
+                val stateFactory = rememberValue("$id@stateFactory", componentType) {
                     inflateStateFactory(componentType)
                 }
 
                 ComponentStructure(
                     componentType = componentType,
-                    params = externalParamsState.value(),
-                    state = rememberState("$id@value", componentType) {
-                        val externalParams: Structure? = externalParamsState.value()
-                        stateFactory.value.calculate(
+                    params = externalParamsState.current(),
+                    value = rememberValue("$id@value", componentType) {
+                        val externalParams: Structure? = externalParamsState.current()
+                        stateFactory.current.calculate(
                             scope = this,
                             args = externalParams,
                             componentType = componentType
@@ -45,5 +45,5 @@ data class ComponentField(
 data class ComponentStructure(
     val componentType: String,
     val params: Structure?,
-    val state: State<*>
+    val value: Value<*>
 )

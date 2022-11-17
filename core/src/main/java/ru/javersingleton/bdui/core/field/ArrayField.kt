@@ -1,22 +1,22 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
-import ru.javersingleton.bdui.core.State
+import ru.javersingleton.bdui.core.Value
 
 data class ArrayField(
     override val id: String,
-    private val fields: List<Field<*>?>
+    private val fields: List<Field<*>>
 ): Field<ArrayData> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field<ArrayData> =
+    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ArrayData> =
         scope.run {
-            val targetFields = fields.map { field -> field?.resolve(this, args) }
+            val targetFields = fields.map { field -> field.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {
                 ArrayField(id, targetFields)
             } else {
                 ResolvedField(
                     id,
-                    rememberState(id, targetFields) {
+                    rememberValue(id, targetFields) {
                         ArrayData(targetFields.map { it as ResolvedField }.toList())
                     }
                 )
@@ -32,7 +32,7 @@ data class ArrayData(
     internal val fields: List<ResolvedField<*>>
 ) {
 
-    operator fun get(index: Int): State<*> = fields[index].state
+    operator fun get(index: Int): Value<*> = fields[index].value
 
     val size get() = fields.size
 

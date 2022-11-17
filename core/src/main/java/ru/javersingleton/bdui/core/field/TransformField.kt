@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
-import ru.javersingleton.bdui.core.State
+import ru.javersingleton.bdui.core.Value
 
 data class TransformField(
     override val id: String,
@@ -9,12 +9,12 @@ data class TransformField(
     private val transformType: String,
 ) : Field<Any?> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field<Any?> = scope.run {
+    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<Any?> = scope.run {
         val params = params.resolve(this, args)
         if (params !is ResolvedField) {
             return TransformField(
                 id,
-                params as StructureField,
+                params,
                 transformType,
             )
         }
@@ -23,10 +23,10 @@ data class TransformField(
 
         ResolvedField(
             id = id,
-            state = rememberState(
+            value = rememberValue(
                 id,
                 setOf(this@TransformField.params, transform)
-            ) { transform.calculate(params.state.value) }
+            ) { transform.calculate(params.value.current) }
         )
     }
 

@@ -1,16 +1,13 @@
 package ru.javersingleton.bdui.component.compose
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.component.compose.component.BoxComponent
 import ru.javersingleton.bdui.component.compose.component.MetaComponent
 import ru.javersingleton.bdui.component.state.BoxState
 import ru.javersingleton.bdui.component.state.MetaState
-import ru.javersingleton.bdui.core.ReadableState
-import ru.javersingleton.bdui.core.State
+import ru.javersingleton.bdui.core.ReadableValue
+import ru.javersingleton.bdui.core.Value
 import ru.javersingleton.bdui.core.field.ComponentStructure
 
 @Suppress("UNCHECKED_CAST")
@@ -23,23 +20,23 @@ fun BduiComponent(
     when (componentStructure.componentType) {
         "Box" -> BoxComponent(
             modifier = modifier,
-            componentState = componentStructure.state as State<BoxState>,
+            componentState = componentStructure.value as Value<BoxState>,
         )
         else -> MetaComponent(
             modifier = modifier,
-            componentState = componentStructure.state as State<MetaState>,
+            componentState = componentStructure.value as Value<MetaState>,
         )
     }
 }
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-fun <T> State<T>.asState(): androidx.compose.runtime.State<T> {
-    val readableState = this as ReadableState<T>
+fun <T> Value<T>.asState(): State<T> {
+    val readableState = this as ReadableValue<T>
     val result = remember { mutableStateOf(readableState.currentValue) }
     DisposableEffect(key1 = readableState) {
         val subscription = readableState.subscribe { newState ->
-            result.value = (newState as ReadableState<T>).currentValue
+            result.value = (newState as ReadableValue<T>).currentValue
         }
         onDispose { subscription.unsubscribe() }
     }

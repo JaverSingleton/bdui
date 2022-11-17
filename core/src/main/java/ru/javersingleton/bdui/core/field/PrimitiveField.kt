@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
-import ru.javersingleton.bdui.core.State
+import ru.javersingleton.bdui.core.Value
 
 data class PrimitiveField(
     override val id: String,
@@ -10,11 +10,11 @@ data class PrimitiveField(
 
     override fun resolve(
         scope: Lambda.Scope,
-        args: Map<String, State<*>>
+        args: Map<String, Value<*>>
     ): Field<Primitive> = scope.run {
         ResolvedField(
             id = id,
-            state = rememberState(id, value) { Primitive(value) },
+            value = rememberValue(id, value) { Primitive(value) },
         )
     }
 
