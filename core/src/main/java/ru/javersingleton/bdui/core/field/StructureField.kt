@@ -6,12 +6,12 @@ import ru.javersingleton.bdui.core.State
 
 data class StructureField(
     override val id: String,
-    private val fields: Map<String, Field?>
-) : Field {
+    private val fields: Map<String, Field<*>>
+) : Field<Structure> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field =
+    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field<Structure> =
         scope.run {
-            val targetFields = fields.map { (name, field) -> name to field?.resolve(this, args) }
+            val targetFields = fields.map { (name, field) -> name to field.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {
                 StructureField(id, targetFields.toMap())
             } else {
@@ -29,8 +29,8 @@ data class StructureField(
             .filterValues { it is ResolvedField }
             .mapValues { (_, value) -> (value as ResolvedField).state }
 
-    private fun List<Pair<String, Field?>>.hasUnresolvedFields(): Boolean =
-        firstOrNull { it.second !is ResolvedField? } != null
+    private fun List<Pair<String, Field<*>>>.hasUnresolvedFields(): Boolean =
+        firstOrNull { it.second !is ResolvedField } != null
 
     fun mergeWith(targetFields: Structure?): StructureField {
         if (targetFields == null) {
@@ -42,7 +42,7 @@ data class StructureField(
 }
 
 data class Structure(
-    internal val fields: Map<String, ResolvedField>
+    internal val fields: Map<String, ResolvedField<*>>
 ) {
 
     fun prop(name: String): State<*> = fields[name]?.state!!

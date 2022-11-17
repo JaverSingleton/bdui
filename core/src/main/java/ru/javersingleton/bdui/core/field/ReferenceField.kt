@@ -7,9 +7,9 @@ import ru.javersingleton.bdui.core.State
 data class ReferenceField(
     private val refFieldName: String,
     override val id: String
-) : Field {
+) : Field<Any?> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field = scope.run {
+    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field<Any?> = scope.run {
         val argument = rememberState(id, args) { args[refFieldName] }
         return if (argument.value != null) {
             ResolvedField(

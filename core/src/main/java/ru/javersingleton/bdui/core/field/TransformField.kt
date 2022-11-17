@@ -5,16 +5,16 @@ import ru.javersingleton.bdui.core.State
 
 data class TransformField(
     override val id: String,
-    private val params: Field?,
+    private val params: Field<Structure>,
     private val transformType: String,
-) : Field {
+) : Field<Any?> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field = scope.run {
-        val params = params?.resolve(this, args)
-        if (params !is ResolvedField?) {
+    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field<Any?> = scope.run {
+        val params = params.resolve(this, args)
+        if (params !is ResolvedField) {
             return TransformField(
                 id,
-                params,
+                params as StructureField,
                 transformType,
             )
         }
@@ -26,7 +26,7 @@ data class TransformField(
             state = rememberState(
                 id,
                 setOf(this@TransformField.params, transform)
-            ) { transform.calculate(params?.state?.value) }
+            ) { transform.calculate(params.state.value) }
         )
     }
 

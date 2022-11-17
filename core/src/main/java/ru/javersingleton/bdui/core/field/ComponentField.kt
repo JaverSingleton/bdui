@@ -6,18 +6,16 @@ import ru.javersingleton.bdui.core.State
 data class ComponentField(
     override val id: String,
     val componentType: String,
-    val params: Field?
-) : Field {
+    val params: Field<Structure>
+) : Field<ComponentStructure> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field = scope.run {
-        val params = params as StructureField?
-
-        val externalParamsField = params?.resolve(scope, args)
-        if (externalParamsField !is ResolvedField?) {
-            return ComponentField(id, componentType, externalParamsField)
+    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field<ComponentStructure> = scope.run {
+        val externalParamsField = params.resolve(scope, args)
+        if (externalParamsField !is ResolvedField) {
+            return ComponentField(id, componentType, externalParamsField as StructureField)
         }
 
-        val externalParamsState = externalParamsField?.state
+        val externalParamsState = externalParamsField.state
 
         return ResolvedField(
             id,
@@ -28,9 +26,9 @@ data class ComponentField(
 
                 ComponentStructure(
                     componentType = componentType,
-                    params = externalParamsState?.value(),
+                    params = externalParamsState.value(),
                     state = rememberState("$id@value", componentType) {
-                        val externalParams: Structure? = externalParamsState?.value()
+                        val externalParams: Structure? = externalParamsState.value()
                         stateFactory.value.calculate(
                             scope = this,
                             args = externalParams,

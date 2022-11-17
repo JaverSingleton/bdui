@@ -6,12 +6,12 @@ import ru.javersingleton.bdui.core.State
 data class PrimitiveField(
     override val id: String,
     private val value: String,
-) : Field {
+) : Field<Primitive> {
 
     override fun resolve(
         scope: Lambda.Scope,
         args: Map<String, State<*>>
-    ): Field = scope.run {
+    ): Field<Primitive> = scope.run {
         ResolvedField(
             id = id,
             state = rememberState(id, value) { Primitive(value) },

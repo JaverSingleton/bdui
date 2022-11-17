@@ -5,10 +5,10 @@ import ru.javersingleton.bdui.core.State
 
 data class ArrayField(
     override val id: String,
-    private val fields: List<Field?>
-): Field {
+    private val fields: List<Field<*>?>
+): Field<ArrayData> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field =
+    override fun resolve(scope: Lambda.Scope, args: Map<String, State<*>>): Field<ArrayData> =
         scope.run {
             val targetFields = fields.map { field -> field?.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {
@@ -23,13 +23,13 @@ data class ArrayField(
             }
         }
 
-    private fun List<Field?>.hasUnresolvedFields(): Boolean =
+    private fun List<Field<*>?>.hasUnresolvedFields(): Boolean =
         firstOrNull { it !is ResolvedField? } != null
 
 }
 
 data class ArrayData(
-    internal val fields: List<ResolvedField>
+    internal val fields: List<ResolvedField<*>>
 ) {
 
     operator fun get(index: Int): State<*> = fields[index].state
