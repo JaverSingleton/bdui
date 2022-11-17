@@ -5,7 +5,7 @@ import ru.javersingleton.bdui.core.field.ComponentStructure
 
 object BoxComponent {
 
-    class StateFactory : ComponentState.Factory<BoxState>() {
+    object StateFactory : ComponentState.Factory<BoxState>() {
 
         override fun Scope.create(componentType: String): BoxState =
             BoxState(

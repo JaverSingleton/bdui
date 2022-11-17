@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import ru.javersingleton.bdui.component.compose.BduiComponent
-import ru.javersingleton.bdui.component.compose.asState
+import ru.javersingleton.bdui.component.compose.subscribeAsState
 import ru.javersingleton.bdui.component.state.BoxState
 import ru.javersingleton.bdui.core.Value
 
@@ -18,7 +18,7 @@ fun BoxComponent(
     modifier: Modifier = Modifier,
     componentState: Value<BoxState>
 ) {
-    val state = componentState.asState().value
+    val state = componentState.subscribeAsState().value
     Box(
         modifier = Modifier
             .background(color = Color(state.backgroundColor))

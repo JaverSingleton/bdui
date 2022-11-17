@@ -31,7 +31,7 @@ fun BduiComponent(
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-fun <T> Value<T>.asState(): State<T> {
+fun <T> Value<T>.subscribeAsState(): State<T> {
     val readableState = this as ReadableValue<T>
     val result = remember { mutableStateOf(readableState.currentValue) }
     DisposableEffect(key1 = readableState) {

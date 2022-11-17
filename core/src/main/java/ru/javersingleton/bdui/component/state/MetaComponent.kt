@@ -8,7 +8,7 @@ import ru.javersingleton.bdui.core.field.resolveThemselves
 
 object MetaComponent {
 
-    class StateFactory : ComponentState.Factory<MetaState>() {
+    object StateFactory : ComponentState.Factory<MetaState>() {
 
         override fun Scope.create(componentType: String): MetaState {
             val defaultParams = inflateDefaultFields(componentType)
