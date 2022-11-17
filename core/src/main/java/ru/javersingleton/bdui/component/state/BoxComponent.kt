@@ -11,23 +11,25 @@ object BoxComponent {
             BoxState(
                 children = prop("children").toArray {
                     toComponentWithParams { component ->
-                        Child(
+                        BoxState.Child(
                             component,
-                            Child.Params(
-                                alignment = prop("alignment").toStringValue(),
+                            BoxState.Child.Params(
+                                alignment = prop("layout_alignment").toStringValue(),
                             )
                         )
                     }
                 },
-                backgroundColor = prop("alignment").toInt()
+                backgroundColor = prop("backgroundColor").toInt()
             )
 
     }
 
-    data class BoxState(
-        val children: List<Child>,
-        val backgroundColor: Int,
-    )
+}
+
+data class BoxState(
+    val children: List<Child>,
+    val backgroundColor: Int,
+) {
 
     data class Child(
         val component: ComponentStructure,
@@ -37,6 +39,4 @@ object BoxComponent {
             val alignment: String,
         )
     }
-
-
 }

@@ -2,9 +2,11 @@ package ru.javersingleton.bdui.core
 
 import kotlinx.coroutines.flow.*
 
-class Lambda(private val context: BeduinContext) : ReadableState<Any?> {
-
+class Lambda(
+    private val context: BeduinContext,
     private var script: Scope.() -> Any? = { throw IllegalStateException() }
+) : ReadableState<Any?> {
+
 
     fun setBody(
         script: Scope.() -> Any? = this.script
