@@ -33,7 +33,13 @@ class MainActivity : AppCompatActivity() {
                                     "ListItem",
                                     "title" to PrimitiveField("Title"),
                                     "subtitle" to PrimitiveField("Subtitle"),
-                                    "layout_width" to PrimitiveField("100")
+                                    "layout_width" to PrimitiveField("100"),
+                                    "footer" to ComponentField(
+                                        "ListItem",
+                                        "title" to PrimitiveField("Title 2"),
+                                        "subtitle" to PrimitiveField("Subtitle 2"),
+                                        "layout_width" to PrimitiveField("100"),
+                                    )
                                 )
                             )
                         )

@@ -18,7 +18,7 @@ object BoxComponent {
                             )
                         )
                     }
-                },
+                }.filterNotNull(),
                 backgroundColor = prop("backgroundColor").toInt()
             )
 

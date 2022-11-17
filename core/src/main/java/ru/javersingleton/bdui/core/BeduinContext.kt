@@ -25,6 +25,7 @@ class MainBeduinContext() : BeduinContext {
                     "title" to PrimitiveField(""),
                     "subtitle" to PrimitiveField(""),
                     "hint" to ReferenceField("subtitle"),
+                    "footer" to EmptyField(),
                 ),
                 rootComponent = ComponentField(
                     type = "Column",
@@ -46,7 +47,8 @@ class MainBeduinContext() : BeduinContext {
                             "text" to ReferenceField("hint"),
                             "textSize" to PrimitiveField("8"),
                             "layout_width" to PrimitiveField("fillMaxWidth"),
-                        )
+                        ),
+                        ReferenceField("footer")
                     )
                 )
             )

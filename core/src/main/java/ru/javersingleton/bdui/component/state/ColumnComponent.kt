@@ -17,7 +17,7 @@ object ColumnComponent {
                         )
                     )
                 }
-            }
+            }.filterNotNull()
         )
 
     }

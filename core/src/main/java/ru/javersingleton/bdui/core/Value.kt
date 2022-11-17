@@ -1,6 +1,23 @@
 package ru.javersingleton.bdui.core
 
-interface Value<T : Any?>
+interface Value<T : Any?> {
+
+    object NULL : ReadableValue<Any?> {
+
+        override val currentValue: Any? = null
+
+        override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
+            object : ReadableValue.Subscription {
+
+                override fun unsubscribe() {
+                    // Do Nothing
+                }
+
+            }
+
+    }
+
+}
 
 interface ReadableValue<T> : Value<T> {
 

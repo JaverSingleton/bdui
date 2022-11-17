@@ -22,18 +22,18 @@ object ComponentState {
             val args: Structure?,
         ) : Lambda.Scope by scope {
 
-            fun Value<*>.toComponent(): ComponentStructure = current()
+            fun Value<*>.toComponent(): ComponentStructure? = current()
 
-            fun <T> Value<*>.toLayoutParams(func: Structure.() -> T): T {
-                val componentStructure: ComponentStructure = current()
-                return componentStructure.params!!.func()
+            fun <T> Value<*>.toLayoutParams(func: Structure.() -> T): T? {
+                val componentStructure: ComponentStructure? = current()
+                return componentStructure?.params?.func()
             }
 
             fun <T> Value<*>.toComponentWithParams(
                 func: Structure.(component: ComponentStructure) -> T
-            ): T {
-                val componentStructure: ComponentStructure = current()
-                return componentStructure.params!!.func(componentStructure)
+            ): T? {
+                val componentStructure: ComponentStructure? = current()
+                return componentStructure?.params?.func(componentStructure)
             }
 
             fun <T> Value<*>.toObject(
@@ -63,7 +63,7 @@ object ComponentState {
                 return result.toList()
             }
 
-            fun prop(name: String): Value<*> = args?.prop(name)!!
+            fun prop(name: String): Value<*> = args?.prop(name) ?: Value.NULL
 
             fun hasProp(name: String): Boolean = args?.hasProp(name) == true
 

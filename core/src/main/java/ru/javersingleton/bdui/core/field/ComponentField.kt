@@ -28,7 +28,7 @@ data class ComponentField(
                     componentType = componentType,
                     params = externalParamsState.current(),
                     value = rememberValue("$id@value", componentType) {
-                        val externalParams: Structure? = externalParamsState.current()
+                        val externalParams: Structure = externalParamsState.current()
                         stateFactory.current.calculate(
                             scope = this,
                             args = externalParams,
@@ -54,6 +54,6 @@ fun ComponentField(
 
 data class ComponentStructure(
     val componentType: String,
-    val params: Structure?,
+    val params: Structure,
     val value: Value<*>
 )
