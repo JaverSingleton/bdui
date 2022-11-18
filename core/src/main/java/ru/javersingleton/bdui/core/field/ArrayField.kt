@@ -53,10 +53,12 @@ data class ArrayField(
                     copy(fields = changedFields)
                 }
             } else {
-                targetField
+                targetField.copyWithId(id = id)
             } as Field<ArrayData>
         }
     }
+
+    override fun copyWithId(id: String): Field<ArrayData> = copy(id = id)
 
 }
 

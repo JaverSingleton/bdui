@@ -13,7 +13,7 @@ object ColumnComponent {
                     ColumnState.Child(
                         component,
                         ColumnState.Child.Params(
-                            width = prop("layout_width").toStringValue(),
+                            width = prop("layout_width").toStringValue() ?: "fillMaxWidth",
                         )
                     )
                 }

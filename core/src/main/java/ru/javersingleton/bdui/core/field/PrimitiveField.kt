@@ -21,10 +21,16 @@ data class PrimitiveField(
     @Suppress("UNCHECKED_CAST")
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Primitive> =
         if (targetFieldId == id) {
-            targetField as Field<Primitive>
+            if (targetField is PrimitiveField) {
+                copy(value = targetField.value)
+            } else {
+                targetField.copyWithId(id) as Field<Primitive>
+            }
         } else {
             this
         }
+
+    override fun copyWithId(id: String): Field<Primitive> = copy(id = id)
 
 }
 

@@ -60,10 +60,12 @@ data class ComponentField(
                     this
                 }
             } else {
-                targetField
+                targetField.copyWithId(id = id)
             } as Field<ComponentStructure>
         }
     }
+
+    override fun copyWithId(id: String): Field<ComponentStructure> = copy(id = id)
 
 }
 

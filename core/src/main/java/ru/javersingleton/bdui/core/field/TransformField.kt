@@ -43,11 +43,12 @@ data class TransformField(
             if (targetField is TransformField) {
                 params.mergeDeeply(params.id, targetField.params)
             } else {
-                targetField
+                targetField.copyWithId(id = id)
             } as Field<Any?>
         }
     }
 
+    override fun copyWithId(id: String): Field<Any?> = copy(id = id)
 
 }
 

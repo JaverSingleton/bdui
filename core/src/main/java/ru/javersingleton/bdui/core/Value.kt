@@ -33,7 +33,7 @@ interface ReadableValue<T> : Value<T> {
 
 }
 
-class LambdaValue<T : Any?>(private val lambda: Lambda) : ReadableValue<T> {
+data class LambdaValue<T : Any?>(private val lambda: Lambda) : ReadableValue<T> {
 
     @Suppress("UNCHECKED_CAST")
     override val currentValue: T
@@ -41,6 +41,8 @@ class LambdaValue<T : Any?>(private val lambda: Lambda) : ReadableValue<T> {
 
     override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
         lambda.subscribe(callback)
+
+    val tag: String get() = lambda.tag
 
 }
 

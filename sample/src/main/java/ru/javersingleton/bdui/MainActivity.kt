@@ -14,6 +14,17 @@ import ru.javersingleton.bdui.core.field.ComponentField
 import ru.javersingleton.bdui.core.field.PrimitiveField
 
 class MainActivity : AppCompatActivity() {
+    var withNot = false
+
+    fun newText(): String {
+        val result = if (withNot) {
+            "not text"
+        } else {
+            "text"
+        }
+        withNot = !withNot
+        return result
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -24,25 +35,18 @@ class MainActivity : AppCompatActivity() {
                             type = "Column",
                             "children" to ArrayField(
                                 ComponentField(
-                                    "Text",
-                                    "text" to PrimitiveField("Meta"),
-                                    "textSize" to PrimitiveField("25"),
-                                    "layout_width" to PrimitiveField("20"),
-                                    id = "meta_title"
-                                ),
-                                ComponentField(
-                                    "ListItem",
-                                    "title" to PrimitiveField("Title"),
-                                    "subtitle" to PrimitiveField("Subtitle"),
-                                    "layout_width" to PrimitiveField("100"),
-                                    "footer" to ComponentField(
-                                        "ListItem",
-                                        "title" to PrimitiveField("Title 2"),
-                                        "subtitle" to PrimitiveField("Subtitle 2"),
-                                        "layout_width" to PrimitiveField("100"),
-                                    )
+                                    type = "Column",
+                                    "children" to ArrayField(
+                                        ComponentField(
+                                            type = "Text",
+                                            "text" to PrimitiveField(newText()),
+                                            id = "titleId"
+                                        )
+                                    ),
+                                    id = "innerColumnId"
                                 )
-                            )
+                            ),
+                            id = "columnId"
                         )
                     )
                 }
@@ -51,12 +55,10 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.clickable {
                         val value = field.value
                         val newField = value.mergeDeeply(
-                            "meta_title",
+                            "titleId",
                             ComponentField(
-                                "Text",
-                                "text" to PrimitiveField("Meta2"),
-                                "textSize" to PrimitiveField("100"),
-                                "layout_width" to PrimitiveField("fillMaxWidth")
+                                type = "Text",
+                                "text" to PrimitiveField(newText())
                             )
                         ) as ComponentField
                         field.value = newField

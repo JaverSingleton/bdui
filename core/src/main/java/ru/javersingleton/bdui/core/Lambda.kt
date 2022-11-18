@@ -1,5 +1,6 @@
 package ru.javersingleton.bdui.core
 
+import android.util.Log
 import kotlinx.coroutines.flow.*
 
 class Lambda(
@@ -7,6 +8,7 @@ class Lambda(
     private var script: Scope.() -> Any? = { throw IllegalStateException() }
 ) : ReadableValue<Any?> {
 
+    var tag: String = ""
 
     fun setBody(
         script: Scope.() -> Any? = this.script
@@ -34,6 +36,8 @@ class Lambda(
         if (isInvalidating) {
             return
         }
+
+        Log.d("Beduin", "notifyStateChanged(tag=$tag)")
 
         isInvalidating = true
         subscribers.toList().forEach { callback ->
@@ -78,17 +82,21 @@ class Lambda(
             return if (cachedState != null && cachedState.input == key) {
                 cachedState.output
             } else {
-                val newCachedState = CachedState(
-                    key,
-                    if (cachedState?.output is Lambda) {
+                val tag = "$callId@($key)"
+                val targetLambda = if (cachedState?.output is Lambda) {
                         cachedState.output.apply {
                             setBody(func)
                         }
                     } else {
+                        Log.d("Beduin", "rememberValue@newLambda($tag)")
                         Lambda(context).apply {
                             setBody(func)
                         }
                     }
+                targetLambda.tag = tag
+                val newCachedState = CachedState(
+                    key,
+                    targetLambda
                 )
                 cache[callId] = newCachedState
                 newCachedState.output

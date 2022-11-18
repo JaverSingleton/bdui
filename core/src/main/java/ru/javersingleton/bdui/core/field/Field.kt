@@ -10,6 +10,8 @@ interface Field<T> {
 
     fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<T>
 
+    fun copyWithId(id: String): Field<T>
+
     val id: String
 
 }
@@ -22,6 +24,8 @@ data class ResolvedField<T>(
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<T> = this
 
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<T> = this
+
+    override fun copyWithId(id: String): Field<T> = copy(id = id)
 
 }
 

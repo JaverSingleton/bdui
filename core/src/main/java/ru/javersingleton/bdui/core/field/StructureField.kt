@@ -61,10 +61,12 @@ data class StructureField(
                     this
                 }
             } else {
-                targetField
+                targetField.copyWithId(id = id)
             } as Field<Structure>
         }
     }
+
+    override fun copyWithId(id: String): Field<Structure> = copy(id = id)
 
 }
 
@@ -80,7 +82,7 @@ data class Structure(
     internal val fields: Map<String, ResolvedField<*>>
 ) {
 
-    fun prop(name: String): Value<*> = fields[name]?.value!!
+    fun prop(name: String): Value<*> = fields[name]?.value ?: Value.NULL
 
     fun hasProp(name: String): Boolean = fields.containsKey(name)
 

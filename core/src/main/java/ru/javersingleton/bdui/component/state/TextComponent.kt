@@ -8,8 +8,8 @@ object TextComponent {
     object StateFactory : ComponentState.Factory<TextState>() {
 
         override fun Scope.create(componentType: String): TextState = TextState(
-            text = prop("text").toStringValue(),
-            textSize = prop("textSize").toInt()
+            text = prop("text").toStringValue() ?: "",
+            textSize = prop("textSize").toInt() ?: 16
         )
 
     }

@@ -23,10 +23,16 @@ data class ReferenceField(
     @Suppress("UNCHECKED_CAST")
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Any?> =
         if (targetFieldId == id) {
-            targetField as Field<Any?>
+            if (targetField is ReferenceField) {
+                copy(refFieldName = targetField.refFieldName)
+            } else {
+                targetField.copyWithId(id) as Field<Any?>
+            }
         } else {
             this
         }
+
+    override fun copyWithId(id: String): Field<Any?> = copy(id = id)
 
 }
 

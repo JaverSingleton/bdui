@@ -14,12 +14,12 @@ object BoxComponent {
                         BoxState.Child(
                             component,
                             BoxState.Child.Params(
-                                alignment = prop("layout_alignment").toStringValue(),
+                                alignment = prop("layout_alignment").toStringValue() ?: "TopCenter",
                             )
                         )
                     }
                 }.filterNotNull(),
-                backgroundColor = prop("backgroundColor").toInt()
+                backgroundColor = prop("backgroundColor").toInt() ?: 0
             )
 
     }

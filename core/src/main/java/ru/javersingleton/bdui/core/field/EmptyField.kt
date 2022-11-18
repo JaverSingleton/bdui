@@ -20,11 +20,17 @@ data class EmptyField(
     @Suppress("UNCHECKED_CAST")
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Any?> {
         return if (targetFieldId == id) {
-            targetField as Field<Any?>
+            if (targetField is EmptyField) {
+                this
+            } else {
+                targetField.copyWithId(id = id) as Field<Any?>
+            }
         } else {
             this
         }
     }
+
+    override fun copyWithId(id: String): Field<Any?> = copy(id = id)
 
 }
 

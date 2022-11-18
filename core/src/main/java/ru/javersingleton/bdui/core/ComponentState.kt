@@ -43,15 +43,14 @@ object ComponentState {
                 return structure.func()
             }
 
-            fun Value<*>.toStringValue(): String {
-                val primitive: Primitive = current()
-                return primitive.toString()
+            fun Value<*>.toStringValue(): String? {
+                val primitive: Primitive? = current()
+                return primitive?.toString()
             }
 
-
-            fun Value<*>.toInt(): Int {
-                val primitive: Primitive = current()
-                return primitive.toInt()
+            fun Value<*>.toInt(): Int? {
+                val primitive: Primitive? = current()
+                return primitive?.toInt()
             }
 
             fun <T> Value<*>.toArray(mapIndexed: Value<*>.(index: Int) -> T): List<T> {
