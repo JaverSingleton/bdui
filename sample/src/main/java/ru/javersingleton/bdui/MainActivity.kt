@@ -7,60 +7,45 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.component.compose.BeduinComponent
-import ru.javersingleton.bdui.core.Beduin
+import ru.javersingleton.bdui.core.BeduinController
 import ru.javersingleton.bdui.core.field.ArrayField
 import ru.javersingleton.bdui.core.field.ComponentField
+import ru.javersingleton.bdui.core.field.EmptyField
 import ru.javersingleton.bdui.core.field.PrimitiveField
+import ru.javersingleton.bdui.core.plus
 
 class MainActivity : AppCompatActivity() {
-    val beduin: Beduin = Beduin().apply {
-        setState(
-            ComponentField(
-                type = "Column",
-                "children" to ArrayField(
-                    ComponentField(
-                        type = "Column",
-                        "children" to ArrayField(
-                            ComponentField(
-                                type = "Text",
-                                "text" to PrimitiveField(newText()),
-                                id = "titleId"
-                            )
+    private val beduin: BeduinController = BeduinController(
+        ComponentField(
+            type = "Column",
+            "children" to ArrayField(
+                ComponentField(
+                    type = "Column",
+                    "children" to ArrayField(
+                        ComponentField(
+                            type = "ListItem",
+                            "title" to PrimitiveField(newText()),
                         ),
-                        id = "innerColumnId"
-                    )
-                ),
-                id = "columnId"
-            )
+                        EmptyField(
+                            id = "titleId"
+                        )
+                    ),
+                )
+            ),
         )
-    }
-    var withNot = false
-
-    fun newText(): String {
-        val result = if (withNot) {
-            "not text"
-        } else {
-            "text"
-        }
-        withNot = !withNot
-        return result
-    }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Column {
                 BeduinComponent(
-                    root = beduin.root,
+                    controller = beduin,
                     modifier = Modifier.clickable {
-                        beduin.setState(
-                            beduin.currentState.mergeDeeply(
-                                "titleId",
-                                ComponentField(
-                                    type = "Text",
-                                    "text" to PrimitiveField(newText())
-                                )
-                            ) as ComponentField
+                        beduin.state += ComponentField(
+                            type = "Text",
+                            "text" to PrimitiveField(newText()),
+                            id = "titleId"
                         )
                     }
                 )

@@ -54,8 +54,11 @@ data class ComponentField(
         } else {
             if (targetField is ComponentField) {
                 val changedParams = params.mergeDeeply(params.id, targetField.params)
-                if (changedParams != params) {
-                    copy(params = changedParams)
+                if (changedParams != params || targetField.componentType != this.componentType) {
+                    copy(
+                        params = changedParams,
+                        componentType = targetField.componentType
+                    )
                 } else {
                     this
                 }
