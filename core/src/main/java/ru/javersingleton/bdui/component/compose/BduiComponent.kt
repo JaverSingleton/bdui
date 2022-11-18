@@ -21,7 +21,7 @@ fun BduiComponent(
     modifier: Modifier = Modifier,
     componentStructure: ComponentStructure
 ) {
-    Log.d("Beduin", "componentType: ${componentStructure.componentType}")
+    Log.d("Beduin", "BduiComponent(componentType=${componentStructure.componentType})")
     // TODO Вынести отдельно
     when (componentStructure.componentType) {
         "Box" -> BoxComponent(

@@ -20,6 +20,14 @@ data class ReferenceField(
         } ?: this@ReferenceField
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Any?> =
+        if (targetFieldId == id) {
+            targetField as Field<Any?>
+        } else {
+            this
+        }
+
 }
 
 fun ReferenceField(

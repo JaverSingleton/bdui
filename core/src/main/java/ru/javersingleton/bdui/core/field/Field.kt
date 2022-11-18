@@ -8,6 +8,8 @@ interface Field<T> {
 
     fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<T>
 
+    fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<T>
+
     val id: String
 
 }
@@ -18,6 +20,8 @@ data class ResolvedField<T>(
 ) : Field<T> {
 
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<T> = this
+
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<T> = this
 
 }
 

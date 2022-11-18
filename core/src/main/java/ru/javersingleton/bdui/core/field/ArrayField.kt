@@ -6,7 +6,7 @@ import ru.javersingleton.bdui.core.Value
 data class ArrayField(
     override val id: String,
     private val fields: List<Field<*>>
-): Field<ArrayData> {
+) : Field<ArrayData> {
 
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ArrayData> =
         scope.run {
@@ -25,6 +25,38 @@ data class ArrayField(
 
     private fun List<Field<*>>.hasUnresolvedFields(): Boolean =
         firstOrNull { it !is ResolvedField } != null
+
+    @Suppress("UNCHECKED_CAST")
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<ArrayData> {
+        return if (targetFieldId != id) {
+            val targetFields = fields.map { it.mergeDeeply(targetFieldId, targetField) }
+            if (targetFields == fields) {
+                this
+            } else {
+                copy(fields = targetFields)
+            }
+        } else {
+            if (targetField is ArrayField) {
+                val changedFields = fields.map { value ->
+                    targetField.fields.firstOrNull { it.id == value.id }
+                        ?.let { targetFieldElement ->
+                            value.mergeDeeply(
+                                value.id,
+                                targetFieldElement
+                            )
+                        }
+                        ?: value
+                }
+                if (changedFields == fields) {
+                    this
+                } else {
+                    copy(fields = changedFields)
+                }
+            } else {
+                targetField
+            } as Field<ArrayData>
+        }
+    }
 
 }
 

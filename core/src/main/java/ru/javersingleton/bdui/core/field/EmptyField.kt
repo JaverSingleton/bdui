@@ -17,6 +17,15 @@ data class EmptyField(
         )
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Any?> {
+        return if (targetFieldId == id) {
+            targetField as Field<Any?>
+        } else {
+            this
+        }
+    }
+
 }
 
 fun EmptyField(): EmptyField = EmptyField(id = newId())

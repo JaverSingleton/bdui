@@ -30,6 +30,24 @@ data class TransformField(
         )
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Any?> {
+        return if (targetFieldId != id) {
+            val targetParams = params.mergeDeeply(targetFieldId, targetField)
+            if (targetParams != params) {
+                this.copy(params = targetParams)
+            } else {
+                this
+            }
+        } else {
+            if (targetField is TransformField) {
+                params.mergeDeeply(params.id, targetField.params)
+            } else {
+                targetField
+            } as Field<Any?>
+        }
+    }
+
 
 }
 

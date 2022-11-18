@@ -36,7 +36,7 @@ class Lambda(
         }
 
         isInvalidating = true
-        subscribers.forEach { callback ->
+        subscribers.toList().forEach { callback ->
             callback(this)
         }
     }
@@ -56,6 +56,7 @@ class Lambda(
         subscriptions.forEach { it.unsubscribe() }
         subscriptions = call.targetDependencies.map { it.subscribe { invalidate() } }
         cache = call.targetCache
+        isInvalidating = false
 
         return result
     }

@@ -18,6 +18,14 @@ data class PrimitiveField(
         )
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Primitive> =
+        if (targetFieldId == id) {
+            targetField as Field<Primitive>
+        } else {
+            this
+        }
+
 }
 
 fun PrimitiveField(

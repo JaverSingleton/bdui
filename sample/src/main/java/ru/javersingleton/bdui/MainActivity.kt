@@ -27,7 +27,8 @@ class MainActivity : AppCompatActivity() {
                                     "Text",
                                     "text" to PrimitiveField("Meta"),
                                     "textSize" to PrimitiveField("25"),
-                                    "layout_width" to PrimitiveField("20")
+                                    "layout_width" to PrimitiveField("20"),
+                                    id = "meta_title"
                                 ),
                                 ComponentField(
                                     "ListItem",
@@ -48,24 +49,17 @@ class MainActivity : AppCompatActivity() {
                 Beduin(
                     state = field.value,
                     modifier = Modifier.clickable {
-                        field.value = ComponentField(
-                                type = "Column",
-                                "children" to ArrayField(
-                                    ComponentField(
-                                        "Text",
-                                        "text" to PrimitiveField("Meta"),
-                                        "textSize" to PrimitiveField("100"),
-                                        "layout_width" to PrimitiveField("fillMaxWidth")
-                                    ),
-                                    ComponentField(
-                                        "ListItem",
-                                        "title" to PrimitiveField("Title"),
-                                        "subtitle" to PrimitiveField("Subtitle"),
-                                        "hint" to PrimitiveField("SCIENCE!!!"),
-                                        "layout_width" to PrimitiveField("100")
-                                    )
-                                )
+                        val value = field.value
+                        val newField = value.mergeDeeply(
+                            "meta_title",
+                            ComponentField(
+                                "Text",
+                                "text" to PrimitiveField("Meta2"),
+                                "textSize" to PrimitiveField("100"),
+                                "layout_width" to PrimitiveField("fillMaxWidth")
                             )
+                        ) as ComponentField
+                        field.value = newField
                     }
                 )
             }

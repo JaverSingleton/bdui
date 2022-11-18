@@ -39,6 +39,33 @@ data class StructureField(
         return StructureField(id = id, fields = fields + targetFields.fields)
     }
 
+    @Suppress("UNCHECKED_CAST")
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Structure> {
+        return if (targetFieldId != id) {
+            val targetFields = fields.mapValues { it.value.mergeDeeply(targetFieldId, targetField) }
+            if (targetFields == fields) {
+                this
+            } else {
+                copy(fields = targetFields)
+            }
+        } else {
+            if (targetField is StructureField) {
+                val changedFields = fields + targetField.fields.mapValues { (key, value) ->
+                    val currentField = fields[key]
+                    currentField?.mergeDeeply(currentField.id, value)
+                        ?: value
+                }
+                if (changedFields != fields) {
+                    copy(fields = changedFields)
+                } else {
+                    this
+                }
+            } else {
+                targetField
+            } as Field<Structure>
+        }
+    }
+
 }
 
 fun StructureField(
