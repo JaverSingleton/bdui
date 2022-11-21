@@ -42,6 +42,10 @@ fun BduiComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<ImageState>,
         )
+        "Toolbar" -> ToolbarComponent(
+            modifier = modifier,
+            componentState = componentStructure.value as Value<ToolbarState>,
+        )
         else -> MetaComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<MetaState>,

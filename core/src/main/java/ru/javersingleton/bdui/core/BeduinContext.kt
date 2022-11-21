@@ -126,6 +126,7 @@ class MainBeduinContext() : BeduinContext {
             "Text" -> TextComponent.StateFactory
             "Button" -> ButtonComponent.StateFactory
             "Image" -> ImageComponent.StateFactory
+            "Toolbar" -> ToolbarComponent.StateFactory
             else -> MetaComponent.StateFactory
         }
 

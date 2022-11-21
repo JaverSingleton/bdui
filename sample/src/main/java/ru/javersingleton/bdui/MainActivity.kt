@@ -24,6 +24,10 @@ class MainActivity : AppCompatActivity() {
                     type = "Column",
                     "children" to ArrayField(
                         ComponentField(
+                            type = "Toolbar",
+                            "title" to PrimitiveField("Contacts"),
+                        ),
+                        ComponentField(
                             type = "Text",
                             "text" to PrimitiveField("Contacts"),
                             "textSize" to PrimitiveField("24"),
