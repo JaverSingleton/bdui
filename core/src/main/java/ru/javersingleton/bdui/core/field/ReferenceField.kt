@@ -5,8 +5,8 @@ import ru.javersingleton.bdui.core.Value
 
 
 data class ReferenceField(
+    override val id: String = newId(),
     private val refFieldName: String,
-    override val id: String
 ) : Field<Any?> {
 
     @Suppress("UNCHECKED_CAST")

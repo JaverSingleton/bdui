@@ -4,7 +4,7 @@ import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
 data class EmptyField(
-    override val id: String
+    override val id: String = newId()
 ) : Field<Any?> {
 
     override fun resolve(

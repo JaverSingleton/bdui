@@ -5,7 +5,7 @@ import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
 data class ComponentField(
-    override val id: String,
+    override val id: String = newId(),
     val componentType: String,
     val params: Field<Structure>
 ) : Field<ComponentStructure> {
@@ -24,7 +24,6 @@ data class ComponentField(
                 val stateFactory = rememberValue("$id@stateFactory", componentType) {
                     inflateStateFactory(componentType)
                 }
-                Log.d("Beduin", "ComponentField(id=$id componentType=$componentType)")
 
                 ComponentStructure(
                     componentType = componentType,

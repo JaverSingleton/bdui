@@ -37,8 +37,6 @@ class Lambda(
             return
         }
 
-        Log.d("Beduin", "notifyStateChanged(tag=$tag)")
-
         isInvalidating = true
         subscribers.toList().forEach { callback ->
             callback(this)
@@ -88,7 +86,6 @@ class Lambda(
                             setBody(func)
                         }
                     } else {
-                        Log.d("Beduin", "rememberValue@newLambda($tag)")
                         Lambda(context).apply {
                             setBody(func)
                         }

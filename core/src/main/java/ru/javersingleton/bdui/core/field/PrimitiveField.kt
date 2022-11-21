@@ -4,7 +4,7 @@ import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
 data class PrimitiveField(
-    override val id: String,
+    override val id: String = newId(),
     private val value: String,
 ) : Field<Primitive> {
 

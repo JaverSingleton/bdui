@@ -1,5 +1,6 @@
 package ru.javersingleton.bdui.component.compose.component
 
+import android.util.Log
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +15,7 @@ fun TextComponent(
     componentState: Value<TextState>
 ) {
     val state = componentState.subscribeAsState().value
+    Log.d("Beduin", "OnComponentRender: componentType=Text")
     Text(
         modifier = modifier,
         text = state.text,

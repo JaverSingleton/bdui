@@ -8,12 +8,12 @@ object ColumnComponent {
     object StateFactory : ComponentState.Factory<ColumnState>() {
 
         override fun Scope.create(componentType: String): ColumnState = ColumnState(
-            children = prop("children").toArray {
-                toComponentWithParams { component ->
+            children = prop("children").asList {
+                asComponentWithParams { component ->
                     ColumnState.Child(
                         component,
                         ColumnState.Child.Params(
-                            width = prop("layout_width").toStringValue() ?: "fillMaxWidth",
+                            width = prop("layout_width").asString() ?: "fillMaxWidth",
                         )
                     )
                 }

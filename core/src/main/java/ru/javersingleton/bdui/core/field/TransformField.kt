@@ -4,7 +4,7 @@ import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
 data class TransformField(
-    override val id: String,
+    override val id: String = newId(),
     private val params: Field<Structure>,
     private val transformType: String,
 ) : Field<Any?> {

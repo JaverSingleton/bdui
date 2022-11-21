@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.component.compose.component
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ fun ColumnComponent(
     componentState: Value<ColumnState>
 ) {
     val state = componentState.subscribeAsState().value
+    Log.d("Beduin", "OnComponentRender: componentType=Column")
     Column(
         modifier = modifier
     ) {

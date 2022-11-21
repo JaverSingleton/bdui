@@ -9,17 +9,17 @@ object BoxComponent {
 
         override fun Scope.create(componentType: String): BoxState =
             BoxState(
-                children = prop("children").toArray {
-                    toComponentWithParams { component ->
+                children = prop("children").asList {
+                    asComponentWithParams { component ->
                         BoxState.Child(
                             component,
                             BoxState.Child.Params(
-                                alignment = prop("layout_alignment").toStringValue() ?: "TopCenter",
+                                alignment = prop("layout_alignment").asString() ?: "TopCenter",
                             )
                         )
                     }
                 }.filterNotNull(),
-                backgroundColor = prop("backgroundColor").toInt() ?: 0
+                backgroundColor = prop("backgroundColor").asInt() ?: 0
             )
 
     }
