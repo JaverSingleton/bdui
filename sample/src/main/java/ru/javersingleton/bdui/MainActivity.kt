@@ -5,6 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.component.compose.BeduinComponent
 import ru.javersingleton.bdui.core.BeduinController
@@ -23,12 +24,24 @@ class MainActivity : AppCompatActivity() {
                     type = "Column",
                     "children" to ArrayField(
                         ComponentField(
-                            type = "ListItem",
-                            "title" to PrimitiveField(newText()),
+                            type = "Image",
+                            "src" to PrimitiveField("https://www.meme-arsenal.com/memes/80a6a54e64c243b1fd270649a2cdc0f2.jpg"),
+                            "contentScale" to PrimitiveField("Fit"),
+                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                            "layout_height" to PrimitiveField("250"),
+                            id = "imageId"
                         ),
-                        EmptyField(
-                            id = "titleId"
-                        )
+                        ComponentField(
+                            type = "Text",
+                            "text" to PrimitiveField("Hello World!"),
+                            "layout_width" to PrimitiveField("wrapContentWidth"),
+                            id = "textId",
+                        ),
+                        ComponentField(
+                            type = "Button",
+                            "text" to PrimitiveField("Submit"),
+                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                        ),
                     ),
                 )
             ),
@@ -43,11 +56,11 @@ class MainActivity : AppCompatActivity() {
                     controller = beduin,
                     modifier = Modifier.clickable {
                         beduin.state += ComponentField(
-                            type = "Text",
-                            "text" to PrimitiveField(newText()),
-                            id = "titleId"
+                            type = "Image",
+                            "src" to PrimitiveField("https://www.meme-arsenal.com/memes/46af4bad3574b521c529676373030172.jpg"),
+                            id = "imageId"
                         )
-                    }
+                    }.fillMaxWidth()
                 )
             }
         }

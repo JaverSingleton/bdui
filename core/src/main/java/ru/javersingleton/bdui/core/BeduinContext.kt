@@ -1,9 +1,6 @@
 package ru.javersingleton.bdui.core
 
-import ru.javersingleton.bdui.component.state.BoxComponent
-import ru.javersingleton.bdui.component.state.ColumnComponent
-import ru.javersingleton.bdui.component.state.MetaComponent
-import ru.javersingleton.bdui.component.state.TextComponent
+import ru.javersingleton.bdui.component.state.*
 import ru.javersingleton.bdui.core.field.*
 
 interface BeduinContext {
@@ -70,6 +67,8 @@ class MainBeduinContext() : BeduinContext {
             "Box" -> BoxComponent.StateFactory
             "Column" -> ColumnComponent.StateFactory
             "Text" -> TextComponent.StateFactory
+            "Button" -> ButtonComponent.StateFactory
+            "Image" -> ImageComponent.StateFactory
             else -> MetaComponent.StateFactory
         }
 

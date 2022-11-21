@@ -14,6 +14,7 @@ object ColumnComponent {
                         component,
                         ColumnState.Child.Params(
                             width = prop("layout_width").asString() ?: "fillMaxWidth",
+                            height = prop("layout_height").asString() ?: "wrapContentHeight",
                         )
                     )
                 }
@@ -34,6 +35,7 @@ data class ColumnState(
     ) {
         data class Params(
             val width: String,
+            val height: String,
         )
     }
 }
