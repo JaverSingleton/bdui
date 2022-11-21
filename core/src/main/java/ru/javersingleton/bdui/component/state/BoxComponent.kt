@@ -15,6 +15,8 @@ object BoxComponent {
                             component,
                             BoxState.Child.Params(
                                 alignment = prop("layout_alignment").asString() ?: "TopCenter",
+                                width = prop("layout_width").asString() ?: "fillMaxWidth",
+                                height = prop("layout_height").asString() ?: "wrapContentHeight",
                             )
                         )
                     }
@@ -37,6 +39,8 @@ data class BoxState(
     ) {
         data class Params(
             val alignment: String,
+            val width: String,
+            val height: String,
         )
     }
 }

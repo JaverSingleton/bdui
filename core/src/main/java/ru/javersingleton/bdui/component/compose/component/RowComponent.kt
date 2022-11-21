@@ -2,29 +2,24 @@ package ru.javersingleton.bdui.component.compose.component
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ru.javersingleton.bdui.component.compose.BduiComponent
 import ru.javersingleton.bdui.component.compose.subscribeAsState
-import ru.javersingleton.bdui.component.state.BoxState
+import ru.javersingleton.bdui.component.state.RowState
 import ru.javersingleton.bdui.core.Value
 
 @Composable
-fun BoxComponent(
+fun RowComponent(
     modifier: Modifier = Modifier,
-    componentState: Value<BoxState>
+    componentState: Value<RowState>
 ) {
     val state = componentState.subscribeAsState().value
-    Log.d("Beduin", "OnComponentRender: componentType=Box")
-    Box(
-        modifier = Modifier
-            .background(color = Color(state.backgroundColor))
-            .then(modifier)
+    Log.d("Beduin", "OnComponentRender: componentType=Row")
+    Row(
+        modifier = modifier
     ) {
         state.children.forEach { child ->
             BduiComponent(
@@ -37,7 +32,7 @@ fun BoxComponent(
 
 @Composable
 @SuppressLint("ModifierFactoryExtensionFunction", "ComposableModifierFactory")
-private fun BoxScope.toModifier(params: BoxState.Child.Params): Modifier {
+private fun RowScope.toModifier(params: RowState.Child.Params): Modifier {
     var result: Modifier = Modifier
     result = when {
         params.width == "fillMaxWidth" -> result.fillMaxWidth()
@@ -52,22 +47,6 @@ private fun BoxScope.toModifier(params: BoxState.Child.Params): Modifier {
         params.height.toIntOrNull() != null -> result.height(params.height.toInt().dp)
         params.height.isEmpty() -> result
         else -> throw IllegalArgumentException()
-    }
-    if (params.alignment.isNotEmpty()) {
-        result = result.align(
-            when (params.alignment) {
-                "TopStart" -> Alignment.TopStart
-                "TopCenter" -> Alignment.TopCenter
-                "TopEnd" -> Alignment.TopEnd
-                "CenterStart" -> Alignment.CenterStart
-                "Center" -> Alignment.Center
-                "CenterEnd" -> Alignment.CenterEnd
-                "BottomStart" -> Alignment.BottomStart
-                "BottomCenter" -> Alignment.BottomCenter
-                "BottomEnd" -> Alignment.BottomEnd
-                else -> throw IllegalArgumentException()
-            }
-        )
     }
     return result
 }

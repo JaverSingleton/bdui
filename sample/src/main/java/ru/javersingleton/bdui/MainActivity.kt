@@ -24,24 +24,37 @@ class MainActivity : AppCompatActivity() {
                     type = "Column",
                     "children" to ArrayField(
                         ComponentField(
-                            type = "Image",
-                            "src" to PrimitiveField("https://www.meme-arsenal.com/memes/80a6a54e64c243b1fd270649a2cdc0f2.jpg"),
-                            "contentScale" to PrimitiveField("Fit"),
-                            "layout_width" to PrimitiveField("fillMaxWidth"),
-                            "layout_height" to PrimitiveField("250"),
-                            id = "imageId"
-                        ),
-                        ComponentField(
                             type = "Text",
-                            "text" to PrimitiveField("Hello World!"),
-                            "layout_width" to PrimitiveField("wrapContentWidth"),
-                            id = "textId",
-                        ),
-                        ComponentField(
-                            type = "Button",
-                            "text" to PrimitiveField("Submit"),
+                            "text" to PrimitiveField("Contacts"),
+                            "textSize" to PrimitiveField("24"),
+                            "textAlign" to PrimitiveField("Center"),
                             "layout_width" to PrimitiveField("fillMaxWidth"),
                         ),
+                        ComponentField(
+                            type = "ContactItem",
+                            "avatar" to PrimitiveField("https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg"),
+                            "name" to PrimitiveField("Happy Cat"),
+                            "lastSeen" to PrimitiveField("21.11.2022"),
+                        ),
+                        ComponentField(
+                            type = "ContactItem",
+                            "avatar" to PrimitiveField("https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg"),
+                            "name" to PrimitiveField("Broken Cat"),
+                            "lastSeen" to PrimitiveField("20.11.2022"),
+                            id = "contact2"
+                        ),
+                        ComponentField(
+                            type = "Box",
+                            "layout_height" to PrimitiveField("fillMaxHeight"),
+                            "children" to ArrayField(
+                                ComponentField(
+                                    type = "Button",
+                                    "text" to PrimitiveField("Submit"),
+                                    "layout_width" to PrimitiveField("fillMaxWidth"),
+                                    "layout_alignment" to PrimitiveField("BottomCenter"),
+                                ),
+                            )
+                        )
                     ),
                 )
             ),
@@ -56,9 +69,10 @@ class MainActivity : AppCompatActivity() {
                     controller = beduin,
                     modifier = Modifier.clickable {
                         beduin.state += ComponentField(
-                            type = "Image",
-                            "src" to PrimitiveField("https://www.meme-arsenal.com/memes/46af4bad3574b521c529676373030172.jpg"),
-                            id = "imageId"
+                            type = "ContactItem",
+                            "indicator" to PrimitiveField("https://zibuhoker.ru/ifm/indicator.png"),
+                            "lastSeen" to PrimitiveField("Online"),
+                            id = "contact2"
                         )
                     }.fillMaxWidth()
                 )

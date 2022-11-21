@@ -26,6 +26,10 @@ fun BduiComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<ColumnState>,
         )
+        "Row" -> RowComponent(
+            modifier = modifier,
+            componentState = componentStructure.value as Value<RowState>,
+        )
         "Text" -> TextComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<TextState>,
