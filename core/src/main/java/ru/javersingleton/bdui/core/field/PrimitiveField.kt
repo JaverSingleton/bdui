@@ -48,6 +48,8 @@ data class Primitive(private val value: String) {
 
     fun toInt(): Int = value.toInt()
 
+    fun toBoolean(): Boolean = value.toBoolean()
+
     fun toFloat(): Float = value.toFloat()
 
 }

@@ -3,30 +3,29 @@ package ru.javersingleton.bdui.core.field
 import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
-data class TransformField(
+data class FunctionField(
     override val id: String = newId(),
     private val params: Field<Structure>,
-    private val transformType: String,
+    private val functionType: String,
 ) : Field<Any?> {
 
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<Any?> = scope.run {
         val params = params.resolve(this, args)
         if (params !is ResolvedField) {
-            return TransformField(
+            return FunctionField(
                 id,
                 params,
-                transformType,
+                functionType,
             )
         }
 
-        val transform = inflateTransform(transformType)
+        val function = rememberValue("$id@function", functionType) {
+            inflateFunction(functionType)
+        }
 
         ResolvedField(
             id = id,
-            value = rememberValue(
-                id,
-                setOf(this@TransformField.params, transform)
-            ) { transform.calculate(params.value.current) }
+            value = function.current.calculate(scope, id, params.value.current)
         )
     }
 
@@ -40,7 +39,7 @@ data class TransformField(
                 this
             }
         } else {
-            if (targetField is TransformField) {
+            if (targetField is FunctionField) {
                 params.mergeDeeply(params.id, targetField.params)
             } else {
                 targetField.copyWithId(id = id)
@@ -52,9 +51,19 @@ data class TransformField(
 
 }
 
-interface Transform {
+fun FunctionField(
+    type: String,
+    vararg fields: Pair<String, Field<*>>,
+    id: String = newId(),
+): FunctionField  =
+    FunctionField(
+        id = id,
+        functionType = type,
+        params = StructureField(*fields)
+    )
 
-    // TODO Переписать Transform
-    fun calculate(params: Any?): Any?
+interface Function {
+
+    fun calculate(scope: Lambda.Scope, id: String, params: Structure): Value<Any?>
 
 }

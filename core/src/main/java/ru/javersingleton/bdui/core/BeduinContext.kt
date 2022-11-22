@@ -1,11 +1,13 @@
 package ru.javersingleton.bdui.core
 
+import ru.javersingleton.bdui.component.function.ConditionFunction
 import ru.javersingleton.bdui.component.state.*
 import ru.javersingleton.bdui.core.field.*
+import ru.javersingleton.bdui.core.field.Function
 
 interface BeduinContext {
 
-    fun inflateTransform(transformType: String): Transform
+    fun inflateFunction(functionType: String): Function
 
     fun inflateMetaComponentBlueprint(componentType: String): MetaComponentBlueprint
 
@@ -56,7 +58,7 @@ class MainBeduinContext() : BeduinContext {
                     "avatar" to PrimitiveField(""),
                     "name" to PrimitiveField(""),
                     "lastSeen" to PrimitiveField(""),
-                    "indicator" to PrimitiveField(""),
+                    "indicator" to PrimitiveField("false"),
                 ),
                 rootComponent = ComponentField(
                     type = "Box",
@@ -86,7 +88,12 @@ class MainBeduinContext() : BeduinContext {
                                         ),
                                         ComponentField(
                                             type = "Image",
-                                            "src" to ReferenceField("indicator"),
+                                            "src" to FunctionField(
+                                                type = "Condition",
+                                                "value" to ReferenceField("indicator"),
+                                                "trueResult" to PrimitiveField("https://zibuhoker.ru/ifm/indicator.png"),
+                                                "falseResult" to PrimitiveField(""),
+                                            ),
                                             "layout_alignment" to PrimitiveField("BottomEnd"),
                                             "contentScale" to PrimitiveField("Inside"),
                                             "clip" to PrimitiveField("Circle"),
@@ -134,9 +141,11 @@ class MainBeduinContext() : BeduinContext {
         }
     )
 
-    override fun inflateTransform(transformType: String): Transform {
-        TODO("Not yet implemented")
-    }
+    override fun inflateFunction(functionType: String): Function =
+        when (functionType) {
+            "Condition" -> ConditionFunction()
+            else -> throw IllegalArgumentException("Function $functionType not found")
+        }
 
     override fun inflateMetaComponentBlueprint(componentType: String): MetaComponentBlueprint =
         when {
