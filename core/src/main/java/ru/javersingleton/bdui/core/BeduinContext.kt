@@ -1,5 +1,6 @@
 package ru.javersingleton.bdui.core
 
+import ru.javersingleton.bdui.component.function.CheckEqualsFunction
 import ru.javersingleton.bdui.component.function.ConditionFunction
 import ru.javersingleton.bdui.component.state.*
 import ru.javersingleton.bdui.core.field.*
@@ -122,7 +123,12 @@ class MainBeduinContext() : BeduinContext {
                                         ),
                                         ComponentField(
                                             type = "Text",
-                                            "text" to ReferenceField("lastSeen"),
+                                            "text" to FunctionField(
+                                                type = "Condition",
+                                                "value" to ReferenceField("indicator"),
+                                                "trueResult" to PrimitiveField("Online"),
+                                                "falseResult" to ReferenceField("lastSeen"),
+                                            ),
                                             "textSize" to PrimitiveField("12"),
                                             "layout_width" to PrimitiveField("fillMaxWidth"),
                                             "layout_padding" to StructureField(
@@ -144,6 +150,7 @@ class MainBeduinContext() : BeduinContext {
     override fun inflateFunction(functionType: String): Function =
         when (functionType) {
             "Condition" -> ConditionFunction()
+            "CheckEquals" -> CheckEqualsFunction()
             else -> throw IllegalArgumentException("Function $functionType not found")
         }
 
