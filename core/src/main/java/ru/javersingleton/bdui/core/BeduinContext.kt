@@ -34,19 +34,19 @@ class MainBeduinContext() : BeduinContext {
                             type = "Text",
                             "text" to ReferenceField("title"),
                             "textSize" to PrimitiveField("20"),
-                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                            "layout_width" to PrimitiveField("fillMax"),
                         ),
                         ComponentField(
                             type = "Text",
                             "text" to ReferenceField("subtitle"),
                             "textSize" to PrimitiveField("12"),
-                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                            "layout_width" to PrimitiveField("fillMax"),
                         ),
                         ComponentField(
                             type = "Text",
                             "text" to ReferenceField("hint"),
                             "textSize" to PrimitiveField("8"),
-                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                            "layout_width" to PrimitiveField("fillMax"),
                         ),
                         ReferenceField("footer")
                     )
@@ -66,7 +66,7 @@ class MainBeduinContext() : BeduinContext {
                     "children" to ArrayField(
                         ComponentField(
                             type = "Row",
-                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                            "layout_width" to PrimitiveField("fillMax"),
                             "layout_padding" to StructureField(
                                 "start" to PrimitiveField("16"),
                                 "end" to PrimitiveField("16"),
@@ -84,8 +84,8 @@ class MainBeduinContext() : BeduinContext {
                                             "src" to ReferenceField("avatar"),
                                             "contentScale" to PrimitiveField("Crop"),
                                             "clip" to PrimitiveField("Circle"),
-                                            "layout_width" to PrimitiveField("fillMaxWidth"),
-                                            "layout_height" to PrimitiveField("fillMaxHeight"),
+                                            "layout_width" to PrimitiveField("fillMax"),
+                                            "layout_height" to PrimitiveField("fillMax"),
                                         ),
                                         ComponentField(
                                             type = "Image",
@@ -109,13 +109,13 @@ class MainBeduinContext() : BeduinContext {
                                 ),
                                 ComponentField(
                                     type = "Column",
-                                    "layout_width" to PrimitiveField("fillMaxWidth"),
+                                    "layout_width" to PrimitiveField("fillMax"),
                                     "children" to ArrayField(
                                         ComponentField(
                                             type = "Text",
                                             "text" to ReferenceField("name"),
                                             "textSize" to PrimitiveField("16"),
-                                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                                            "layout_width" to PrimitiveField("fillMax"),
                                             "layout_padding" to StructureField(
                                                 "top" to PrimitiveField("8"),
                                                 "start" to PrimitiveField("8")
@@ -130,7 +130,7 @@ class MainBeduinContext() : BeduinContext {
                                                 "falseResult" to ReferenceField("lastSeen"),
                                             ),
                                             "textSize" to PrimitiveField("12"),
-                                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                                            "layout_width" to PrimitiveField("fillMax"),
                                             "layout_padding" to StructureField(
                                                 "top" to PrimitiveField("8"),
                                                 "start" to PrimitiveField("8"),

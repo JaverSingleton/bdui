@@ -17,8 +17,8 @@ object BoxComponent {
                             component,
                             BoxState.Child.Params(
                                 alignment = prop("layout_alignment").asString() ?: "TopCenter",
-                                width = prop("layout_width").asString() ?: "fillMaxWidth",
-                                height = prop("layout_height").asString() ?: "wrapContentHeight",
+                                width = prop("layout_width").asString() ?: "fillMax",
+                                height = prop("layout_height").asString() ?: "wrapContent",
                                 padding = prop("layout_padding").asObject {
                                     create(this@create, this)
                                 }

@@ -15,8 +15,8 @@ object RowComponent {
                     RowState.Child(
                         component,
                         RowState.Child.Params(
-                            width = prop("layout_width").asString() ?: "fillMaxWidth",
-                            height = prop("layout_height").asString() ?: "wrapContentHeight",
+                            width = prop("layout_width").asString() ?: "fillMax",
+                            height = prop("layout_height").asString() ?: "wrapContent",
                             padding = prop("layout_padding").asObject {
                                 Padding.create(this@create, this)
                             },

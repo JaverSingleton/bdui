@@ -16,14 +16,12 @@ data class Padding(
             scope: ComponentState.Factory.Scope,
             structure: Structure,
         ): Padding = scope.run {
-            structure.run {
-                Padding(
-                    start = prop("start").asInt() ?: 0,
-                    end = prop("end").asInt() ?: 0,
-                    bottom = prop("bottom").asInt() ?: 0,
-                    top = prop("top").asInt() ?: 0,
-                )
-            }
+            Padding(
+                start = structure.prop("start").asInt() ?: 0,
+                end = structure.prop("end").asInt() ?: 0,
+                bottom = structure.prop("bottom").asInt() ?: 0,
+                top = structure.prop("top").asInt() ?: 0,
+            )
         }
 
     }

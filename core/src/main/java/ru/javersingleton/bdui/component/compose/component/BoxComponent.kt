@@ -41,15 +41,15 @@ fun BoxComponent(
 private fun BoxScope.toModifier(params: BoxState.Child.Params): Modifier {
     var result: Modifier = Modifier
     result = when {
-        params.width == "fillMaxWidth" -> result.fillMaxWidth()
-        params.width == "wrapContentWidth" -> result.wrapContentWidth()
+        params.width == "fillMax" -> result.fillMaxWidth()
+        params.width == "wrapContent" -> result.wrapContentWidth()
         params.width.toIntOrNull() != null -> result.width(params.width.toInt().dp)
         params.width.isEmpty() -> result
         else -> throw IllegalArgumentException()
     }
     result = when {
-        params.height == "fillMaxHeight" -> result.fillMaxHeight()
-        params.height == "wrapContentHeight" -> result.wrapContentHeight()
+        params.height == "fillMax" -> result.fillMaxHeight()
+        params.height == "wrapContent" -> result.wrapContentHeight()
         params.height.toIntOrNull() != null -> result.height(params.height.toInt().dp)
         params.height.isEmpty() -> result
         else -> throw IllegalArgumentException()

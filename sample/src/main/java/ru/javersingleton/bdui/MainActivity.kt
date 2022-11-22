@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                             "text" to PrimitiveField("Contacts"),
                             "textSize" to PrimitiveField("24"),
                             "textAlign" to PrimitiveField("Center"),
-                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                            "layout_width" to PrimitiveField("fillMax"),
                         ),
                         ComponentField(
                             type = "ContactItem",
@@ -47,12 +47,12 @@ class MainActivity : AppCompatActivity() {
                         ),
                         ComponentField(
                             type = "Box",
-                            "layout_height" to PrimitiveField("fillMaxHeight"),
+                            "layout_height" to PrimitiveField("fillMax"),
                             "children" to ArrayField(
                                 ComponentField(
                                     type = "Button",
                                     "text" to PrimitiveField("Submit"),
-                                    "layout_width" to PrimitiveField("fillMaxWidth"),
+                                    "layout_width" to PrimitiveField("fillMax"),
                                     "layout_alignment" to PrimitiveField("BottomCenter"),
                                 ),
                             )
@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity() {
                         beduin.state += ComponentField(
                             type = "ContactItem",
                             "indicator" to PrimitiveField("true"),
-                            "lastSeen" to PrimitiveField("Online"),
                             id = "contact2"
                         )
                     }.fillMaxWidth()
