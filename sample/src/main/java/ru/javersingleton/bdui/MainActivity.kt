@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
                             "text" to PrimitiveField("Contacts"),
                             "textSize" to PrimitiveField("24"),
                             "textAlign" to PrimitiveField("Center"),
-                            "layout_width" to PrimitiveField("fillMax"),
                         ),
                         ComponentField(
                             type = "ContactItem",
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity() {
                                 ComponentField(
                                     type = "Button",
                                     "text" to PrimitiveField("Submit"),
-                                    "layout_width" to PrimitiveField("fillMax"),
                                     "layout_alignment" to PrimitiveField("BottomCenter"),
                                 ),
                             )
