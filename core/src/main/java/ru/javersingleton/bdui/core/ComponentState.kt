@@ -42,9 +42,9 @@ object ComponentState {
 
             fun <T> Value<*>.asObject(
                 func: Structure.() -> T
-            ): T {
-                val structure: Structure = current()
-                return structure.func()
+            ): T? {
+                val structure: Structure? = current()
+                return structure?.func()
             }
 
             fun Value<*>.asString(): String? {

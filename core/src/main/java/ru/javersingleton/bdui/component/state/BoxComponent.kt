@@ -1,5 +1,7 @@
 package ru.javersingleton.bdui.component.state
 
+import ru.javersingleton.bdui.component.state.entity.Padding
+import ru.javersingleton.bdui.component.state.entity.Padding.Companion.create
 import ru.javersingleton.bdui.core.ComponentState
 import ru.javersingleton.bdui.core.field.ComponentStructure
 
@@ -17,6 +19,9 @@ object BoxComponent {
                                 alignment = prop("layout_alignment").asString() ?: "TopCenter",
                                 width = prop("layout_width").asString() ?: "fillMaxWidth",
                                 height = prop("layout_height").asString() ?: "wrapContentHeight",
+                                padding = prop("layout_padding").asObject {
+                                    create(this@create, this)
+                                }
                             )
                         )
                     }
@@ -35,12 +40,13 @@ data class BoxState(
 
     data class Child(
         val component: ComponentStructure,
-        val params: Params
+        val params: Params,
     ) {
         data class Params(
             val alignment: String,
             val width: String,
             val height: String,
+            val padding: Padding?,
         )
     }
 }

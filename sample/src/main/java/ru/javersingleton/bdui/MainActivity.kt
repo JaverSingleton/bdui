@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.component.compose.BeduinComponent
 import ru.javersingleton.bdui.core.BeduinController
-import ru.javersingleton.bdui.core.field.ArrayField
-import ru.javersingleton.bdui.core.field.ComponentField
-import ru.javersingleton.bdui.core.field.EmptyField
-import ru.javersingleton.bdui.core.field.PrimitiveField
+import ru.javersingleton.bdui.core.field.*
 import ru.javersingleton.bdui.core.plus
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                             "avatar" to PrimitiveField("https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg"),
                             "name" to PrimitiveField("Broken Cat"),
                             "lastSeen" to PrimitiveField("20.11.2022"),
+                            "indicator" to PrimitiveField(""),
                             id = "contact2"
                         ),
                         ComponentField(

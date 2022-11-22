@@ -48,5 +48,17 @@ private fun ColumnScope.toModifier(params: ColumnState.Child.Params): Modifier {
         params.height.isEmpty() -> result
         else -> throw IllegalArgumentException()
     }
+    if (params.padding != null) {
+        result = result.padding(
+            params.padding.run {
+                PaddingValues(
+                    start = start.dp,
+                    end = end.dp,
+                    top = top.dp,
+                    bottom = bottom.dp,
+                )
+            }
+        )
+    }
     return result
 }

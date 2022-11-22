@@ -59,47 +59,73 @@ class MainBeduinContext() : BeduinContext {
                     "indicator" to PrimitiveField(""),
                 ),
                 rootComponent = ComponentField(
-                    type = "Row",
-                    "layout_width" to PrimitiveField("fillMaxWidth"),
+                    type = "Box",
                     "children" to ArrayField(
                         ComponentField(
-                            type = "Box",
-                            "layout_width" to PrimitiveField("72"),
-                            "layout_height" to PrimitiveField("72"),
-                            "children" to ArrayField(
-                                ComponentField(
-                                    type = "Image",
-                                    "src" to ReferenceField("avatar"),
-                                    "contentScale" to PrimitiveField("Crop"),
-                                    "layout_width" to PrimitiveField("fillMaxWidth"),
-                                    "layout_height" to PrimitiveField("fillMaxHeight"),
-                                ),
-                                ComponentField(
-                                    type = "Image",
-                                    "src" to ReferenceField("indicator"),
-                                    "layout_alignment" to PrimitiveField("BottomEnd"),
-                                    "contentScale" to PrimitiveField("Inside"),
-                                    "layout_width" to PrimitiveField("20"),
-                                    "layout_height" to PrimitiveField("20"),
-                                ),
-                            ),
-                        ),
-                        ComponentField(
-                            type = "Column",
+                            type = "Row",
                             "layout_width" to PrimitiveField("fillMaxWidth"),
+                            "layout_padding" to StructureField(
+                                "start" to PrimitiveField("16"),
+                                "end" to PrimitiveField("16"),
+                                "top" to PrimitiveField("8"),
+                                "bottom" to PrimitiveField("8"),
+                            ),
                             "children" to ArrayField(
                                 ComponentField(
-                                    type = "Text",
-                                    "text" to ReferenceField("name"),
-                                    "textSize" to PrimitiveField("16"),
-                                    "layout_width" to PrimitiveField("fillMaxWidth"),
+                                    type = "Box",
+                                    "layout_width" to PrimitiveField("72"),
+                                    "layout_height" to PrimitiveField("72"),
+                                    "children" to ArrayField(
+                                        ComponentField(
+                                            type = "Image",
+                                            "src" to ReferenceField("avatar"),
+                                            "contentScale" to PrimitiveField("Crop"),
+                                            "clip" to PrimitiveField("Circle"),
+                                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                                            "layout_height" to PrimitiveField("fillMaxHeight"),
+                                        ),
+                                        ComponentField(
+                                            type = "Image",
+                                            "src" to ReferenceField("indicator"),
+                                            "layout_alignment" to PrimitiveField("BottomEnd"),
+                                            "contentScale" to PrimitiveField("Inside"),
+                                            "clip" to PrimitiveField("Circle"),
+                                            "layout_width" to PrimitiveField("24"),
+                                            "layout_height" to PrimitiveField("24"),
+                                            "layout_padding" to StructureField(
+                                                "end" to PrimitiveField("2"),
+                                                "bottom" to PrimitiveField("2")
+                                            )
+                                        ),
+                                    ),
                                 ),
                                 ComponentField(
-                                    type = "Text",
-                                    "text" to ReferenceField("lastSeen"),
-                                    "textSize" to PrimitiveField("10"),
+                                    type = "Column",
                                     "layout_width" to PrimitiveField("fillMaxWidth"),
-                                ),
+                                    "children" to ArrayField(
+                                        ComponentField(
+                                            type = "Text",
+                                            "text" to ReferenceField("name"),
+                                            "textSize" to PrimitiveField("16"),
+                                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                                            "layout_padding" to StructureField(
+                                                "top" to PrimitiveField("8"),
+                                                "start" to PrimitiveField("8")
+                                            ),
+                                        ),
+                                        ComponentField(
+                                            type = "Text",
+                                            "text" to ReferenceField("lastSeen"),
+                                            "textSize" to PrimitiveField("12"),
+                                            "layout_width" to PrimitiveField("fillMaxWidth"),
+                                            "layout_padding" to StructureField(
+                                                "top" to PrimitiveField("8"),
+                                                "start" to PrimitiveField("8"),
+                                                "bottom" to PrimitiveField("8")
+                                            ),
+                                        ),
+                                    )
+                                )
                             )
                         )
                     )
