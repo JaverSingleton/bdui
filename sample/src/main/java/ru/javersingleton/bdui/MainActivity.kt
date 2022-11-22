@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                             "avatar" to PrimitiveField("https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg"),
                             "name" to PrimitiveField("Broken Cat"),
                             "lastSeen" to PrimitiveField("20.11.2022"),
-                            "indicator" to PrimitiveField("false"),
+                            "online" to PrimitiveField("false"),
                             id = "contact2"
                         ),
                         ComponentField(
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.clickable {
                         beduin.state += ComponentField(
                             type = "ContactItem",
-                            "indicator" to PrimitiveField("true"),
+                            "online" to PrimitiveField("true"),
                             id = "contact2"
                         )
                     }.fillMaxWidth()

@@ -59,7 +59,7 @@ class MainBeduinContext() : BeduinContext {
                     "avatar" to PrimitiveField(""),
                     "name" to PrimitiveField(""),
                     "lastSeen" to PrimitiveField(""),
-                    "indicator" to PrimitiveField("false"),
+                    "online" to PrimitiveField("false"),
                 ),
                 rootComponent = ComponentField(
                     type = "Box",
@@ -91,7 +91,7 @@ class MainBeduinContext() : BeduinContext {
                                             type = "Image",
                                             "src" to FunctionField(
                                                 type = "Condition",
-                                                "value" to ReferenceField("indicator"),
+                                                "value" to ReferenceField("online"),
                                                 "trueResult" to PrimitiveField("https://zibuhoker.ru/ifm/indicator.png"),
                                                 "falseResult" to PrimitiveField(""),
                                             ),
@@ -125,7 +125,7 @@ class MainBeduinContext() : BeduinContext {
                                             type = "Text",
                                             "text" to FunctionField(
                                                 type = "Condition",
-                                                "value" to ReferenceField("indicator"),
+                                                "value" to ReferenceField("online"),
                                                 "trueResult" to PrimitiveField("Online"),
                                                 "falseResult" to ReferenceField("lastSeen"),
                                             ),
