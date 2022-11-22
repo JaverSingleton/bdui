@@ -26,7 +26,7 @@ object BoxComponent {
                         )
                     }
                 }.filterNotNull(),
-                backgroundColor = prop("backgroundColor").asInt() ?: 0
+                backgroundColor = prop("backgroundColor").asString() ?: "#00000000"
             )
 
     }
@@ -35,7 +35,7 @@ object BoxComponent {
 
 data class BoxState(
     val children: List<Child>,
-    val backgroundColor: Int,
+    val backgroundColor: String,
 ) {
 
     data class Child(

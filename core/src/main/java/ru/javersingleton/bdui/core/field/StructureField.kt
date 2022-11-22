@@ -75,7 +75,7 @@ fun StructureField(
 ): StructureField =
     StructureField(
         id = newId(),
-        fields.toMap()
+        linkedMapOf(*fields)
     )
 
 data class Structure(
@@ -85,6 +85,10 @@ data class Structure(
     fun prop(name: String): Value<*> = fields[name]?.value ?: Value.NULL
 
     fun hasProp(name: String): Boolean = fields.containsKey(name)
+
+    fun forEach(func: (key: String) -> Unit) {
+        fields.forEach { (key, _) -> func(key) }
+    }
 
     fun unbox(): Map<String, Value<*>> = fields.mapValues { it.value.value }
 

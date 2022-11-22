@@ -66,6 +66,8 @@ object ComponentState {
                 return result.toList()
             }
 
+            fun forEach(func: (key: String) -> Unit) = args?.forEach(func)
+
             fun prop(name: String): Value<*> = args?.prop(name) ?: Value.NULL
 
             fun hasProp(name: String): Boolean = args?.hasProp(name) == true

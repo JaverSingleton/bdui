@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.component.compose.component
 
 import android.annotation.SuppressLint
+import android.graphics.Color.parseColor
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -23,7 +24,7 @@ fun BoxComponent(
     Log.d("Beduin", "OnComponentRender: componentType=Box")
     Box(
         modifier = Modifier
-            .background(color = Color(state.backgroundColor))
+            .background(color = Color(parseColor(state.backgroundColor)))
             .then(modifier)
     ) {
         state.children.forEach { child ->
