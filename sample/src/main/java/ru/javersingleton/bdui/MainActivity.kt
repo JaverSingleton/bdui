@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     private fun parseField(value: Any): Field<*> {
         return when (value) {
             is JSONArray -> ArrayField(fields = parseArrayField(value, ::parseField))
-            is JSONObject -> StructureField(fields = parseStructureField(value))
+            is JSONObject -> StructureField(fields = parseStructureField(value, ::parseField))
             else -> {
                 val strVal = value.toString()
                 val isRef = strVal.startsWith("{{").and(strVal.endsWith("}}"))
@@ -90,10 +90,10 @@ class MainActivity : AppCompatActivity() {
         return fields.toTypedArray()
     }
 
-    private fun parseStructureField(obj: JSONObject): Array<Pair<String, Field<*>>> {
+    private fun parseStructureField(obj: JSONObject, parseFunc: (Any) -> Field<*>): Array<Pair<String, Field<*>>> {
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
-            fields += key to parseField(obj.get(key))
+            fields += key to parseFunc(obj.get(key))
         }
         return fields.toTypedArray()
     }
