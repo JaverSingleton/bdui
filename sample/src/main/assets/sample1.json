@@ -122,6 +122,14 @@
             "online": false
           },
           {
+            "componentType": "ContactItem",
+            "id": "contact3",
+            "avatar": "https://zibuhoker.ru/ifm/nyan-cat.jpg",
+            "name": "Nyan Cat",
+            "lastSeen": "23.11.2022",
+            "online": false
+          },
+          {
             "componentType": "Box",
             "layout_height": "fillMax",
             "layout_padding": {
