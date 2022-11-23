@@ -11,6 +11,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import ru.javersingleton.bdui.component.compose.BeduinComponent
 import ru.javersingleton.bdui.core.BeduinController
+import ru.javersingleton.bdui.core.ComponentsCache
 import ru.javersingleton.bdui.core.MemoryComponentsCache
 import ru.javersingleton.bdui.core.MetaComponentBlueprint
 import ru.javersingleton.bdui.core.field.*
@@ -20,7 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val controller = assetController("sample1.json")
+        val componentsCache = MemoryComponentsCache()
+        val controller = assetController("sample1.json", componentsCache)
         setContent {
             Column {
                 BeduinComponent(
@@ -35,10 +37,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun assetController(name: String): BeduinController {
+    private fun assetController(name: String, componentsCache: ComponentsCache): BeduinController {
         val json = readAsset(name)
         val obj = JSONObject(json)
-        val componentsCache = MemoryComponentsCache()
         parseMetaComponentsMap(obj.getJSONObject("components"), componentsCache)
         val state = parseComponentField(obj.getJSONObject("state"))
         return BeduinController(componentsCache, state)
@@ -54,19 +55,49 @@ class MainActivity : AppCompatActivity() {
         return application.assets.open(name).bufferedReader().run { readText() }
     }
 
-    private fun parseMetaComponentsMap(obj: JSONObject, componentsCache: MemoryComponentsCache) {
+    private fun parseMetaComponentsMap(obj: JSONObject, componentsCache: ComponentsCache) {
         val blueprints = ArrayList<Pair<String, MetaComponentBlueprint>>()
         obj.keys().forEach { key ->
-            val blueprint = parseMetaComponentBlueprint(obj.getJSONObject(key))
+            val blueprint = parseMetaComponent(obj.getJSONObject(key))
             blueprints += key to blueprint
             componentsCache.put(key, blueprint)
         }
     }
 
-    private fun parseMetaComponentBlueprint(obj: JSONObject): MetaComponentBlueprint {
+    private fun parseMetaComponent(obj: JSONObject): MetaComponentBlueprint {
         val state = parseStructureField(obj.getJSONObject("state"))
         val rootComponent = parseComponentField(obj.getJSONObject("rootComponent"))
         return MetaComponentBlueprint(state, rootComponent)
+    }
+
+    private fun parseField(value: Any): Field<*> {
+        return when (value) {
+            is JSONArray -> parseArray(value)
+            is JSONObject -> parseObject(value)
+            else -> {
+                val strVal = value.toString()
+                val isRef = strVal.startsWith("{{").and(strVal.endsWith("}}"))
+                if (isRef) {
+                    ReferenceField(strVal.substring(2, strVal.length - 2))
+                } else {
+                    PrimitiveField(strVal)
+                }
+            }
+        }
+    }
+
+    private fun parseArray(arr: JSONArray): ArrayField {
+        val fields = ArrayList<Field<*>>()
+        for (i in 0 until arr.length()) {
+            fields += parseField(arr[i])
+        }
+        return ArrayField(fields = fields.toTypedArray())
+    }
+
+    private fun parseObject(obj: JSONObject): Field<*> = when {
+        obj.has("componentType") -> parseComponentField(obj)
+        obj.has("functionType") -> parseFunctionField(obj)
+        else -> parseStructureField(obj)
     }
 
     private fun parseComponentField(obj: JSONObject): ComponentField {
@@ -105,42 +136,12 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun parseArrayField(arr: JSONArray): ArrayField {
-        val fields = ArrayList<Field<*>>()
-        for (i in 0 until arr.length()) {
-            fields += parseField(arr[i])
-        }
-        return ArrayField(fields = fields.toTypedArray())
-    }
-
     private fun parseStructureField(obj: JSONObject): StructureField {
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             fields += key to parseField(obj.get(key))
         }
         return StructureField(fields = fields.toTypedArray())
-    }
-
-    private fun parseField(value: Any): Field<*> {
-        return when (value) {
-            is JSONArray -> parseArrayField(value)
-            is JSONObject -> parseObject(value)
-            else -> {
-                val strVal = value.toString()
-                val isRef = strVal.startsWith("{{").and(strVal.endsWith("}}"))
-                if (isRef) {
-                    ReferenceField(strVal.substring(2, strVal.length - 2))
-                } else {
-                    PrimitiveField(strVal)
-                }
-            }
-        }
-    }
-
-    private fun parseObject(obj: JSONObject): Field<*> = when {
-        obj.has("componentType") -> parseComponentField(obj)
-        obj.has("functionType") -> parseFunctionField(obj)
-        else -> parseStructureField(obj)
     }
 
 }
