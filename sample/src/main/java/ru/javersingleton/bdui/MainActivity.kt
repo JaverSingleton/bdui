@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val controller = assetController("full_sample1.json")
+        val controller = assetController("sample1.json")
         setContent {
             Column {
                 BeduinComponent(
