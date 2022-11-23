@@ -17,3 +17,4 @@ include(
     ":core",
     ":sample"
 )
+include(":parser")
