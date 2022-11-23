@@ -41,14 +41,14 @@ class MainActivity : AppCompatActivity() {
         val json = readAsset(name)
         val obj = JSONObject(json)
         parseMetaComponentsMap(obj.getJSONObject("components"), componentsCache)
-        val state = parseComponentField(obj.getJSONObject("state"))
+        val state = parseComponent(obj.getJSONObject("state"))
         return BeduinController(componentsCache, state)
     }
 
     private fun assetComponent(name: String): ComponentField {
         val json = readAsset(name)
         val obj = JSONObject(json)
-        return parseComponentField(obj)
+        return parseComponent(obj)
     }
 
     private fun readAsset(name: String): String {
@@ -65,8 +65,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun parseMetaComponent(obj: JSONObject): MetaComponentBlueprint {
-        val state = parseStructureField(obj.getJSONObject("state"))
-        val rootComponent = parseComponentField(obj.getJSONObject("rootComponent"))
+        val state = parseStructure(obj.getJSONObject("state"))
+        val rootComponent = parseComponent(obj.getJSONObject("rootComponent"))
         return MetaComponentBlueprint(state, rootComponent)
     }
 
@@ -95,12 +95,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun parseObject(obj: JSONObject): Field<*> = when {
-        obj.has("componentType") -> parseComponentField(obj)
-        obj.has("functionType") -> parseFunctionField(obj)
-        else -> parseStructureField(obj)
+        obj.has("componentType") -> parseComponent(obj)
+        obj.has("functionType") -> parseFunction(obj)
+        else -> parseStructure(obj)
     }
 
-    private fun parseComponentField(obj: JSONObject): ComponentField {
+    private fun parseComponent(obj: JSONObject): ComponentField {
         var type = ""
         var id: String = newId()
         val fields = ArrayList<Pair<String, Field<*>>>()
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun parseFunctionField(obj: JSONObject): FunctionField {
+    private fun parseFunction(obj: JSONObject): FunctionField {
         var type = ""
         var id: String = newId()
         val fields = ArrayList<Pair<String, Field<*>>>()
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun parseStructureField(obj: JSONObject): StructureField {
+    private fun parseStructure(obj: JSONObject): StructureField {
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             fields += key to parseField(obj.get(key))
