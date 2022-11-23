@@ -1,0 +1,92 @@
+{
+  "ContactItem": {
+    "state": {
+      "avatar": "",
+      "name": "",
+      "lastSeen": "",
+      "online": false
+    },
+    "rootComponent": {
+      "componentType": "Box",
+      "children": [
+        {
+          "componentType": "Row",
+          "layout_width": "fillMax",
+          "layout_padding": {
+            "start": 16,
+            "end": 16,
+            "top": 8,
+            "bottom": 8
+          },
+          "children": [
+            {
+              "componentType": "Box",
+              "layout_width": 72,
+              "layout_height": 72,
+              "children": [
+                {
+                  "componentType": "Image",
+                  "src": "{{avatar}}",
+                  "contentScale": "Crop",
+                  "clip": "Circle",
+                  "layout_width": "fillMax",
+                  "layout_height": "fillMax"
+                },
+                {
+                  "componentType": "Image",
+                  "src": {
+                    "functionType": "Condition",
+                    "value": "{{online}}",
+                    "trueResult": "https://zibuhoker.ru/ifm/indicator.png",
+                    "falseResult": ""
+                  },
+                  "layout_alignment": "BottomEnd",
+                  "contentScale": "Inside",
+                  "clip": "Circle",
+                  "layout_width": 24,
+                  "layout_height": 24,
+                  "layout_padding": {
+                    "end": 2,
+                    "bottom": 2
+                  }
+                }
+              ]
+            },
+            {
+              "componentType": "Column",
+              "layout_width": "fillMax",
+              "children": [
+                {
+                  "componentType": "Text",
+                  "text": "{{name}}",
+                  "textSize": 16,
+                  "layout_width": "fillMax",
+                  "layout_padding": {
+                    "top": 8,
+                    "start": 8
+                  }
+                },
+                {
+                  "componentType": "Text",
+                  "text": {
+                    "functionType": "Condition",
+                    "value": "{{online}}",
+                    "trueResult": "Online",
+                    "falseResult": "{{lastSeen}}"
+                  },
+                  "textSize": 12,
+                  "layout_width": "fillMax",
+                  "layout_padding": {
+                    "top": 8,
+                    "start": 8,
+                    "bottom": 8
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

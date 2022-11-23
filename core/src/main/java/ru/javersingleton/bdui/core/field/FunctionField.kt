@@ -9,25 +9,26 @@ data class FunctionField(
     private val functionType: String,
 ) : Field<Any?> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<Any?> = scope.run {
-        val params = params.resolve(this, args)
-        if (params !is ResolvedField) {
-            return FunctionField(
-                id,
-                params,
-                functionType,
+    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<Any?> =
+        scope.run {
+            val params = params.resolve(this, args)
+            if (params !is ResolvedField) {
+                return FunctionField(
+                    id,
+                    params,
+                    functionType,
+                )
+            }
+
+            val function = rememberValue("$id@function", functionType) {
+                inflateFunction(functionType)
+            }
+
+            ResolvedField(
+                id = id,
+                value = function.current.calculate(scope, id, params.value.current)
             )
         }
-
-        val function = rememberValue("$id@function", functionType) {
-            inflateFunction(functionType)
-        }
-
-        ResolvedField(
-            id = id,
-            value = function.current.calculate(scope, id, params.value.current)
-        )
-    }
 
     @Suppress("UNCHECKED_CAST")
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Any?> {
@@ -55,7 +56,7 @@ fun FunctionField(
     type: String,
     vararg fields: Pair<String, Field<*>>,
     id: String = newId(),
-): FunctionField  =
+): FunctionField =
     FunctionField(
         id = id,
         functionType = type,

@@ -1,27 +1,27 @@
 {
-  "type": "Column",
+  "componentType": "Column",
   "children": [
     {
-      "type": "Column",
+      "componentType": "Column",
       "children": [
         {
-          "type": "Toolbar",
+          "componentType": "Toolbar",
           "title": "Contacts"
         },
         {
-          "type": "Text",
+          "componentType": "Text",
           "text": "Contacts",
           "textSize": "24",
           "textAlign": "Center"
         },
         {
-          "type": "ContactItem",
+          "componentType": "ContactItem",
           "avatar": "https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg",
           "name": "Happy Cat",
           "lastSeen": "21.11.2022"
         },
         {
-          "type": "ContactItem",
+          "componentType": "ContactItem",
           "id": "contact2",
           "avatar": "https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg",
           "name": "Broken Cat",
@@ -29,7 +29,7 @@
           "online": false
         },
         {
-          "type": "Box",
+          "componentType": "Box",
           "layout_height": "fillMax",
           "layout_padding": {
             "start": 10,
@@ -39,7 +39,7 @@
           },
           "children": [
             {
-              "type": "Button",
+              "componentType": "Button",
               "text": "Submit",
               "layout_alignment": "BottomCenter"
             }

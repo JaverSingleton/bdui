@@ -1,0 +1,145 @@
+{
+  "components": {
+    "ContactItem": {
+      "state": {
+        "avatar": "",
+        "name": "",
+        "lastSeen": "",
+        "online": false
+      },
+      "rootComponent": {
+        "componentType": "Box",
+        "children": [
+          {
+            "componentType": "Row",
+            "layout_width": "fillMax",
+            "layout_padding": {
+              "start": 16,
+              "end": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "children": [
+              {
+                "componentType": "Box",
+                "layout_width": 72,
+                "layout_height": 72,
+                "children": [
+                  {
+                    "componentType": "Image",
+                    "src": "{{avatar}}",
+                    "contentScale": "Crop",
+                    "clip": "Circle",
+                    "layout_width": "fillMax",
+                    "layout_height": "fillMax"
+                  },
+                  {
+                    "componentType": "Image",
+                    "src": {
+                      "functionType": "Condition",
+                      "value": "{{online}}",
+                      "trueResult": "https://zibuhoker.ru/ifm/indicator.png",
+                      "falseResult": ""
+                    },
+                    "layout_alignment": "BottomEnd",
+                    "contentScale": "Inside",
+                    "clip": "Circle",
+                    "layout_width": 24,
+                    "layout_height": 24,
+                    "layout_padding": {
+                      "end": 2,
+                      "bottom": 2
+                    }
+                  }
+                ]
+              },
+              {
+                "componentType": "Column",
+                "layout_width": "fillMax",
+                "children": [
+                  {
+                    "componentType": "Text",
+                    "text": "{{name}}",
+                    "textSize": 16,
+                    "layout_width": "fillMax",
+                    "layout_padding": {
+                      "top": 8,
+                      "start": 8
+                    }
+                  },
+                  {
+                    "componentType": "Text",
+                    "text": {
+                      "functionType": "Condition",
+                      "value": "{{online}}",
+                      "trueResult": "Online",
+                      "falseResult": "{{lastSeen}}"
+                    },
+                    "textSize": 12,
+                    "layout_width": "fillMax",
+                    "layout_padding": {
+                      "top": 8,
+                      "start": 8,
+                      "bottom": 8
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "state": {
+    "componentType": "Column",
+    "children": [
+      {
+        "componentType": "Column",
+        "children": [
+          {
+            "componentType": "Toolbar",
+            "title": "Contacts"
+          },
+          {
+            "componentType": "Text",
+            "text": "Contacts",
+            "textSize": "24",
+            "textAlign": "Center"
+          },
+          {
+            "componentType": "ContactItem",
+            "avatar": "https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg",
+            "name": "Happy Cat",
+            "lastSeen": "21.11.2022"
+          },
+          {
+            "componentType": "ContactItem",
+            "id": "contact2",
+            "avatar": "https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg",
+            "name": "Broken Cat",
+            "lastSeen": "20.11.2022",
+            "online": false
+          },
+          {
+            "componentType": "Box",
+            "layout_height": "fillMax",
+            "layout_padding": {
+              "start": 10,
+              "end": 10,
+              "top": 4,
+              "bottom": 4
+            },
+            "children": [
+              {
+                "componentType": "Button",
+                "text": "Submit",
+                "layout_alignment": "BottomCenter"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
