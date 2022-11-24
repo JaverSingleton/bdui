@@ -8,6 +8,7 @@ import ru.javersingleton.bdui.core.MainBeduinContext
 import ru.javersingleton.bdui.core.MetaComponentBlueprint
 import ru.javersingleton.bdui.core.field.ArrayField
 import ru.javersingleton.bdui.core.field.ComponentField
+import ru.javersingleton.bdui.core.field.EmptyField
 import ru.javersingleton.bdui.core.field.Field
 import ru.javersingleton.bdui.core.field.FunctionField
 import ru.javersingleton.bdui.core.field.PrimitiveField
@@ -29,10 +30,10 @@ class JsonParser(
         return BeduinController(context, state)
     }
 
-    override fun parseComponent(reader: Reader): ComponentField {
+    override fun parseObject(reader: Reader): Field<*> {
         val json = reader.readText()
         val obj = JSONObject(json)
-        return parseComponent(obj)
+        return parseObject(obj)
     }
 
     private fun parseMetaComponentsMap(obj: JSONObject, componentsCache: ComponentsCache) {
@@ -46,14 +47,17 @@ class JsonParser(
 
     private fun parseMetaComponent(obj: JSONObject): MetaComponentBlueprint {
         val state = parseStructure(obj.getJSONObject(STATE))
+            ?: throw IllegalArgumentException("state must be provided")
         val rootComponent = parseComponent(obj.getJSONObject(ROOT_COMPONENT))
+            ?: throw IllegalArgumentException("rootComponent must be provided")
         return MetaComponentBlueprint(state, rootComponent)
     }
 
-    private fun parseField(value: Any): Field<*> {
+    private fun parseField(value: Any?): Field<*> {
         return when (value) {
             is JSONArray -> parseArray(value)
             is JSONObject -> parseObject(value)
+            null -> parseEmpty()
             else -> {
                 val strVal = value.toString()
                 val isRef = strVal.startsWith(REF_PREFIX).and(strVal.endsWith(REF_SUFFIX))
@@ -79,13 +83,12 @@ class JsonParser(
         return ArrayField(fields = fields.toTypedArray())
     }
 
-    private fun parseObject(obj: JSONObject): Field<*> = when {
-        obj.has(COMPONENT_TYPE) -> parseComponent(obj)
-        obj.has(FUNCTION_TYPE) -> parseFunction(obj)
-        else -> parseStructure(obj)
+    private fun parseObject(obj: JSONObject): Field<*> {
+        return parseComponent(obj) ?: parseFunction(obj) ?: parseStructure(obj) ?: parseEmpty(obj)
     }
 
-    private fun parseComponent(obj: JSONObject): ComponentField {
+    private fun parseComponent(obj: JSONObject): ComponentField? {
+        obj.opt(COMPONENT_TYPE) ?: return null
         var type = ""
         var id: String = newId()
         val fields = ArrayList<Pair<String, Field<*>>>()
@@ -93,7 +96,7 @@ class JsonParser(
             when (key) {
                 COMPONENT_TYPE -> type = obj.getString(key)
                 ID -> id = obj.getString(key)
-                else -> fields += key to parseField(obj.get(key))
+                else -> fields += key to parseField(obj.getNullable(key))
             }
         }
         return ComponentField(
@@ -103,7 +106,8 @@ class JsonParser(
         )
     }
 
-    private fun parseFunction(obj: JSONObject): FunctionField {
+    private fun parseFunction(obj: JSONObject): FunctionField? {
+        obj.opt(FUNCTION_TYPE) ?: return null
         var type = ""
         var id: String = newId()
         val fields = ArrayList<Pair<String, Field<*>>>()
@@ -111,7 +115,7 @@ class JsonParser(
             when (key) {
                 FUNCTION_TYPE -> type = obj.getString(key)
                 ID -> id = obj.getString(key)
-                else -> fields += key to parseField(obj.get(key))
+                else -> fields += key to parseField(obj.getNullable(key))
             }
         }
         return FunctionField(
@@ -121,13 +125,30 @@ class JsonParser(
         )
     }
 
-    private fun parseStructure(obj: JSONObject): StructureField {
+    private fun parseStructure(obj: JSONObject): StructureField? {
+        if (obj.length() == 0 || (obj.length() == 1 && obj.has(ID))) {
+            return null
+        }
+        var id: String = newId()
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
-            fields += key to parseField(obj.get(key))
+            when (key) {
+                ID -> id = obj.getString(key)
+                else -> fields += key to parseField(obj.getNullable(key))
+            }
         }
-        return StructureField(fields = fields.toTypedArray())
+        return StructureField(
+            id = id,
+            fields = linkedMapOf(*fields.toTypedArray())
+        )
     }
+
+    private fun parseEmpty(obj: JSONObject? = null): EmptyField {
+        val id: String = obj?.optString(ID) ?: newId()
+        return EmptyField(id)
+    }
+
+    private fun JSONObject.getNullable(key: String): Any? = if (isNull(key)) null else get(key)
 
 }
 

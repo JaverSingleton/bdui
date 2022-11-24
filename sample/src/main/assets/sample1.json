@@ -34,22 +34,22 @@
                     "layout_height": "fillMax"
                   },
                   {
-                    "componentType": "Image",
-                    "src": {
-                      "functionType": "Condition",
-                      "value": "{{online}}",
-                      "trueResult": "https://zibuhoker.ru/ifm/indicator.png",
-                      "falseResult": ""
+                    "functionType": "Condition",
+                    "value": "{{online}}",
+                    "trueResult": {
+                      "componentType": "Image",
+                      "src": "https://zibuhoker.ru/ifm/indicator.png",
+                      "layout_alignment": "BottomEnd",
+                      "contentScale": "Inside",
+                      "clip": "Circle",
+                      "layout_width": 24,
+                      "layout_height": 24,
+                      "layout_padding": {
+                        "end": 2,
+                        "bottom": 2
+                      }
                     },
-                    "layout_alignment": "BottomEnd",
-                    "contentScale": "Inside",
-                    "clip": "Circle",
-                    "layout_width": 24,
-                    "layout_height": 24,
-                    "layout_padding": {
-                      "end": 2,
-                      "bottom": 2
-                    }
+                    "falseResult": null
                   }
                 ]
               },

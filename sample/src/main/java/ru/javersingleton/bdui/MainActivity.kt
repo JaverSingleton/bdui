@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier
                         .clickable {
                             controller.state += asset("sample1_patch1.json").let { reader ->
-                                parser.parseComponent(reader)
-                            }
+                                parser.parseObject(reader)
+                            } as ComponentField
                         }
                         .fillMaxWidth()
                 )
