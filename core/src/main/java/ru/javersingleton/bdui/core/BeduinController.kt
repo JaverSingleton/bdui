@@ -6,11 +6,12 @@ import ru.javersingleton.bdui.core.field.ResolvedField
 import ru.javersingleton.bdui.core.field.resolveThemselves
 
 class BeduinController(
+    context: BeduinContext,
     state: ComponentField? = null
 ) {
 
     private var lastState: ComponentField? = null
-    private val lambda = Lambda(MainBeduinContext())
+    private val lambda = Lambda(context)
 
     val root: Value<ComponentStructure> = LambdaValue(lambda)
 

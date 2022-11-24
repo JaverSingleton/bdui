@@ -7,75 +7,48 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
+import org.json.JSONArray
+import org.json.JSONObject
 import ru.javersingleton.bdui.component.compose.BeduinComponent
 import ru.javersingleton.bdui.core.BeduinController
+import ru.javersingleton.bdui.core.ComponentsCache
+import ru.javersingleton.bdui.core.MainBeduinContext
+import ru.javersingleton.bdui.core.MemoryComponentsCache
+import ru.javersingleton.bdui.core.MetaComponentBlueprint
 import ru.javersingleton.bdui.core.field.*
 import ru.javersingleton.bdui.core.plus
+import ru.javersingleton.bdui.parser.JsonParser
+import java.io.Reader
 
 class MainActivity : AppCompatActivity() {
-    private val beduin: BeduinController = BeduinController(
-        ComponentField(
-            type = "Column",
-            "children" to ArrayField(
-                ComponentField(
-                    type = "Column",
-                    "children" to ArrayField(
-                        ComponentField(
-                            type = "Toolbar",
-                            "title" to PrimitiveField("Contacts"),
-                        ),
-                        ComponentField(
-                            type = "Text",
-                            "text" to PrimitiveField("Contacts"),
-                            "textSize" to PrimitiveField("24"),
-                            "textAlign" to PrimitiveField("Center"),
-                        ),
-                        ComponentField(
-                            type = "ContactItem",
-                            "avatar" to PrimitiveField("https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg"),
-                            "name" to PrimitiveField("Happy Cat"),
-                            "lastSeen" to PrimitiveField("21.11.2022"),
-                        ),
-                        ComponentField(
-                            type = "ContactItem",
-                            "avatar" to PrimitiveField("https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg"),
-                            "name" to PrimitiveField("Broken Cat"),
-                            "lastSeen" to PrimitiveField("20.11.2022"),
-                            "online" to PrimitiveField("false"),
-                            id = "contact2"
-                        ),
-                        ComponentField(
-                            type = "Box",
-                            "layout_height" to PrimitiveField("fillMax"),
-                            "children" to ArrayField(
-                                ComponentField(
-                                    type = "Button",
-                                    "text" to PrimitiveField("Submit"),
-                                    "layout_alignment" to PrimitiveField("BottomCenter"),
-                                ),
-                            )
-                        )
-                    ),
-                )
-            ),
-        )
-    )
+
+    private val componentsCache = MemoryComponentsCache()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val reader = asset("sample1.json")
+        val parser = JsonParser(componentsCache)
+        val controller = parser.parse(reader)
+
         setContent {
             Column {
                 BeduinComponent(
-                    controller = beduin,
-                    modifier = Modifier.clickable {
-                        beduin.state += ComponentField(
-                            type = "ContactItem",
-                            "online" to PrimitiveField("true"),
-                            id = "contact2"
-                        )
-                    }.fillMaxWidth()
+                    controller = controller,
+                    modifier = Modifier
+                        .clickable {
+                            controller.state += asset("sample1_patch1.json").let { reader ->
+                                parser.parseObject(reader)
+                            } as ComponentField
+                        }
+                        .fillMaxWidth()
                 )
             }
         }
     }
+
+    private fun asset(name: String): Reader {
+        return application.assets.open(name).bufferedReader()
+    }
+
 }
