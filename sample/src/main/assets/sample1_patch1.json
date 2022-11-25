@@ -1,5 +1,12 @@
 {
-  "componentType": "ContactItem",
-  "online": "true",
-  "id": "contact2"
+  "id": "root",
+  "offlineMode": true,
+  "componentType": "ContactScreen",
+  "contacts": [
+    {
+      "id": "contact2",
+      "componentType": "_ContactItem",
+      "name": "asdadopkasdkasdkaskodoai"
+    }
+  ]
 }

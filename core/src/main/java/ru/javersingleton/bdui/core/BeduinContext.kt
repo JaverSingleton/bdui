@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.core
 
 import ru.javersingleton.bdui.component.function.CheckEqualsFunction
+import ru.javersingleton.bdui.component.function.CombineArraysFunction
 import ru.javersingleton.bdui.component.function.ConditionFunction
 import ru.javersingleton.bdui.component.state.*
 import ru.javersingleton.bdui.core.field.*
@@ -24,6 +25,7 @@ class MainBeduinContext(
         when (functionType) {
             "Condition" -> ConditionFunction()
             "CheckEquals" -> CheckEqualsFunction()
+            "CombineArrays" -> CombineArraysFunction()
             else -> throw IllegalArgumentException("Function $functionType not found")
         }
 

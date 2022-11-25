@@ -10,7 +10,6 @@ class CheckEqualsFunction: ru.javersingleton.bdui.core.field.Function {
         rememberValue(id, params) {
             val value1 = params.prop("value1").current
             val value2 = params.prop("value2").current
-            // TODO Тут могут придти две структуры, что тогда?
             Primitive((value1 == value2).toString())
         }
     }
