@@ -43,7 +43,7 @@ fun PrimitiveField(
     )
 
 data class PrimitiveData(
-    private val id: String,
+    private val id: String = newId(),
     private val value: String
 ) : ResolvedData {
 

@@ -38,6 +38,10 @@ fun BduiComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<ButtonState>,
         )
+        "Input" -> InputComponent(
+            modifier = modifier,
+            componentState = componentStructure.value as Value<InputState>,
+        )
         "Image" -> ImageComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<ImageState>,

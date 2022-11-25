@@ -187,20 +187,36 @@
     "componentType": "ContactScreen",
     "offlineMode": false,
     "title": "Contacts",
+    "inputValue": "",
     "footer": {
-      "componentType": "Button",
-      "text": "Click Me",
-      "onClick": {
-        "effectType": "StatePatch",
-        "patch": {
-          "id": "root",
-          "componentType": "ContactScreen",
-          "offlineMode": {
-            "functionType": "Not",
-            "value": "{{offlineMode}}"
+      "componentType": "Column",
+      "children": [
+        {
+          "componentType": "Input",
+          "text": "{{inputValue}}",
+          "onTextChanged": {
+            "effectType": "StatePatch",
+            "patch": {
+              "id": "root",
+              "componentType": "ContactScreen",
+              "inputValue": "{{args.text}}"
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "id": "button",
+          "text": "Click Me",
+          "onClick": {
+            "effectType": "StatePatch",
+            "patch": {
+              "id": "button",
+              "componentType": "Button",
+              "text": "{{inputValue}}"
+            }
           }
         }
-      }
+      ]
     },
     "contacts": [
       {
