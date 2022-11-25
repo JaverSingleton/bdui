@@ -2,20 +2,21 @@ package ru.javersingleton.bdui.component.function
 
 import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
+import ru.javersingleton.bdui.core.field.*
 import ru.javersingleton.bdui.core.field.Function
-import ru.javersingleton.bdui.core.field.Primitive
-import ru.javersingleton.bdui.core.field.Structure
 
 
 class ConditionFunction: Function {
 
-    override fun calculate(scope: Lambda.Scope, id: String, params: Structure): Value<Any?> = scope.run {
+    override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> = scope.run {
         rememberValue(id, params) {
-            if (params.prop("value").current<Primitive>().toBoolean()) {
+            val value: PrimitiveData = params.prop("value").current()
+                ?: throw IllegalArgumentException("You must set value for ConditionFunction")
+            if (value.toBoolean()) {
                 params.prop("trueResult")
             } else {
                 params.prop("falseResult")
-            }.current
+            }.current { it }
         }
     }
 

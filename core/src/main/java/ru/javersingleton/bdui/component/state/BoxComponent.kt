@@ -3,7 +3,7 @@ package ru.javersingleton.bdui.component.state
 import ru.javersingleton.bdui.component.state.entity.Padding
 import ru.javersingleton.bdui.component.state.entity.Padding.Companion.create
 import ru.javersingleton.bdui.core.ComponentState
-import ru.javersingleton.bdui.core.field.ComponentStructure
+import ru.javersingleton.bdui.core.field.ComponentData
 
 object BoxComponent {
 
@@ -39,7 +39,7 @@ data class BoxState(
 ) {
 
     data class Child(
-        val component: ComponentStructure,
+        val component: ComponentData,
         val params: Params,
     ) {
         data class Params(

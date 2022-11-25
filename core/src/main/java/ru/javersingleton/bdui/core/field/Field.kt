@@ -2,9 +2,9 @@ package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
-import java.util.UUID
+import java.util.*
 
-interface Field<T> {
+interface Field<T: ResolvedData> {
 
     fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<T>
 
@@ -16,7 +16,7 @@ interface Field<T> {
 
 }
 
-data class ResolvedField<T>(
+data class ResolvedField<T: ResolvedData>(
     override val id: String,
     val value: Value<T>,
 ) : Field<T> {
@@ -29,11 +29,15 @@ data class ResolvedField<T>(
 
 }
 
+interface ResolvedData {
+    fun toField(): Field<*>
+}
+
 fun Lambda.Scope.resolveThemselves(
     id: String,
-    params: Field<Structure>,
+    params: Field<StructureData>,
     args: Map<String, Value<*>> = mapOf()
-): ResolvedField<Structure> {
+): ResolvedField<StructureData> {
 
     val processedParams = params.resolve(this, args)
     return if (processedParams is ResolvedField) {

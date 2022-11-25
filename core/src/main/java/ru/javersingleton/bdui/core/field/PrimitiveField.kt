@@ -6,31 +6,31 @@ import ru.javersingleton.bdui.core.Value
 data class PrimitiveField(
     override val id: String = newId(),
     private val value: String,
-) : Field<Primitive> {
+) : Field<PrimitiveData> {
 
     override fun resolve(
         scope: Lambda.Scope,
         args: Map<String, Value<*>>
-    ): Field<Primitive> = scope.run {
+    ): Field<PrimitiveData> = scope.run {
         ResolvedField(
             id = id,
-            value = rememberValue(id, value) { Primitive(value) },
+            value = rememberValue(id, value) { PrimitiveData(id = id, value) },
         )
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Primitive> =
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<PrimitiveData> =
         if (targetFieldId == id) {
             if (targetField is PrimitiveField) {
                 copy(value = targetField.value)
             } else {
-                targetField.copyWithId(id) as Field<Primitive>
+                targetField.copyWithId(id) as Field<PrimitiveData>
             }
         } else {
             this
         }
 
-    override fun copyWithId(id: String): Field<Primitive> = copy(id = id)
+    override fun copyWithId(id: String): Field<PrimitiveData> = copy(id = id)
 
 }
 
@@ -42,7 +42,10 @@ fun PrimitiveField(
         value
     )
 
-data class Primitive(private val value: String) {
+data class PrimitiveData(
+    private val id: String,
+    private val value: String
+) : ResolvedData {
 
     override fun toString(): String = value
 
@@ -51,5 +54,7 @@ data class Primitive(private val value: String) {
     fun toBoolean(): Boolean = value.toBoolean()
 
     fun toFloat(): Float = value.toFloat()
+
+    override fun toField(): Field<PrimitiveData> = PrimitiveField(id = id, value)
 
 }

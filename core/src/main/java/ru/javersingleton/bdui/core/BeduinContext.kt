@@ -1,11 +1,12 @@
 package ru.javersingleton.bdui.core
 
 import ru.javersingleton.bdui.component.function.CheckEqualsFunction
+import ru.javersingleton.bdui.component.function.CheckNullFunction
 import ru.javersingleton.bdui.component.function.CombineArraysFunction
-import ru.javersingleton.bdui.component.function.JoinToStringFunction
 import ru.javersingleton.bdui.component.function.ConditionFunction
 import ru.javersingleton.bdui.component.state.*
 import ru.javersingleton.bdui.core.field.Function
+import ru.javersingleton.bdui.core.interaction.Interaction
 
 interface BeduinContext {
 
@@ -14,6 +15,13 @@ interface BeduinContext {
     fun inflateMetaComponentBlueprint(componentType: String): MetaComponentBlueprint
 
     fun inflateStateFactory(componentType: String): ComponentState.Factory<*>
+
+    fun sendInteraction(interaction: Interaction)
+
+    fun inflateInteraction(
+        type: String,
+        name: String
+    ): Interaction
 
 }
 
@@ -26,7 +34,7 @@ class MainBeduinContext(
             "Condition" -> ConditionFunction()
             "CheckEquals" -> CheckEqualsFunction()
             "CombineArrays" -> CombineArraysFunction()
-            "JoinToString" -> JoinToStringFunction()
+            "CheckNull" -> CheckNullFunction()
             else -> throw IllegalArgumentException("Function $functionType not found")
         }
 
@@ -45,5 +53,13 @@ class MainBeduinContext(
             "Toolbar" -> ToolbarComponent.StateFactory
             else -> MetaComponent.StateFactory
         }
+
+    override fun sendInteraction(interaction: Interaction) {
+        TODO("Not yet implemented")
+    }
+
+    override fun inflateInteraction(type: String, name: String): Interaction {
+        TODO("Not yet implemented")
+    }
 
 }

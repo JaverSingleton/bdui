@@ -91,31 +91,20 @@
         ]
       }
     },
+
     "ContactScreen": {
       "state": {
         "title": "",
         "header": {
           "functionType": "Condition",
           "value": {
-            "functionType": "CheckEquals",
-            "value1": "{{title}}",
-            "value2": ""
+            "functionType": "CheckNull",
+            "value": "{{title}}"
           },
           "trueResult": null,
           "falseResult": {
             "componentType": "Toolbar",
-            "title": {
-              "functionType": "Condition",
-              "value": "{{offlineMode}}",
-              "trueResult": {
-                "functionType": "JoinToString",
-                "items": [
-                  "{{title}}",
-                  " (Offline mode)"
-                ]
-              },
-              "falseResult": "{{title}}"
-            }
+            "title": "{{title}}"
           }
         },
         "contacts": [],
@@ -133,12 +122,16 @@
             "children": {
               "functionType": "CombineArrays",
               "arrays": [
-                [
-                  "{{header}}"
-                ],
+                "{{header}}",
                 "{{contacts}}",
-                [
-                  {
+                {
+                  "functionType": "Condition",
+                  "value": {
+                    "functionType": "CheckNull",
+                    "value": "{{footer}}"
+                  },
+                  "trueResult": null,
+                  "falseResult": {
                     "componentType": "Box",
                     "layout_height": "fillMax",
                     "layout_padding": {
@@ -151,13 +144,14 @@
                       "{{footer}}"
                     ]
                   }
-                ]
+                }
               ]
             }
           }
         ]
       }
     },
+
     "_ContactItem": {
       "state": {
         "avatar": "",
@@ -180,10 +174,18 @@
       }
     }
   },
+
+
+
+
+
+
+
+
   "state": {
     "id": "root",
     "componentType": "ContactScreen",
-    "offlineMode": "true",
+    "offlineMode": false,
     "title": "Contacts",
     "contacts": [
       {

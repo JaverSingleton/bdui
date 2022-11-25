@@ -19,6 +19,19 @@ interface Value<T : Any?> {
 
 }
 
+class ConstValue<T : Any?>(override val currentValue: T) : ReadableValue<T> {
+
+    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
+        object : ReadableValue.Subscription {
+
+            override fun unsubscribe() {
+                // Do Nothing
+            }
+
+        }
+
+}
+
 interface ReadableValue<T> : Value<T> {
 
     val currentValue: T
@@ -41,8 +54,6 @@ data class LambdaValue<T : Any?>(private val lambda: Lambda) : ReadableValue<T> 
 
     override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
         lambda.subscribe(callback)
-
-    val tag: String get() = lambda.tag
 
 }
 

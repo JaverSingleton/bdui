@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.core
 
 import ru.javersingleton.bdui.core.field.ComponentField
-import ru.javersingleton.bdui.core.field.ComponentStructure
+import ru.javersingleton.bdui.core.field.ComponentData
 import ru.javersingleton.bdui.core.field.ResolvedField
 import ru.javersingleton.bdui.core.field.resolveThemselves
 
@@ -13,7 +13,7 @@ class BeduinController(
     private var lastState: ComponentField? = null
     private val lambda = Lambda(context)
 
-    val root: Value<ComponentStructure> = LambdaValue(lambda)
+    val root: Value<ComponentData> = LambdaValue(lambda)
 
     var state: ComponentField
         get() = lastState ?: throw IllegalStateException()
@@ -34,7 +34,7 @@ class BeduinController(
                     throw IllegalArgumentException()
                 }
 
-                processedField.value.current<ComponentStructure>()
+                processedField.value.current<ComponentData>()
             }
         }
 

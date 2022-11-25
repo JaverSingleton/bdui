@@ -6,10 +6,10 @@ import ru.javersingleton.bdui.core.Value
 data class ComponentField(
     override val id: String = newId(),
     val componentType: String,
-    val params: Field<Structure>
-) : Field<ComponentStructure> {
+    val params: Field<StructureData>
+) : Field<ComponentData> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ComponentStructure> = scope.run {
+    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ComponentData> = scope.run {
         val externalParamsField = params.resolve(scope, args)
         if (externalParamsField !is ResolvedField) {
             return ComponentField(id, componentType, externalParamsField as StructureField)
@@ -24,16 +24,21 @@ data class ComponentField(
                     inflateStateFactory(componentType)
                 }
 
-                ComponentStructure(
+                ComponentData(
+                    id = id,
                     componentType = componentType,
-                    params = externalParamsState.current(),
+                    params = externalParamsState.current { empty ->
+                        StructureData(empty.id, fields = mapOf())
+                    },
                     value = rememberValue("$id@value", componentType) {
-                        val externalParams: Structure = externalParamsState.current()
-                        stateFactory.current.calculate(
+                        val externalParams: StructureData = externalParamsState.current { empty ->
+                            StructureData(empty.id, fields = mapOf())
+                        }
+                        stateFactory.current?.calculate(
                             scope = this,
                             args = externalParams,
                             componentType = componentType
-                        )
+                        ) ?: throw IllegalArgumentException("StateFactory $componentType not found")
                     }
                 )
             }
@@ -41,7 +46,7 @@ data class ComponentField(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<ComponentStructure> {
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<ComponentData> {
         return if (targetFieldId != id) {
             val targetParams = params.mergeDeeply(targetFieldId, targetField)
             if (targetParams != params) {
@@ -62,27 +67,25 @@ data class ComponentField(
                 }
             } else {
                 targetField.copyWithId(id = id)
-            } as Field<ComponentStructure>
+            } as Field<ComponentData>
         }
     }
 
-    override fun copyWithId(id: String): Field<ComponentStructure> = copy(id = id)
+    override fun copyWithId(id: String): Field<ComponentData> = copy(id = id)
 
 }
 
-fun ComponentField(
-    type: String,
-    vararg fields: Pair<String, Field<*>>,
-    id: String = newId(),
-): ComponentField  =
-    ComponentField(
+data class ComponentData(
+    val id: String,
+    val componentType: String,
+    val params: StructureData,
+    val value: Value<*>
+): ResolvedData {
+
+    override fun toField(): Field<ComponentData> = ComponentField(
         id = id,
-        componentType = type,
-        params = StructureField(*fields)
+        componentType = componentType,
+        params = params.toField()
     )
 
-data class ComponentStructure(
-    val componentType: String,
-    val params: Structure,
-    val value: Value<*>
-)
+}

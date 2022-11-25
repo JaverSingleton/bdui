@@ -1,13 +1,18 @@
 {
   "id": "root",
-  "offlineMode": false,
+  "offlineMode": true,
   "componentType": "ContactScreen",
-  "title": "Контакты",
+  "title": null,
+  "footer": {
+    "componentType": "Text",
+    "text": "Replaced Button",
+    "layout_alignment": "BottomCenter"
+  },
   "contacts": [
     {
       "id": "contact2",
       "componentType": "_ContactItem",
-      "name": "Online Cat"
+      "name": "Renamed Cat"
     }
   ]
 }

@@ -5,14 +5,14 @@ import ru.javersingleton.bdui.core.Value
 
 data class FunctionField(
     override val id: String = newId(),
-    private val params: Field<Structure>,
+    private val params: Field<StructureData>,
     private val functionType: String,
-) : Field<Any?> {
+) : Field<ResolvedData> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<Any?> =
+    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ResolvedData> =
         scope.run {
             val params = params.resolve(this, args)
-            if (params !is ResolvedField) {
+            if (params !is ResolvedField<StructureData>) {
                 return FunctionField(
                     id,
                     params,
@@ -24,14 +24,21 @@ data class FunctionField(
                 inflateFunction(functionType)
             }
 
+            @Suppress("UNCHECKED_CAST")
             ResolvedField(
                 id = id,
-                value = function.current.calculate(scope, id, params.value.current)
+                value = function.current?.calculate(
+                    scope,
+                    id,
+                    params.value.current {
+                        StructureData(id = it.id)
+                    }
+                ) ?: throw IllegalArgumentException("Function $functionType not found")
             )
         }
 
     @Suppress("UNCHECKED_CAST")
-    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Any?> {
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<ResolvedData> {
         return if (targetFieldId != id) {
             val targetParams = params.mergeDeeply(targetFieldId, targetField)
             if (targetParams != params) {
@@ -44,27 +51,16 @@ data class FunctionField(
                 params.mergeDeeply(params.id, targetField.params)
             } else {
                 targetField.copyWithId(id = id)
-            } as Field<Any?>
+            } as Field<ResolvedData>
         }
     }
 
-    override fun copyWithId(id: String): Field<Any?> = copy(id = id)
+    override fun copyWithId(id: String): Field<ResolvedData> = copy(id = id)
 
 }
 
-fun FunctionField(
-    type: String,
-    vararg fields: Pair<String, Field<*>>,
-    id: String = newId(),
-): FunctionField =
-    FunctionField(
-        id = id,
-        functionType = type,
-        params = StructureField(*fields)
-    )
-
 interface Function {
 
-    fun calculate(scope: Lambda.Scope, id: String, params: Structure): Value<Any?>
+    fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData>
 
 }

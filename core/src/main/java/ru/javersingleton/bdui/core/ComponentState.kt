@@ -1,10 +1,7 @@
 package ru.javersingleton.bdui.core
 
 import android.util.Log
-import ru.javersingleton.bdui.core.field.ArrayData
-import ru.javersingleton.bdui.core.field.ComponentStructure
-import ru.javersingleton.bdui.core.field.Primitive
-import ru.javersingleton.bdui.core.field.Structure
+import ru.javersingleton.bdui.core.field.*
 
 object ComponentState {
 
@@ -13,7 +10,7 @@ object ComponentState {
         internal fun calculate(
             componentType: String,
             scope: Lambda.Scope,
-            args: Structure?
+            args: StructureData?
         ): T {
             Log.d("Beduin", "OnStateCreate: componentType=$componentType")
             return Scope(scope, args).create(componentType)
@@ -23,42 +20,44 @@ object ComponentState {
 
         class Scope(
             private val scope: Lambda.Scope,
-            val args: Structure?,
+            val args: StructureData?,
         ) : Lambda.Scope by scope {
 
-            fun Value<*>.asComponent(): ComponentStructure? = current()
+            fun Value<*>.asComponent(): ComponentData? = current()
 
-            fun <T> Value<*>.asLayoutParams(func: Structure.() -> T): T? {
-                val componentStructure: ComponentStructure? = current()
+            fun <T> Value<*>.asLayoutParams(func: StructureData.() -> T): T? {
+                val componentStructure: ComponentData? = current()
                 return componentStructure?.params?.func()
             }
 
             fun <T> Value<*>.asComponentWithParams(
-                func: Structure.(component: ComponentStructure) -> T
+                func: StructureData.(component: ComponentData) -> T
             ): T? {
-                val componentStructure: ComponentStructure? = current()
+                val componentStructure: ComponentData? = current()
                 return componentStructure?.params?.func(componentStructure)
             }
 
             fun <T> Value<*>.asObject(
-                func: Structure.() -> T
+                func: StructureData.() -> T
             ): T? {
-                val structure: Structure? = current()
+                val structure: StructureData? = current()
                 return structure?.func()
             }
 
             fun Value<*>.asString(): String? {
-                val primitive: Primitive? = current()
+                val primitive: PrimitiveData? = current()
                 return primitive?.toString()
             }
 
             fun Value<*>.asInt(): Int? {
-                val primitive: Primitive? = current()
+                val primitive: PrimitiveData? = current()
                 return primitive?.toInt()
             }
 
             fun <T> Value<*>.asList(mapIndexed: Value<*>.(index: Int) -> T): List<T> {
                 val array: ArrayData = current()
+                    ?: return listOf()
+
                 val result: MutableList<T> = mutableListOf()
                 for (index in 0 until array.size) {
                     result.add(array[index].mapIndexed(index))

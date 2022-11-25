@@ -5,33 +5,35 @@ import ru.javersingleton.bdui.core.Value
 
 data class EmptyField(
     override val id: String = newId()
-) : Field<Any?> {
+) : Field<EmptyData> {
 
     override fun resolve(
         scope: Lambda.Scope,
         args: Map<String, Value<*>>
-    ): Field<Any?> = scope.run {
+    ): Field<EmptyData> = scope.run {
         ResolvedField(
             id = id,
-            value = rememberValue(id, null) { null },
+            value = rememberValue(id, null) { EmptyData(id = id) },
         )
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<Any?> {
+    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<EmptyData> {
         return if (targetFieldId == id) {
             if (targetField is EmptyField) {
                 this
             } else {
-                targetField.copyWithId(id = id) as Field<Any?>
+                targetField.copyWithId(id = id) as Field<EmptyData>
             }
         } else {
             this
         }
     }
 
-    override fun copyWithId(id: String): Field<Any?> = copy(id = id)
+    override fun copyWithId(id: String): Field<EmptyData> = copy(id = id)
 
 }
 
-fun EmptyField(): EmptyField = EmptyField(id = newId())
+data class EmptyData(val id: String): ResolvedData {
+    override fun toField(): Field<EmptyData> = EmptyField(id)
+}

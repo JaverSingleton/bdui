@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.core
 
-import android.util.Log
 import kotlinx.coroutines.flow.*
+import ru.javersingleton.bdui.core.field.EmptyData
 
 class Lambda(
     private val context: BeduinContext,
@@ -101,10 +101,18 @@ class Lambda(
         }
 
         @Suppress("UNCHECKED_CAST")
-        override fun <R> Value<*>.current(): R {
+        override fun <R> Value<*>.current(): R? = current { null }
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <R> Value<*>.current(default: (emptyData: EmptyData) -> R): R {
             val readableValue = this as ReadableValue
             targetDependencies.add(readableValue)
-            return readableValue.currentValue as R
+            val currentValue = readableValue.currentValue
+            return if (currentValue !is EmptyData) {
+                currentValue as R
+            } else {
+                default(currentValue)
+            }
         }
 
     }
@@ -158,9 +166,11 @@ class Lambda(
             func: Scope.() -> T
         ): Value<T>
 
-        val <T> Value<T>.current: T get() = current()
+        val <T> Value<T>.current: T? get() = current()
 
-        fun <T> Value<*>.current(): T
+        fun <T> Value<*>.current(): T?
+
+        fun <T> Value<*>.current(default: (emptyData: EmptyData) -> T): T
 
     }
 

@@ -2,6 +2,7 @@ package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
+import ru.javersingleton.bdui.core.getValueQuiet
 
 data class ArrayField(
     override val id: String = newId(),
@@ -17,7 +18,7 @@ data class ArrayField(
                 ResolvedField(
                     id,
                     rememberValue(id, targetFields) {
-                        ArrayData(targetFields.map { it as ResolvedField }.toList())
+                        ArrayData(id, targetFields.map { it as ResolvedField<*> }.toList())
                     }
                 )
             }
@@ -62,19 +63,18 @@ data class ArrayField(
 
 }
 
-fun ArrayField(
-    vararg fields: Field<*>
-): ArrayField = ArrayField(
-    id = newId(),
-    fields = fields.toList()
-)
-
 data class ArrayData(
+    val id: String,
     internal val fields: List<ResolvedField<*>>
-) {
+): ResolvedData {
 
     operator fun get(index: Int): Value<*> = fields[index].value
 
     val size get() = fields.size
+
+    override fun toField(): Field<ArrayData> = ArrayField(
+        id = id,
+        fields = fields.map { it.value.getValueQuiet().toField() }
+    )
 
 }

@@ -7,13 +7,13 @@ import ru.javersingleton.bdui.component.compose.component.*
 import ru.javersingleton.bdui.component.state.*
 import ru.javersingleton.bdui.core.ReadableValue
 import ru.javersingleton.bdui.core.Value
-import ru.javersingleton.bdui.core.field.ComponentStructure
+import ru.javersingleton.bdui.core.field.ComponentData
 
 @Suppress("UNCHECKED_CAST")
 @Composable
 fun BduiComponent(
     modifier: Modifier = Modifier,
-    componentStructure: ComponentStructure
+    componentStructure: ComponentData
 ) {
     Log.d("Beduin", "OnComponentRecomposition: componentType=${componentStructure.componentType}")
     // TODO Вынести отдельно

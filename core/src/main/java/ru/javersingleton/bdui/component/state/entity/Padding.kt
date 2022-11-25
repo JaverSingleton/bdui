@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.component.state.entity
 
 import ru.javersingleton.bdui.core.ComponentState
-import ru.javersingleton.bdui.core.field.Structure
+import ru.javersingleton.bdui.core.field.StructureData
 
 data class Padding(
     val start: Int,
@@ -14,7 +14,7 @@ data class Padding(
 
         fun create(
             scope: ComponentState.Factory.Scope,
-            structure: Structure,
+            structure: StructureData,
         ): Padding = scope.run {
             Padding(
                 start = structure.prop("start").asInt() ?: 0,

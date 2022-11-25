@@ -80,7 +80,7 @@ class JsonParser(
         for (i in 0 until arr.length()) {
             fields += parseField(arr[i])
         }
-        return ArrayField(fields = fields.toTypedArray())
+        return ArrayField(fields = fields)
     }
 
     private fun parseObject(obj: JSONObject): Field<*> {
@@ -102,7 +102,7 @@ class JsonParser(
         return ComponentField(
             id = id,
             componentType = type,
-            params = StructureField(*fields.toTypedArray())
+            params = StructureField(fields = linkedMapOf(*fields.toTypedArray()))
         )
     }
 
@@ -121,7 +121,7 @@ class JsonParser(
         return FunctionField(
             id = id,
             functionType = type,
-            params = StructureField(*fields.toTypedArray())
+            params = StructureField(fields = linkedMapOf(*fields.toTypedArray()))
         )
     }
 
