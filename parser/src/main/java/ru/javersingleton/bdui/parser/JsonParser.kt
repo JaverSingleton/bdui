@@ -6,15 +6,7 @@ import ru.javersingleton.bdui.core.BeduinController
 import ru.javersingleton.bdui.core.ComponentsCache
 import ru.javersingleton.bdui.core.MainBeduinContext
 import ru.javersingleton.bdui.core.MetaComponentBlueprint
-import ru.javersingleton.bdui.core.field.ArrayField
-import ru.javersingleton.bdui.core.field.ComponentField
-import ru.javersingleton.bdui.core.field.EmptyField
-import ru.javersingleton.bdui.core.field.Field
-import ru.javersingleton.bdui.core.field.FunctionField
-import ru.javersingleton.bdui.core.field.PrimitiveField
-import ru.javersingleton.bdui.core.field.ReferenceField
-import ru.javersingleton.bdui.core.field.StructureField
-import ru.javersingleton.bdui.core.field.newId
+import ru.javersingleton.bdui.core.field.*
 import java.io.Reader
 
 class JsonParser(
@@ -84,7 +76,11 @@ class JsonParser(
     }
 
     private fun parseObject(obj: JSONObject): Field<*> {
-        return parseComponent(obj) ?: parseFunction(obj) ?: parseStructure(obj) ?: parseEmpty(obj)
+        return parseComponent(obj)
+            ?: parseInteraction(obj)
+            ?: parseFunction(obj)
+            ?: parseStructure(obj)
+            ?: parseEmpty(obj)
     }
 
     private fun parseComponent(obj: JSONObject): ComponentField? {
@@ -125,6 +121,30 @@ class JsonParser(
         )
     }
 
+    private fun parseInteraction(obj: JSONObject): InteractionField? {
+        obj.opt(EFFECT_TYPE) ?: return null
+        var type = ""
+        var name = ""
+        var id: String = newId()
+        val fields = ArrayList<Pair<String, Field<*>>>()
+        obj.keys().forEach { key ->
+            when (key) {
+                EFFECT_TYPE -> {
+                    type = "effect"
+                    name = obj.getString(key)
+                }
+                ID -> id = obj.getString(key)
+                else -> fields += key to parseField(obj.getNullable(key))
+            }
+        }
+        return InteractionField(
+            id = id,
+            interactionType = type,
+            interactionName = name,
+            params = StructureField(fields = linkedMapOf(*fields.toTypedArray()))
+        )
+    }
+
     private fun parseStructure(obj: JSONObject): StructureField? {
         if (obj.length() == 0 || (obj.length() == 1 && obj.has(ID))) {
             return null
@@ -157,6 +177,7 @@ private const val COMPONENTS = "components"
 private const val ROOT_COMPONENT = "rootComponent"
 private const val COMPONENT_TYPE = "componentType"
 private const val FUNCTION_TYPE = "functionType"
+private const val EFFECT_TYPE = "effectType"
 private const val ID = "id"
 private const val REF_PREFIX = "{{"
 private const val REF_SUFFIX = "}}"

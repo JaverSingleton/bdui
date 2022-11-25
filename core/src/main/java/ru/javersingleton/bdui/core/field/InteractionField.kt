@@ -1,9 +1,8 @@
 package ru.javersingleton.bdui.core.field
 
-import ru.javersingleton.bdui.core.ConstValue
 import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
-import ru.javersingleton.bdui.core.getValueQuiet
+import ru.javersingleton.bdui.core.interaction.Interaction
 
 data class InteractionField(
     override val id: String,
@@ -16,60 +15,46 @@ data class InteractionField(
         scope: Lambda.Scope,
         args: Map<String, Value<*>>
     ): Field<InteractionData> = scope.run {
-        val interaction = inflateInteraction(interactionType, interactionName)
+        val interactionFactory = inflateInteractionFactory(interactionType, interactionName)
 
         ResolvedField(
             id = id,
             value = rememberValue(
                 id,
-                setOf(args, interaction, params)
+                setOf(args, interactionFactory, params)
             ) {
                 InteractionData(
                     raw = this@InteractionField
                 ) { externalArgs ->
                     val callbackArgs = args + externalArgs
                     val resolvedParams = (params.resolve(this, callbackArgs) as ResolvedField)
-                        .value.getValueQuiet()
-//                    interaction.create(resolvedParams)
-                    TODO()
+                        .value.current { StructureData(it.id) }
+                    interactionFactory.create(resolvedParams.unbox())
                 }
             }
         )
     }
 
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<InteractionData> {
-        TODO("Not yet implemented")
+        if (targetFieldId == id) {
+            TODO("Not implemented yet")
+        }
+        return this
     }
 
-    override fun copyWithId(id: String): Field<InteractionData> {
-        TODO("Not yet implemented")
-    }
+    override fun copyWithId(id: String): Field<InteractionData> = copy(id = id)
 
 
 }
 
 class InteractionData(
     private val raw: InteractionField,
-    private val callback: (args: Map<String, Value<*>>) -> Unit
-): ResolvedData {
+    private val callback: (args: Map<String, Value<*>>) -> Interaction
+) : ResolvedData {
 
-    operator fun invoke(args: Map<String, Value<*>>) = callback.invoke(args)
+    operator fun invoke(args: Map<String, Value<*>>): Interaction = callback.invoke(args)
 
     override fun toField(): Field<InteractionData> = raw
-
-    inner class Arguments(
-        private val values: MutableMap<String, Value<ResolvedData>> = mutableMapOf()
-    ) {
-
-        fun putString(name: String, value: String) {
-            values[name] = ConstValue(PrimitiveData(newId(), value))
-        }
-
-        fun putInt(name: String, value: Int) {
-            values[name] = ConstValue(PrimitiveData(newId(), value.toString()))
-        }
-
-    }
 
 }
 

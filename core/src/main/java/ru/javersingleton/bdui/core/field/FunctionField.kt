@@ -59,8 +59,3 @@ data class FunctionField(
 
 }
 
-interface Function {
-
-    fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData>
-
-}

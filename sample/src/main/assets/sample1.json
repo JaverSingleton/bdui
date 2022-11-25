@@ -187,6 +187,21 @@
     "componentType": "ContactScreen",
     "offlineMode": false,
     "title": "Contacts",
+    "footer": {
+      "componentType": "Button",
+      "text": "Click Me",
+      "onClick": {
+        "effectType": "StatePatch",
+        "patch": {
+          "id": "root",
+          "componentType": "ContactScreen",
+          "offlineMode": {
+            "functionType": "Not",
+            "value": "{{offlineMode}}"
+          }
+        }
+      }
+    },
     "contacts": [
       {
         "componentType": "_ContactItem",

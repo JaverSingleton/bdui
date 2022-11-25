@@ -2,7 +2,7 @@ package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
-import ru.javersingleton.bdui.core.getValueQuiet
+import ru.javersingleton.bdui.core.currentQuiet
 
 data class ArrayField(
     override val id: String = newId(),
@@ -74,7 +74,7 @@ data class ArrayData(
 
     override fun toField(): Field<ArrayData> = ArrayField(
         id = id,
-        fields = fields.map { it.value.getValueQuiet().toField() }
+        fields = fields.map { it.value.currentQuiet<ResolvedData> { empty -> empty }.toField() }
     )
 
 }

@@ -54,6 +54,15 @@ object ComponentState {
                 return primitive?.toInt()
             }
 
+            fun Value<*>.asInteraction(): ((Map<String, Value<*>>) -> Unit)? {
+                val interactionData: InteractionData? = current()
+                return interactionData?.let { callback ->
+                    { args: Map<String, Value<*>> ->
+                        sendInteraction(callback.invoke(args))
+                    }
+                }
+            }
+
             fun <T> Value<*>.asList(mapIndexed: Value<*>.(index: Int) -> T): List<T> {
                 val array: ArrayData = current()
                     ?: return listOf()

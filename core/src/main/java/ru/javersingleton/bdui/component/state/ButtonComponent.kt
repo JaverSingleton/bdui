@@ -8,6 +8,11 @@ object ButtonComponent {
 
         override fun Scope.create(componentType: String): ButtonState = ButtonState(
             text = prop("text").asString() ?: "",
+            onClick = prop("onClick").asInteraction()?.let { callback ->
+                {
+                    callback(mapOf())
+                }
+            }
         )
 
     }
@@ -16,4 +21,5 @@ object ButtonComponent {
 
 data class ButtonState(
     val text: String,
+    val onClick: (() -> Unit)?,
 )

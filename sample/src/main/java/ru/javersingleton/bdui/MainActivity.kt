@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.component.compose.BeduinComponent
+import ru.javersingleton.bdui.component.interaction.StatePatchEffect
 import ru.javersingleton.bdui.core.MemoryComponentsCache
 import ru.javersingleton.bdui.core.field.ComponentField
+import ru.javersingleton.bdui.core.interaction.Effect
 import ru.javersingleton.bdui.core.plus
 import ru.javersingleton.bdui.parser.JsonParser
 import java.io.Reader
@@ -25,22 +27,22 @@ class MainActivity : AppCompatActivity() {
         val parser = JsonParser(componentsCache)
         val controller = parser.parse(reader)
 
-        var patchIndex = 1
+        controller.onInteraction = { interaction ->
+            when (interaction) {
+                is Effect -> controller.state = interaction.run(controller.state)
+            }
+        }
 
         setContent {
             Column {
                 BeduinComponent(
                     controller = controller,
                     modifier = Modifier
-                        .clickable {
-                            controller.state += asset("sample1_patch$patchIndex.json").let { reader ->
-                                parser.parseObject(reader)
-                            } as ComponentField
-                            patchIndex++
-                            if (patchIndex > 4) {
-                                patchIndex = 1
-                            }
-                        }
+//                        .clickable {
+//                            controller.state += asset("sample1_patch1.json").let { reader ->
+//                                parser.parseObject(reader)
+//                            } as ComponentField
+//                        }
                         .fillMaxWidth()
                 )
             }

@@ -17,7 +17,7 @@ fun ButtonComponent(
     val state = componentState.subscribeAsState().value
     Log.d("Beduin", "OnComponentRender: componentType=Button")
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { state.onClick?.invoke() },
         modifier = modifier
     ) {
         Text(text = state.text)

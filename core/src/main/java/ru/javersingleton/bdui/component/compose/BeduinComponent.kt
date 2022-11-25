@@ -3,6 +3,7 @@ package ru.javersingleton.bdui.component.compose
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.core.BeduinController
+import ru.javersingleton.bdui.core.interaction.Interaction
 
 @Composable
 fun BeduinComponent(

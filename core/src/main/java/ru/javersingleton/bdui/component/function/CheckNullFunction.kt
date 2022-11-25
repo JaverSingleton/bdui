@@ -5,8 +5,9 @@ import ru.javersingleton.bdui.core.Value
 import ru.javersingleton.bdui.core.field.PrimitiveData
 import ru.javersingleton.bdui.core.field.ResolvedData
 import ru.javersingleton.bdui.core.field.StructureData
+import ru.javersingleton.bdui.core.function.Function
 
-class CheckNullFunction: ru.javersingleton.bdui.core.field.Function {
+class CheckNullFunction: Function {
     override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> = scope.run {
         rememberValue(id, params) {
             val value = params.prop("value").current

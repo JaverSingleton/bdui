@@ -1,5 +1,7 @@
 package ru.javersingleton.bdui.core
 
+import ru.javersingleton.bdui.core.field.EmptyData
+
 interface Value<T : Any?> {
 
     object NULL : ReadableValue<Any?> {
@@ -58,4 +60,17 @@ data class LambdaValue<T : Any?>(private val lambda: Lambda) : ReadableValue<T> 
 }
 
 @Suppress("UNCHECKED_CAST")
-internal fun <T : Any?> Value<T>.getValueQuiet(): T = (this as ReadableValue).currentValue
+fun <R> Value<*>.currentQuiet(): R? = currentQuiet { null }
+
+@Suppress("UNCHECKED_CAST")
+fun <R> Value<*>.currentQuiet(default: (emptyData: EmptyData) -> R): R {
+    val readableValue = this as ReadableValue
+    val currentValue = readableValue.currentValue
+    return if (currentValue !is EmptyData) {
+        currentValue as R
+    } else {
+        default(currentValue)
+    }
+}
+
+val <T> Value<T>.currentQuiet: T? get() = currentQuiet()

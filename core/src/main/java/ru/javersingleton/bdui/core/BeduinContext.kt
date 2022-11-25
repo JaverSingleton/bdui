@@ -1,11 +1,9 @@
 package ru.javersingleton.bdui.core
 
-import ru.javersingleton.bdui.component.function.CheckEqualsFunction
-import ru.javersingleton.bdui.component.function.CheckNullFunction
-import ru.javersingleton.bdui.component.function.CombineArraysFunction
-import ru.javersingleton.bdui.component.function.ConditionFunction
+import ru.javersingleton.bdui.component.function.*
+import ru.javersingleton.bdui.component.interaction.StatePatchEffect
 import ru.javersingleton.bdui.component.state.*
-import ru.javersingleton.bdui.core.field.Function
+import ru.javersingleton.bdui.core.function.Function
 import ru.javersingleton.bdui.core.interaction.Interaction
 
 interface BeduinContext {
@@ -18,10 +16,10 @@ interface BeduinContext {
 
     fun sendInteraction(interaction: Interaction)
 
-    fun inflateInteraction(
+    fun inflateInteractionFactory(
         type: String,
         name: String
-    ): Interaction
+    ): Interaction.Factory
 
 }
 
@@ -35,6 +33,7 @@ class MainBeduinContext(
             "CheckEquals" -> CheckEqualsFunction()
             "CombineArrays" -> CombineArraysFunction()
             "CheckNull" -> CheckNullFunction()
+            "Not" -> NotFunction()
             else -> throw IllegalArgumentException("Function $functionType not found")
         }
 
@@ -55,11 +54,18 @@ class MainBeduinContext(
         }
 
     override fun sendInteraction(interaction: Interaction) {
-        TODO("Not yet implemented")
+        // Do Nothing
     }
 
-    override fun inflateInteraction(type: String, name: String): Interaction {
-        TODO("Not yet implemented")
+    override fun inflateInteractionFactory(type: String, name: String): Interaction.Factory =
+        when (type) {
+            "effect" -> inflateEffectFactory(name)
+            else -> throw IllegalArgumentException("Interaction with type $type not found")
+        }
+
+    private fun inflateEffectFactory(name: String): Interaction.Factory = when (name) {
+        "StatePatch" -> StatePatchEffect.Factory()
+        else -> throw IllegalArgumentException("Effect $name not found")
     }
 
 }

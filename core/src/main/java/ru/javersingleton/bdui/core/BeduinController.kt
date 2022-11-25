@@ -1,17 +1,16 @@
 package ru.javersingleton.bdui.core
 
-import ru.javersingleton.bdui.core.field.ComponentField
-import ru.javersingleton.bdui.core.field.ComponentData
-import ru.javersingleton.bdui.core.field.ResolvedField
-import ru.javersingleton.bdui.core.field.resolveThemselves
+import ru.javersingleton.bdui.core.field.*
+import ru.javersingleton.bdui.core.interaction.Interaction
 
 class BeduinController(
     context: BeduinContext,
-    state: ComponentField? = null
-) {
+    state: ComponentField? = null,
+): BeduinContext by context {
 
+    var onInteraction: ((Interaction) -> Unit)? = null
     private var lastState: ComponentField? = null
-    private val lambda = Lambda(context)
+    private val lambda = Lambda(this)
 
     val root: Value<ComponentData> = LambdaValue(lambda)
 
@@ -44,7 +43,10 @@ class BeduinController(
         }
     }
 
+    override fun sendInteraction(interaction: Interaction) {
+        onInteraction?.invoke(interaction)
+    }
 }
 
-operator fun ComponentField.plus(target: ComponentField): ComponentField =
+operator fun ComponentField.plus(target: Field<*>): ComponentField =
     mergeDeeply(targetFieldId = target.id, targetField = target) as ComponentField

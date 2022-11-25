@@ -2,7 +2,7 @@ package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
-import ru.javersingleton.bdui.core.getValueQuiet
+import ru.javersingleton.bdui.core.currentQuiet
 
 
 data class StructureField(
@@ -91,7 +91,7 @@ data class StructureData(
 
     override fun toField(): Field<StructureData> = StructureField(
         id = id,
-        fields = fields.mapValues { (_, value) -> value.value.getValueQuiet().toField() }
+        fields = fields.mapValues { (_, value) -> value.value.currentQuiet<ResolvedData> { it }.toField() }
     )
 
 }

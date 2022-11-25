@@ -6,17 +6,17 @@ import ru.javersingleton.bdui.core.field.*
 import ru.javersingleton.bdui.core.function.Function
 
 
-class ConditionFunction: Function {
+class NotFunction: Function {
 
     override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> = scope.run {
         rememberValue(id, params) {
             val value: PrimitiveData = params.prop("value").current()
-                ?: throw IllegalArgumentException("You must set value for ConditionFunction")
+                ?: throw IllegalArgumentException("You must set value for Not")
             if (value.toBoolean()) {
-                params.prop("trueResult")
+                PrimitiveData(id = "$id@value", "false")
             } else {
-                params.prop("falseResult")
-            }.current { it }
+                PrimitiveData(id = "$id@value", "true")
+            }
         }
     }
 
