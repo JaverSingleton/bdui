@@ -7,7 +7,7 @@ import ru.javersingleton.bdui.core.currentQuiet
 
 data class StructureField(
     override val id: String = newId(),
-    private val fields: Map<String, Field<*>>
+    val fields: Map<String, Field<*>>
 ) : Field<StructureData> {
 
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<StructureData> =
@@ -26,6 +26,39 @@ data class StructureField(
                     }
                 )
             }
+        }
+
+    fun resolveThemselves(scope: Lambda.Scope): Field<StructureData> =
+        scope.run {
+            val args: MutableMap<String, Value<*>> = mutableMapOf()
+            val resolvedFields: MutableMap<String, ResolvedField<*>> = mutableMapOf()
+            val unresolvedFields: MutableMap<String, Field<*>> = fields.toMutableMap()
+            var lastUnresolvedFields: Map<String, Field<*>> = fields
+            while (unresolvedFields.isNotEmpty()) {
+                val unresolvedFieldsIterator = unresolvedFields.iterator()
+                while (unresolvedFieldsIterator.hasNext()) {
+                    val targetField = unresolvedFieldsIterator.next()
+                    val processedField = targetField.value.resolve(scope, args)
+                    if (processedField is ResolvedField) {
+                        unresolvedFieldsIterator.remove()
+                        resolvedFields[targetField.key] = processedField
+                        args[targetField.key] = processedField.value
+                    }
+                }
+                if (lastUnresolvedFields == unresolvedFields) {
+                    return@run this@StructureField
+                }
+                lastUnresolvedFields = unresolvedFields.toMap()
+            }
+            ResolvedField(
+                id,
+                rememberValue(id, resolvedFields) {
+                    StructureData(
+                        id = id,
+                        resolvedFields
+                    )
+                }
+            )
         }
 
     fun extractStates(): Map<String, Value<*>> =

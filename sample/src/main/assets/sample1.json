@@ -5,13 +5,13 @@
         "avatar": "",
         "name": "",
         "lastSeen": "",
+        "online": false,
         "targetLastSeen": {
           "functionType": "Condition",
           "value": "{{online}}",
           "trueResult": "Online",
           "falseResult": "{{lastSeen}}"
-        },
-        "online": false
+        }
       },
       "rootComponent": {
         "componentType": "Box",

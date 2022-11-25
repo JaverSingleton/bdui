@@ -33,23 +33,4 @@ interface ResolvedData {
     fun toField(): Field<*>
 }
 
-fun Lambda.Scope.resolveThemselves(
-    id: String,
-    params: Field<StructureData>,
-    args: Map<String, Value<*>> = mapOf()
-): ResolvedField<StructureData> {
-
-    val processedParams = params.resolve(this, args)
-    return if (processedParams is ResolvedField) {
-        processedParams
-    } else {
-        val newArgs = (processedParams as StructureField).extractStates()
-        if (args == newArgs) {
-            throw IllegalArgumentException()
-        }
-
-        resolveThemselves(id, processedParams, newArgs)
-    }
-}
-
 fun newId(): String = UUID.randomUUID().toString()

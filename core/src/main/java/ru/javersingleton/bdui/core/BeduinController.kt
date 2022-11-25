@@ -23,10 +23,11 @@ class BeduinController(
 
             lastState = value
             lambda.setBody {
+                val params = (value.params as StructureField).resolveThemselves(this)
                 val componentField = ComponentField(
                     id = value.id,
                     componentType = value.componentType,
-                    params = resolveThemselves("${value.id}@params", value.params)
+                    params = params
                 )
                 val processedField = componentField.resolve(this, mutableMapOf())
                 if (processedField !is ResolvedField) {

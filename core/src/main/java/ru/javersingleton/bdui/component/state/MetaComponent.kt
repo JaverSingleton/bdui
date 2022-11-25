@@ -4,7 +4,6 @@ import ru.javersingleton.bdui.core.ComponentState
 import ru.javersingleton.bdui.core.field.ComponentData
 import ru.javersingleton.bdui.core.field.ResolvedField
 import ru.javersingleton.bdui.core.field.StructureData
-import ru.javersingleton.bdui.core.field.resolveThemselves
 
 object MetaComponent {
 
@@ -17,11 +16,8 @@ object MetaComponent {
                 ?: throw IllegalArgumentException("MetaComponent $componentType not found")
             val currentParams = blueprint.state.mergeWith(args)
 
-            val args: StructureData = resolveThemselves(
-                id = blueprint.state.id,
-                params = currentParams
-            ).value.current
-                ?: throw UnknownError("Args for $componentType is null")
+            val args: StructureData = (currentParams.resolveThemselves(this) as ResolvedField)
+                .value.current ?: throw UnknownError("Args for $componentType is null")
 
 
             val componentField = blueprint.rootComponent.resolve(this, args.unbox())
