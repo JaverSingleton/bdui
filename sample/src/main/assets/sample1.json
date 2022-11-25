@@ -101,13 +101,21 @@
             "value1": "{{title}}",
             "value2": ""
           },
-          "trueResult": {
-            "componentType": "Text",
-            "text": "{{title}}"
-          },
+          "trueResult": null,
           "falseResult": {
             "componentType": "Toolbar",
-            "title": "{{title}}"
+            "title": {
+              "functionType": "Condition",
+              "value": "{{offlineMode}}",
+              "trueResult": {
+                "functionType": "JoinToString",
+                "items": [
+                  "{{title}}",
+                  " (Offline mode)"
+                ]
+              },
+              "falseResult": "{{title}}"
+            }
           }
         },
         "contacts": [],
@@ -125,7 +133,9 @@
             "children": {
               "functionType": "CombineArrays",
               "arrays": [
-                ["{{header}}"],
+                [
+                  "{{header}}"
+                ],
                 "{{contacts}}",
                 [
                   {
@@ -173,7 +183,7 @@
   "state": {
     "id": "root",
     "componentType": "ContactScreen",
-    "offlineMode": "false",
+    "offlineMode": "true",
     "title": "Contacts",
     "contacts": [
       {

@@ -1,0 +1,19 @@
+{
+  "id": "root",
+  "offlineMode": false,
+  "componentType": "ContactScreen",
+  "contacts": [
+    {
+      "id": "contact2",
+      "componentType": "_ContactItem",
+      "name": "Online Cat",
+      "online": false
+    },
+    {
+      "id": "contact3",
+      "componentType": "_ContactItem",
+      "name": "Online Cat",
+      "online": true
+    }
+  ]
+}

@@ -2,7 +2,7 @@ package ru.javersingleton.bdui.core
 
 import ru.javersingleton.bdui.component.function.CheckEqualsFunction
 import ru.javersingleton.bdui.component.function.CombineArraysFunction
-import ru.javersingleton.bdui.component.function.ConcatStringsFunction
+import ru.javersingleton.bdui.component.function.JoinToStringFunction
 import ru.javersingleton.bdui.component.function.ConditionFunction
 import ru.javersingleton.bdui.component.state.*
 import ru.javersingleton.bdui.core.field.Function
@@ -26,7 +26,7 @@ class MainBeduinContext(
             "Condition" -> ConditionFunction()
             "CheckEquals" -> CheckEqualsFunction()
             "CombineArrays" -> CombineArraysFunction()
-            "ConcatStrings" -> ConcatStringsFunction()
+            "JoinToString" -> JoinToStringFunction()
             else -> throw IllegalArgumentException("Function $functionType not found")
         }
 

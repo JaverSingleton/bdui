@@ -1,12 +1,13 @@
 {
   "id": "root",
-  "offlineMode": true,
+  "offlineMode": false,
   "componentType": "ContactScreen",
+  "title": "Контакты",
   "contacts": [
     {
       "id": "contact2",
       "componentType": "_ContactItem",
-      "name": "asdadopkasdkasdkaskodoai"
+      "name": "Online Cat"
     }
   ]
 }
