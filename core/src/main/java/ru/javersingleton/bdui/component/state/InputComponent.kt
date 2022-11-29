@@ -3,6 +3,7 @@ package ru.javersingleton.bdui.component.state
 import ru.javersingleton.bdui.core.ComponentState
 import ru.javersingleton.bdui.core.ConstValue
 import ru.javersingleton.bdui.core.field.PrimitiveData
+import ru.javersingleton.bdui.core.field.StructureData
 
 object InputComponent {
 
@@ -12,7 +13,19 @@ object InputComponent {
             text = prop("text").asString() ?: "",
             onTextChanged = prop("onTextChanged").asInteraction()?.let { callback ->
                 {
-                    callback(mapOf("args.text" to ConstValue(PrimitiveData(value = it))))
+                    callback(
+                        mapOf(
+                            "args" to ConstValue(
+                                StructureData(
+                                    fields = mapOf(
+                                        "text" to ConstValue(
+                                            PrimitiveData(value = it)
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
                 }
             }
         )

@@ -69,27 +69,29 @@ data class ComponentField(
         targetFieldId: String,
         targetField: Field<*>
     ): ComponentField {
-        return if (targetFieldId != id) {
-            val targetParams = params.mergeDeeply(targetFieldId, targetField)
-            if (targetParams != params) {
-                this.copy(params = targetParams)
-            } else {
-                this
+        // TODO Переписать чтобы нормально обрабатывать смену componentType
+        val targetParams = if (targetFieldId == id) {
+            when (targetField) {
+                is ComponentField -> {
+                    if (targetField.componentType != componentType) {
+                        throw IllegalArgumentException("Target ComponentType ${targetField.componentType} and Current ComponentType $componentType are different. ComponentType changing is forbidden for StatePatch")
+                    }
+                    params.mergeDeeply(params.id, targetField.params)
+                }
+                is StructureField -> {
+                    params.mergeDeeply(params.id, targetField)
+                }
+                else -> {
+                    throw IllegalArgumentException("FieldType changing is forbidden for StatePatch")
+                }
             }
         } else {
-            if (targetField is ComponentField) {
-                val changedParams = params.mergeDeeply(params.id, targetField.params)
-                if (changedParams != params || targetField.componentType != this.componentType) {
-                    copy(
-                        params = changedParams,
-                        componentType = targetField.componentType
-                    )
-                } else {
-                    this
-                }
-            } else {
-                targetField.copyWithId(id = id)
-            } as ComponentField
+            params.mergeDeeply(targetFieldId, targetField)
+        }
+        return if (targetParams != params) {
+            this.copy(params = targetParams)
+        } else {
+            this
         }
     }
 

@@ -7,11 +7,7 @@ interface Value<T : Any?> {
 
     object NULL : ReadableValue<Any?> {
 
-        override val currentValue: Any?
-            get() {
-                Log.d("Beduin", "Value.NULL was read")
-                return null
-            }
+        override val currentValue: Any? = null
 
         override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
             object : ReadableValue.Subscription {

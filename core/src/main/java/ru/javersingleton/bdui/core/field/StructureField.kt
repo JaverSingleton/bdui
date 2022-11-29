@@ -92,7 +92,7 @@ data class StructureField(
 }
 
 data class StructureData(
-    val id: String,
+    val id: String = newId(),
     internal val fields: Map<String, Value<out ResolvedData>> = mapOf()
 ) : ResolvedData {
 

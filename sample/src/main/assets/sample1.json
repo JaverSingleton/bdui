@@ -192,7 +192,6 @@
     "offlineMode": false,
     "title": "Contacts",
     "input_value": "",
-    "contact2_online": false,
     "footer": {
       "componentType": "Column",
       "children": [
@@ -203,7 +202,6 @@
             "effectType": "StatePatch",
             "patch": {
               "id": "root",
-              "componentType": "ContactScreen",
               "input_value": {
                 "functionType": "MaxLength",
                 "value": "{{args.text}}",
@@ -220,7 +218,6 @@
             "effectType": "StatePatch",
             "patch": {
               "id": "button",
-              "componentType": "Button",
               "text": "{{input_value}}"
             }
           }
@@ -234,7 +231,18 @@
         "name": "Happy Cat",
         "lastSeen": "21.11.2022",
         "online": true,
-        "offlineMode": "{{offlineMode}}"
+        "offlineMode": "{{offlineMode}}",
+        "id": "contact1",
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact1",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact1.online}}"
+            }
+          }
+        }
       },
       {
         "componentType": "_ContactItem",
@@ -242,16 +250,15 @@
         "avatar": "https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg",
         "name": "Broken Cat",
         "lastSeen": "20.11.2022",
-        "online": "{{contact2_online}}",
+        "online": false,
         "offlineMode": "{{offlineMode}}",
         "onClick": {
           "effectType": "StatePatch",
           "patch": {
-            "componentType": "ContactScreen",
-            "id": "root",
-            "contact2_online": {
+            "id": "contact2",
+            "online": {
               "functionType": "Not",
-              "value": "{{contact2_online}}"
+              "value": "{{contact2.online}}"
             }
           }
         }
@@ -263,7 +270,17 @@
         "name": "Nyan Cat",
         "lastSeen": "23.11.2022",
         "online": false,
-        "offlineMode": "{{offlineMode}}"
+        "offlineMode": "{{offlineMode}}",
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact3",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact3.online}}"
+            }
+          }
+        }
       }
     ]
   }

@@ -1,6 +1,5 @@
 package ru.javersingleton.bdui.core
 
-import ru.javersingleton.bdui.component.state.MetaComponent.StateFactory.create
 import ru.javersingleton.bdui.core.field.*
 import ru.javersingleton.bdui.core.interaction.Interaction
 
@@ -24,10 +23,11 @@ class BeduinController(
 
             lastState = value
             lambda.setBody {
-                val args = MutableReferences()
+                // TODO Избавится от Nullable
+                val args = rememberValue("root@references", value.componentType) { MutableReferences() }.current!!
                 val paramsField = value.params.resolve(this, args) as ResolvedField<StructureData>
                 val paramsData = (paramsField.value.current?.unbox() ?: mapOf()) + paramsField.dataWithUserId
-                args.putAll(this, paramsData)
+                args.replace(this, paramsData)
                 val componentField = ComponentField(
                     id = value.id,
                     componentType = value.componentType,

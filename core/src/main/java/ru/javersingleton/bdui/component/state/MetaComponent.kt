@@ -17,10 +17,11 @@ object MetaComponent {
                 ?: throw IllegalArgumentException("MetaComponent $componentType not found")
             val currentParams = blueprint.state.mergeWith(args)
 
-            val args = MutableReferences()
+            // TODO Избавиться от Nullable
+            val args = rememberValue("${args!!.id}@references", componentType) { MutableReferences() }.current!!
             val paramsField = currentParams.resolve(this, args) as ResolvedField<StructureData>
             val paramsData = (paramsField.value.current?.unbox() ?: mapOf()) + paramsField.dataWithUserId
-            args.putAll(this, paramsData)
+            args.replace(this, paramsData)
 
             val componentField = blueprint.rootComponent.resolve(this, args)
             return MetaState(

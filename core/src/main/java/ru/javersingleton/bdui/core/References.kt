@@ -2,14 +2,14 @@ package ru.javersingleton.bdui.core
 
 import android.util.Log
 
-class MutableReferences: References {
+class MutableReferences : References {
 
     private var values: Map<String, Value<Value<*>>> = mapOf()
 
     override operator fun get(refName: String): Value<Value<*>> =
         values[refName] ?: throw IllegalArgumentException("Field $refName not found")
 
-    fun putAll(
+    fun replace(
         scope: Lambda.Scope,
         refs: Map<String, Value<*>>
     ) = scope.run {
