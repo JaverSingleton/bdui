@@ -4,10 +4,22 @@ import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
 data class FunctionField(
-    override val id: String = newId(),
-    private val params: Field<StructureData>,
+    override val id: String,
+    override val withUserId: Boolean,
     private val functionType: String,
+    private val params: Field<StructureData>,
 ) : Field<ResolvedData> {
+
+    constructor(
+        id: String,
+        functionType: String,
+        params: Field<StructureData>
+    ) : this(id = id, withUserId = true, functionType, params)
+
+    constructor(
+        functionType: String,
+        params: Field<StructureData>
+    ) : this(id = newId(), withUserId = false, functionType, params)
 
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ResolvedData> =
         scope.run {
@@ -15,8 +27,8 @@ data class FunctionField(
             if (params !is ResolvedField<StructureData>) {
                 return FunctionField(
                     id,
-                    params,
                     functionType,
+                    params,
                 )
             }
 

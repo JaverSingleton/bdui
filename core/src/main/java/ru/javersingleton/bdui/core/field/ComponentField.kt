@@ -4,46 +4,61 @@ import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
 data class ComponentField(
-    override val id: String = newId(),
+    override val id: String,
+    override val withUserId: Boolean,
     val componentType: String,
     val params: Field<StructureData>
 ) : Field<ComponentData> {
 
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ComponentData> = scope.run {
-        val externalParamsField = params.resolve(scope, args)
-        if (externalParamsField !is ResolvedField) {
-            return ComponentField(id, componentType, externalParamsField as StructureField)
-        }
+    constructor(
+        id: String,
+        componentType: String,
+        params: Field<StructureData>
+    ) : this(id = id, withUserId = true, componentType, params)
 
-        val externalParamsState = externalParamsField.value
+    constructor(
+        componentType: String,
+        params: Field<StructureData>
+    ) : this(id = newId(), withUserId = false, componentType, params)
 
-        return ResolvedField(
-            id,
-            rememberValue(id, componentType) {
-                val stateFactory = rememberValue("$id@stateFactory", componentType) {
-                    inflateStateFactory(componentType)
-                }
-
-                ComponentData(
-                    id = id,
-                    componentType = componentType,
-                    params = externalParamsState.current { empty ->
-                        StructureData(empty.id, fields = mapOf())
-                    },
-                    value = rememberValue("$id@value", componentType) {
-                        val externalParams: StructureData = externalParamsState.current { empty ->
-                            StructureData(empty.id, fields = mapOf())
-                        }
-                        stateFactory.current?.calculate(
-                            scope = this,
-                            args = externalParams,
-                            componentType = componentType
-                        ) ?: throw IllegalArgumentException("StateFactory $componentType not found")
-                    }
-                )
+    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ComponentData> =
+        scope.run {
+            val externalParamsField = params.resolve(scope, args)
+            if (externalParamsField !is ResolvedField) {
+                return ComponentField(id, componentType, externalParamsField as StructureField)
             }
-        )
-    }
+
+            val externalParamsState = externalParamsField.value
+
+            return ResolvedField(
+                id,
+                rememberValue(id, componentType) {
+                    val stateFactory = rememberValue("$id@stateFactory", componentType) {
+                        inflateStateFactory(componentType)
+                    }
+
+                    ComponentData(
+                        id = id,
+                        componentType = componentType,
+                        params = externalParamsState.current { empty ->
+                            StructureData(empty.id, fields = mapOf())
+                        },
+                        value = rememberValue("$id@value", componentType) {
+                            val externalParams: StructureData =
+                                externalParamsState.current { empty ->
+                                    StructureData(empty.id, fields = mapOf())
+                                }
+                            stateFactory.current?.calculate(
+                                scope = this,
+                                args = externalParams,
+                                componentType = componentType
+                            )
+                                ?: throw IllegalArgumentException("StateFactory $componentType not found")
+                        }
+                    )
+                }
+            )
+        }
 
     @Suppress("UNCHECKED_CAST")
     override fun mergeDeeply(
@@ -83,7 +98,7 @@ data class ComponentData(
     val componentType: String,
     val params: StructureData,
     val value: Value<*>
-): ResolvedData {
+) : ResolvedData {
 
     override fun toField(): Field<ComponentData> = ComponentField(
         id = id,

@@ -4,9 +4,19 @@ import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
 data class PrimitiveField(
-    override val id: String = newId(),
+    override val id: String,
+    override val withUserId: Boolean,
     private val value: String,
 ) : Field<PrimitiveData> {
+
+    constructor(
+        id: String,
+        value: String
+    ) : this(id = id, withUserId = true, value)
+
+    constructor(
+        value: String
+    ) : this(id = newId(), withUserId = false, value)
 
     override fun resolve(
         scope: Lambda.Scope,
@@ -33,14 +43,6 @@ data class PrimitiveField(
     override fun copyWithId(id: String): Field<PrimitiveData> = copy(id = id)
 
 }
-
-fun PrimitiveField(
-    value: String
-): PrimitiveField =
-    PrimitiveField(
-        id = newId(),
-        value
-    )
 
 data class PrimitiveData(
     private val id: String = newId(),

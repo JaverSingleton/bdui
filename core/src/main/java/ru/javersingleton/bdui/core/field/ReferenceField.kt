@@ -5,9 +5,19 @@ import ru.javersingleton.bdui.core.Value
 
 
 data class ReferenceField(
-    override val id: String = newId(),
+    override val id: String,
+    override val withUserId: Boolean,
     private val refFieldName: String
 ) : Field<ResolvedData> {
+
+    constructor(
+        id: String,
+        refFieldName: String
+    ) : this(id = id, withUserId = true, refFieldName)
+
+    constructor(
+        refFieldName: String
+    ) : this(id = newId(), withUserId = false, refFieldName)
 
     @Suppress("UNCHECKED_CAST")
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ResolvedData> = scope.run {
@@ -35,11 +45,3 @@ data class ReferenceField(
     override fun copyWithId(id: String): Field<ResolvedData> = copy(id = id)
 
 }
-
-fun ReferenceField(
-    refFieldName: String
-): ReferenceField =
-    ReferenceField(
-        id = newId(),
-        refFieldName = refFieldName
-    )

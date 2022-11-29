@@ -6,10 +6,24 @@ import ru.javersingleton.bdui.core.interaction.Interaction
 
 data class InteractionField(
     override val id: String,
-    private val params: Field<StructureData>,
+    override val withUserId: Boolean,
     private val interactionType: String,
     private val interactionName: String,
+    private val params: Field<StructureData>,
 ) : Field<InteractionData> {
+
+    constructor(
+        id: String,
+        interactionType: String,
+        interactionName: String,
+        params: Field<StructureData>
+    ) : this(id = id, withUserId = true, interactionType, interactionName, params)
+
+    constructor(
+        interactionType: String,
+        interactionName: String,
+        params: Field<StructureData>
+    ) : this(id = newId(), withUserId = false, interactionType, interactionName, params)
 
     override fun resolve(
         scope: Lambda.Scope,

@@ -4,8 +4,15 @@ import ru.javersingleton.bdui.core.Lambda
 import ru.javersingleton.bdui.core.Value
 
 data class EmptyField(
-    override val id: String = newId()
+    override val id: String,
+    override val withUserId: Boolean
 ) : Field<EmptyData> {
+
+    constructor(
+        id: String
+    ) : this(id = id, withUserId = true)
+
+    constructor() : this(id = newId(), withUserId = false)
 
     override fun resolve(
         scope: Lambda.Scope,
@@ -34,6 +41,6 @@ data class EmptyField(
 
 }
 
-data class EmptyData(val id: String): ResolvedData {
+data class EmptyData(val id: String) : ResolvedData {
     override fun toField(): Field<EmptyData> = EmptyField(id)
 }

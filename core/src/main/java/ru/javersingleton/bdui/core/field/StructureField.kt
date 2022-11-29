@@ -6,9 +6,19 @@ import ru.javersingleton.bdui.core.currentQuiet
 
 
 data class StructureField(
-    override val id: String = newId(),
+    override val id: String,
+    override val withUserId: Boolean,
     val fields: Map<String, Field<*>>
 ) : Field<StructureData> {
+
+    constructor(
+        id: String,
+        fields: Map<String, Field<*>>
+    ): this(id = id, withUserId = true, fields)
+
+    constructor(
+        fields: Map<String, Field<*>>
+    ): this(id = newId(), withUserId = false, fields)
 
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<StructureData> =
         scope.run {

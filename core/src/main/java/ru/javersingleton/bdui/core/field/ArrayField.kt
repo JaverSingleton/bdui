@@ -5,9 +5,19 @@ import ru.javersingleton.bdui.core.Value
 import ru.javersingleton.bdui.core.currentQuiet
 
 data class ArrayField(
-    override val id: String = newId(),
-    private val fields: List<Field<*>>
+    override val id: String,
+    override val withUserId: Boolean,
+    private val fields: List<Field<*>>,
 ) : Field<ArrayData> {
+
+    constructor(
+        id: String,
+        fields: List<Field<*>>
+    ): this(id = id, withUserId = true, fields)
+
+    constructor(
+        fields: List<Field<*>>
+    ): this(id = newId(), withUserId = false, fields)
 
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ArrayData> =
         scope.run {
