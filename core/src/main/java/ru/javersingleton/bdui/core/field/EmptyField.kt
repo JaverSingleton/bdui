@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.References
 import ru.javersingleton.bdui.core.Value
 
 data class EmptyField(
@@ -9,19 +10,23 @@ data class EmptyField(
 ) : Field<EmptyData> {
 
     constructor(
-        id: String
-    ) : this(id = id, withUserId = true)
-
-    constructor() : this(id = newId(), withUserId = false)
+        id: String? = null
+    ) : this(id = id ?: newId(), withUserId = id != null)
 
     override fun resolve(
         scope: Lambda.Scope,
-        args: Map<String, Value<*>>
+        args: References
     ): Field<EmptyData> = scope.run {
+        val resultValue = rememberValue(id, null) { EmptyData(id = id) }
         ResolvedField(
             id = id,
-            withUserId,
-            value = rememberValue(id, null) { EmptyData(id = id) },
+            withUserId = withUserId,
+            value = resultValue,
+            dataWithUserId = if (withUserId) {
+                mapOf(id to resultValue)
+            } else {
+                mapOf()
+            }
         )
     }
 
@@ -43,5 +48,5 @@ data class EmptyField(
 }
 
 data class EmptyData(val id: String) : ResolvedData {
-    override fun toField(): Field<EmptyData> = EmptyField(id)
+    override fun asField(): Field<EmptyData> = EmptyField(id)
 }

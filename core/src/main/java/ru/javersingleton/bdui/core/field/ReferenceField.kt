@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.References
 import ru.javersingleton.bdui.core.Value
 
 
@@ -11,24 +12,27 @@ data class ReferenceField(
 ) : Field<ResolvedData> {
 
     constructor(
-        id: String,
+        id: String? = null,
         refFieldName: String
-    ) : this(id = id, withUserId = true, refFieldName)
-
-    constructor(
-        refFieldName: String
-    ) : this(id = newId(), withUserId = false, refFieldName)
+    ) : this(id = id ?: newId(), withUserId = id != null, refFieldName)
 
     @Suppress("UNCHECKED_CAST")
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ResolvedData> = scope.run {
-        val argument = rememberValue(id, args) { args[refFieldName] }
-        argument.current?.let {
-            ResolvedField(
-                id = id,
-                withUserId,
-                value = argument.current as Value<ResolvedData>,
-            )
-        } ?: this@ReferenceField
+    override fun resolve(scope: Lambda.Scope, args: References): Field<ResolvedData> = scope.run {
+        val resultValue: Value<ResolvedData> = rememberValue(id, args) {
+            val valueContainer = args[refFieldName].current
+                ?: throw IllegalArgumentException("Container of Arg $refFieldName not found")
+            valueContainer.current { it }
+        }
+        return ResolvedField(
+            id = id,
+            withUserId = withUserId,
+            value = resultValue,
+            dataWithUserId = if (withUserId) {
+                mapOf(id to resultValue)
+            } else {
+                mapOf()
+            }
+        )
     }
 
     @Suppress("UNCHECKED_CAST")

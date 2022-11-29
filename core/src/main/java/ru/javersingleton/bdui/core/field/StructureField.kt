@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.References
 import ru.javersingleton.bdui.core.Value
 import ru.javersingleton.bdui.core.currentQuiet
 
@@ -12,71 +13,40 @@ data class StructureField(
 ) : Field<StructureData> {
 
     constructor(
-        id: String,
+        id: String? = null,
         fields: Map<String, Field<*>>
-    ): this(id = id, withUserId = true, fields)
+    ) : this(id = id ?: newId(), withUserId = id != null, fields)
 
-    constructor(
-        fields: Map<String, Field<*>>
-    ): this(id = newId(), withUserId = false, fields)
-
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<StructureData> =
+    override fun resolve(scope: Lambda.Scope, args: References): Field<StructureData> =
         scope.run {
             val targetFields = fields.map { (name, field) -> name to field.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {
-                StructureField(id, targetFields.toMap())
-            } else {
-                ResolvedField(
-                    id,
-                    withUserId,
-                    rememberValue(id, targetFields) {
-                        StructureData(
-                            id = id,
-                            targetFields.associate { (key, value) -> key to (value as ResolvedField).value }
-                        )
-                    }
+                return copy(fields = targetFields.toMap())
+            }
+
+            val dataWithUserId: MutableMap<String, Value<*>> = mutableMapOf()
+            val values: MutableMap<String, Value<out ResolvedData>> = mutableMapOf()
+            targetFields.forEach { (key, value) ->
+                val resolvedElement = value as ResolvedField
+                dataWithUserId.putAll(resolvedElement.dataWithUserId)
+                values[key] = resolvedElement.value
+            }
+            val resultValue = rememberValue(id, targetFields) {
+                StructureData(
+                    id = id,
+                    targetFields.associate { (key, value) -> key to (value as ResolvedField).value }
                 )
             }
-        }
-
-    fun resolveThemselves(scope: Lambda.Scope): Field<StructureData> =
-        scope.run {
-            val args: MutableMap<String, Value<*>> = mutableMapOf()
-            val resolvedFields: MutableMap<String, ResolvedField<*>> = mutableMapOf()
-            val unresolvedFields: MutableMap<String, Field<*>> = fields.toMutableMap()
-            var lastUnresolvedFields: Map<String, Field<*>> = fields
-            while (unresolvedFields.isNotEmpty()) {
-                val unresolvedFieldsIterator = unresolvedFields.iterator()
-                while (unresolvedFieldsIterator.hasNext()) {
-                    val targetField = unresolvedFieldsIterator.next()
-                    val processedField = targetField.value.resolve(scope, args)
-                    if (processedField is ResolvedField) {
-                        unresolvedFieldsIterator.remove()
-                        resolvedFields[targetField.key] = processedField
-                        args[targetField.key] = processedField.value
-                    }
-                }
-                if (lastUnresolvedFields == unresolvedFields) {
-                    return@run this@StructureField
-                }
-                lastUnresolvedFields = unresolvedFields.toMap()
+            if (withUserId) {
+                dataWithUserId[id] = resultValue
             }
-            ResolvedField(
+            return ResolvedField(
                 id,
                 withUserId,
-                rememberValue(id, resolvedFields) {
-                    StructureData(
-                        id = id,
-                        resolvedFields.mapValues { it.value.value }
-                    )
-                }
+                resultValue,
+                dataWithUserId
             )
         }
-
-    fun extractStates(): Map<String, Value<*>> =
-        fields
-            .filterValues { it is ResolvedField }
-            .mapValues { (_, value) -> (value as ResolvedField).value }
 
     private fun List<Pair<String, Field<*>>>.hasUnresolvedFields(): Boolean =
         firstOrNull { it.second !is ResolvedField } != null
@@ -85,7 +55,9 @@ data class StructureField(
         if (targetFields == null) {
             return this
         }
-        return StructureField(id = id, fields = fields + targetFields.fields.mapValues { ResolvedField(it.value) })
+        return copy(
+            fields = fields + targetFields.fields.mapValues { ResolvedField(it.value) }
+        )
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -122,7 +94,7 @@ data class StructureField(
 data class StructureData(
     val id: String,
     internal val fields: Map<String, Value<out ResolvedData>> = mapOf()
-): ResolvedData {
+) : ResolvedData {
 
     fun prop(name: String): Value<*> = fields[name] ?: Value.NULL
 
@@ -132,11 +104,13 @@ data class StructureData(
         fields.forEach { (key, _) -> func(key) }
     }
 
-    fun unbox(): Map<String, Value<*>> = fields.mapValues { it.value }
+    fun unbox(): Map<String, Value<*>> = fields
 
-    override fun toField(): Field<StructureData> = StructureField(
+    override fun asField(): Field<StructureData> = StructureField(
         id = id,
-        fields = fields.mapValues { (_, value) -> value.currentQuiet<ResolvedData> { it }.toField() }
+        fields = fields.mapValues { (_, value) ->
+            value.currentQuiet<ResolvedData> { it }.asField()
+        }
     )
 
 }

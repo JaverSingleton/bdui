@@ -55,13 +55,13 @@ class JsonParser(
                 val isRef = strVal.startsWith(REF_PREFIX).and(strVal.endsWith(REF_SUFFIX))
                 if (isRef) {
                     ReferenceField(
-                        strVal.substring(
+                        refFieldName = strVal.substring(
                             REF_PREFIX.length,
                             strVal.length - REF_SUFFIX.length
                         )
                     )
                 } else {
-                    PrimitiveField(strVal)
+                    PrimitiveField(value = strVal)
                 }
             }
         }
@@ -86,7 +86,7 @@ class JsonParser(
     private fun parseComponent(obj: JSONObject): ComponentField? {
         obj.opt(COMPONENT_TYPE) ?: return null
         var type = ""
-        var id: String = newId()
+        var id: String? = null
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             when (key) {
@@ -105,7 +105,7 @@ class JsonParser(
     private fun parseFunction(obj: JSONObject): FunctionField? {
         obj.opt(FUNCTION_TYPE) ?: return null
         var type = ""
-        var id: String = newId()
+        var id: String? = null
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             when (key) {
@@ -125,7 +125,7 @@ class JsonParser(
         obj.opt(EFFECT_TYPE) ?: return null
         var type = ""
         var name = ""
-        var id: String = newId()
+        var id: String? = null
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             when (key) {
@@ -149,7 +149,7 @@ class JsonParser(
         if (obj.length() == 0 || (obj.length() == 1 && obj.has(ID))) {
             return null
         }
-        var id: String = newId()
+        var id: String? = null
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             when (key) {
@@ -164,7 +164,7 @@ class JsonParser(
     }
 
     private fun parseEmpty(obj: JSONObject? = null): EmptyField {
-        val id: String = obj?.optString(ID) ?: newId()
+        val id: String? = obj?.optString(ID)
         return EmptyField(id)
     }
 

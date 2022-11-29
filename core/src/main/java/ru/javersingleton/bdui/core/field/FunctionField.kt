@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.References
 import ru.javersingleton.bdui.core.Value
 
 data class FunctionField(
@@ -11,42 +12,39 @@ data class FunctionField(
 ) : Field<ResolvedData> {
 
     constructor(
-        id: String,
+        id: String? = null,
         functionType: String,
         params: Field<StructureData>
-    ) : this(id = id, withUserId = true, functionType, params)
+    ) : this(id = id ?: newId(), withUserId = id != null, functionType, params)
 
-    constructor(
-        functionType: String,
-        params: Field<StructureData>
-    ) : this(id = newId(), withUserId = false, functionType, params)
-
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ResolvedData> =
+    override fun resolve(scope: Lambda.Scope, args: References): Field<ResolvedData> =
         scope.run {
             val params = params.resolve(this, args)
             if (params !is ResolvedField<StructureData>) {
-                return FunctionField(
-                    id,
-                    functionType,
-                    params,
-                )
+                return copy(params = params)
             }
 
             val function = rememberValue("$id@function", functionType) {
                 inflateFunction(functionType)
             }
 
+            val resultValue = function.current?.calculate(
+                scope,
+                id,
+                params.value.current {
+                    StructureData(id = it.id)
+                }
+            ) ?: throw IllegalArgumentException("Function $functionType not found")
             @Suppress("UNCHECKED_CAST")
             ResolvedField(
                 id = id,
-                withUserId,
-                value = function.current?.calculate(
-                    scope,
-                    id,
-                    params.value.current {
-                        StructureData(id = it.id)
-                    }
-                ) ?: throw IllegalArgumentException("Function $functionType not found")
+                withUserId = withUserId,
+                value = resultValue,
+                dataWithUserId = if (withUserId) {
+                    mapOf(id to resultValue)
+                } else {
+                    mapOf()
+                }
             )
         }
 

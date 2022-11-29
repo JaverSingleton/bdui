@@ -20,7 +20,7 @@ data class StatePatchEffect(
         override fun create(params: Map<String, Value<*>>): Effect {
             val data: ResolvedData? = params["patch"]?.currentQuiet()
             return StatePatchEffect(
-                patch = data?.toField() ?: EmptyField()
+                patch = data?.asField() ?: EmptyField()
             )
         }
 

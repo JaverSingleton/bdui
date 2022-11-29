@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.References
 import ru.javersingleton.bdui.core.Value
 
 data class ComponentField(
@@ -11,53 +12,55 @@ data class ComponentField(
 ) : Field<ComponentData> {
 
     constructor(
-        id: String,
+        id: String? = null,
         componentType: String,
         params: Field<StructureData>
-    ) : this(id = id, withUserId = true, componentType, params)
+    ) : this(id = id ?: newId(), withUserId = id != null, componentType, params)
 
-    constructor(
-        componentType: String,
-        params: Field<StructureData>
-    ) : this(id = newId(), withUserId = false, componentType, params)
-
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ComponentData> =
+    override fun resolve(scope: Lambda.Scope, args: References): Field<ComponentData> =
         scope.run {
             val externalParamsField = params.resolve(scope, args)
             if (externalParamsField !is ResolvedField) {
-                return ComponentField(id, componentType, externalParamsField as StructureField)
+                return copy(params = externalParamsField as StructureField)
             }
 
-            val externalParamsState = externalParamsField.value
+            val externalParams = externalParamsField.value
 
+            val dataWithUserId: MutableMap<String, Value<*>> = mutableMapOf()
+            dataWithUserId.putAll(externalParamsField.dataWithUserId)
+            val resultValue = rememberValue(id, componentType) {
+                val stateFactory = rememberValue("$id@stateFactory", componentType) {
+                    inflateStateFactory(componentType)
+                }
+
+                ComponentData(
+                    id = id,
+                    componentType = componentType,
+                    params = externalParams.current { empty ->
+                        StructureData(empty.id, fields = mapOf())
+                    },
+                    value = rememberValue("$id@value", componentType) {
+                        val externalParams: StructureData =
+                            externalParams.current { empty ->
+                                StructureData(empty.id, fields = mapOf())
+                            }
+                        stateFactory.current?.calculate(
+                            scope = this,
+                            args = externalParams,
+                            componentType = componentType
+                        )
+                            ?: throw IllegalArgumentException("StateFactory $componentType not found")
+                    }
+                )
+            }
+            if (withUserId) {
+                dataWithUserId[id] = resultValue
+            }
             return ResolvedField(
                 id,
                 withUserId,
-                rememberValue(id, componentType) {
-                    val stateFactory = rememberValue("$id@stateFactory", componentType) {
-                        inflateStateFactory(componentType)
-                    }
-
-                    ComponentData(
-                        id = id,
-                        componentType = componentType,
-                        params = externalParamsState.current { empty ->
-                            StructureData(empty.id, fields = mapOf())
-                        },
-                        value = rememberValue("$id@value", componentType) {
-                            val externalParams: StructureData =
-                                externalParamsState.current { empty ->
-                                    StructureData(empty.id, fields = mapOf())
-                                }
-                            stateFactory.current?.calculate(
-                                scope = this,
-                                args = externalParams,
-                                componentType = componentType
-                            )
-                                ?: throw IllegalArgumentException("StateFactory $componentType not found")
-                        }
-                    )
-                }
+                resultValue,
+                dataWithUserId
             )
         }
 
@@ -101,10 +104,10 @@ data class ComponentData(
     val value: Value<*>
 ) : ResolvedData {
 
-    override fun toField(): Field<ComponentData> = ComponentField(
+    override fun asField(): Field<ComponentData> = ComponentField(
         id = id,
         componentType = componentType,
-        params = params.toField()
+        params = params.asField()
     )
 
 }

@@ -1,5 +1,6 @@
 package ru.javersingleton.bdui.core
 
+import ru.javersingleton.bdui.component.state.MetaComponent.StateFactory.create
 import ru.javersingleton.bdui.core.field.*
 import ru.javersingleton.bdui.core.interaction.Interaction
 
@@ -23,13 +24,16 @@ class BeduinController(
 
             lastState = value
             lambda.setBody {
-                val params = (value.params as StructureField).resolveThemselves(this)
+                val args = MutableReferences()
+                val paramsField = value.params.resolve(this, args) as ResolvedField<StructureData>
+                val paramsData = (paramsField.value.current?.unbox() ?: mapOf()) + paramsField.dataWithUserId
+                args.putAll(this, paramsData)
                 val componentField = ComponentField(
                     id = value.id,
                     componentType = value.componentType,
-                    params = params
+                    params = paramsField
                 )
-                val processedField = componentField.resolve(this, mutableMapOf())
+                val processedField = componentField.resolve(this, args)
                 if (processedField !is ResolvedField) {
                     throw IllegalArgumentException()
                 }

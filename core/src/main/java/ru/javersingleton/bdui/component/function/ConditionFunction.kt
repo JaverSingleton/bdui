@@ -12,7 +12,7 @@ class ConditionFunction: Function {
         rememberValue(id, params) {
             val value: PrimitiveData = params.prop("value").current()
                 ?: throw IllegalArgumentException("You must set value for ConditionFunction")
-            if (value.toBoolean()) {
+            if (value.asBoolean()) {
                 params.prop("trueResult")
             } else {
                 params.prop("falseResult")

@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
-import ru.javersingleton.bdui.core.Value
+import ru.javersingleton.bdui.core.References
 
 data class PrimitiveField(
     override val id: String,
@@ -10,22 +10,24 @@ data class PrimitiveField(
 ) : Field<PrimitiveData> {
 
     constructor(
-        id: String,
+        id: String? = null,
         value: String
-    ) : this(id = id, withUserId = true, value)
-
-    constructor(
-        value: String
-    ) : this(id = newId(), withUserId = false, value)
+    ) : this(id = id ?: newId(), withUserId = id != null, value)
 
     override fun resolve(
         scope: Lambda.Scope,
-        args: Map<String, Value<*>>
+        args: References
     ): Field<PrimitiveData> = scope.run {
+        val resultValue = rememberValue(id, value) { PrimitiveData(id = id, value) }
         ResolvedField(
             id = id,
-            withUserId,
-            value = rememberValue(id, value) { PrimitiveData(id = id, value) },
+            withUserId = withUserId,
+            value = resultValue,
+            dataWithUserId = if (withUserId) {
+                mapOf(id to resultValue)
+            } else {
+                mapOf()
+            }
         )
     }
 
@@ -50,14 +52,14 @@ data class PrimitiveData(
     private val value: String
 ) : ResolvedData {
 
-    override fun toString(): String = value
+    fun asString(): String = value
 
-    fun toInt(): Int = value.toInt()
+    fun asInt(): Int = value.toInt()
 
-    fun toBoolean(): Boolean = value.toBoolean()
+    fun asBoolean(): Boolean = value.toBoolean()
 
-    fun toFloat(): Float = value.toFloat()
+    fun asFloat(): Float = value.toFloat()
 
-    override fun toField(): Field<PrimitiveData> = PrimitiveField(id = id, value)
+    override fun asField(): Field<PrimitiveData> = PrimitiveField(id = id, value)
 
 }

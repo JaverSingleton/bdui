@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.References
 import ru.javersingleton.bdui.core.Value
 import ru.javersingleton.bdui.core.interaction.Interaction
 
@@ -13,46 +14,47 @@ data class InteractionField(
 ) : Field<InteractionData> {
 
     constructor(
-        id: String,
+        id: String? = null,
         interactionType: String,
         interactionName: String,
         params: Field<StructureData>
-    ) : this(id = id, withUserId = true, interactionType, interactionName, params)
-
-    constructor(
-        interactionType: String,
-        interactionName: String,
-        params: Field<StructureData>
-    ) : this(id = newId(), withUserId = false, interactionType, interactionName, params)
+    ) : this(id = id ?: newId(), withUserId = id != null, interactionType, interactionName, params)
 
     override fun resolve(
         scope: Lambda.Scope,
-        args: Map<String, Value<*>>
+        args: References
     ): Field<InteractionData> = scope.run {
         val interactionFactory = inflateInteractionFactory(interactionType, interactionName)
 
+        val resultValue = rememberValue(
+            id,
+            setOf(args, interactionFactory, params)
+        ) {
+            InteractionData(
+                raw = this@InteractionField
+            ) { externalArgs ->
+                TODO("Реализовать resolve для InteractionField")
+//                val callbackArgs = args + externalArgs
+//                val resolvedParams = (params.resolve(this, callbackArgs) as ResolvedField)
+//                    .value.current { StructureData(it.id) }
+//                interactionFactory.create(resolvedParams.unbox())
+            }
+        }
         ResolvedField(
             id = id,
             withUserId,
-            value = rememberValue(
-                id,
-                setOf(args, interactionFactory, params)
-            ) {
-                InteractionData(
-                    raw = this@InteractionField
-                ) { externalArgs ->
-                    val callbackArgs = args + externalArgs
-                    val resolvedParams = (params.resolve(this, callbackArgs) as ResolvedField)
-                        .value.current { StructureData(it.id) }
-                    interactionFactory.create(resolvedParams.unbox())
-                }
+            value = resultValue,
+            dataWithUserId = if (withUserId) {
+                mapOf(id to resultValue)
+            } else {
+                mapOf()
             }
         )
     }
 
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<InteractionData> {
         if (targetFieldId == id) {
-            TODO("Not implemented yet")
+            TODO("Реализовать mergeDeeply для InteractionField")
         }
         return this
     }
@@ -69,7 +71,7 @@ class InteractionData(
 
     operator fun invoke(args: Map<String, Value<*>>): Interaction = callback.invoke(args)
 
-    override fun toField(): Field<InteractionData> = raw
+    override fun asField(): Field<InteractionData> = raw
 
 }
 

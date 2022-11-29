@@ -14,7 +14,7 @@ class MaxLengthFunction: Function {
             val length: PrimitiveData = params.prop("length").current { PrimitiveData(value = "0") }
             PrimitiveData(
                 id = "$id@result",
-                value.toString().take(length.toInt())
+                value.asString().take(length.asInt())
             )
         }
     }

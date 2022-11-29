@@ -46,12 +46,12 @@ object ComponentState {
 
             fun Value<*>.asString(): String? {
                 val primitive: PrimitiveData? = current()
-                return primitive?.toString()
+                return primitive?.asString()
             }
 
             fun Value<*>.asInt(): Int? {
                 val primitive: PrimitiveData? = current()
-                return primitive?.toInt()
+                return primitive?.asInt()
             }
 
             fun Value<*>.asInteraction(): ((Map<String, Value<*>>) -> Unit)? {

@@ -1,6 +1,7 @@
 package ru.javersingleton.bdui.core.field
 
 import ru.javersingleton.bdui.core.Lambda
+import ru.javersingleton.bdui.core.References
 import ru.javersingleton.bdui.core.Value
 import ru.javersingleton.bdui.core.currentQuiet
 
@@ -11,28 +12,36 @@ data class ArrayField(
 ) : Field<ArrayData> {
 
     constructor(
-        id: String,
+        id: String? = null,
         fields: List<Field<*>>
-    ): this(id = id, withUserId = true, fields)
+    ) : this(id = id ?: newId(), withUserId = id != null, fields)
 
-    constructor(
-        fields: List<Field<*>>
-    ): this(id = newId(), withUserId = false, fields)
-
-    override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<ArrayData> =
+    override fun resolve(scope: Lambda.Scope, args: References): Field<ArrayData> =
         scope.run {
             val targetFields = fields.map { field -> field.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {
-                ArrayField(id, targetFields)
-            } else {
-                ResolvedField(
-                    id,
-                    withUserId,
-                    rememberValue(id, targetFields) {
-                        ArrayData(id, targetFields.map { (it as ResolvedField<*>).value }.toList())
-                    }
-                )
+                return copy(fields = targetFields)
             }
+
+            val dataWithUserId: MutableMap<String, Value<*>> = mutableMapOf()
+            val values: MutableList<Value<out ResolvedData>> = mutableListOf()
+            targetFields.forEach {
+                val resolvedElement = it as ResolvedField
+                dataWithUserId.putAll(resolvedElement.dataWithUserId)
+                values.add(resolvedElement.value)
+            }
+            val resultValue = rememberValue(id, targetFields) {
+                ArrayData(id, targetFields.map { (it as ResolvedField<*>).value }.toList())
+            }
+            if (withUserId) {
+                dataWithUserId[id] = resultValue
+            }
+            ResolvedField(
+                id,
+                withUserId,
+                resultValue,
+                dataWithUserId
+            )
         }
 
     private fun List<Field<*>>.hasUnresolvedFields(): Boolean =
@@ -77,15 +86,15 @@ data class ArrayField(
 data class ArrayData(
     val id: String,
     internal val fields: List<Value<out ResolvedData>>
-): ResolvedData {
+) : ResolvedData {
 
     operator fun get(index: Int): Value<*> = fields[index]
 
     val size get() = fields.size
 
-    override fun toField(): Field<ArrayData> = ArrayField(
+    override fun asField(): Field<ArrayData> = ArrayField(
         id = id,
-        fields = fields.map { it.currentQuiet<ResolvedData> { empty -> empty }.toField() }
+        fields = fields.map { it.currentQuiet<ResolvedData> { empty -> empty }.asField() }
     )
 
 }
