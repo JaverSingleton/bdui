@@ -27,6 +27,7 @@ data class ArrayField(
             } else {
                 ResolvedField(
                     id,
+                    withUserId,
                     rememberValue(id, targetFields) {
                         ArrayData(id, targetFields.map { (it as ResolvedField<*>).value }.toList())
                     }

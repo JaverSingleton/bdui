@@ -28,6 +28,7 @@ data class StructureField(
             } else {
                 ResolvedField(
                     id,
+                    withUserId,
                     rememberValue(id, targetFields) {
                         StructureData(
                             id = id,
@@ -62,6 +63,7 @@ data class StructureField(
             }
             ResolvedField(
                 id,
+                withUserId,
                 rememberValue(id, resolvedFields) {
                     StructureData(
                         id = id,

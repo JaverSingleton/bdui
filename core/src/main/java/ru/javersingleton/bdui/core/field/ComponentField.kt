@@ -32,6 +32,7 @@ data class ComponentField(
 
             return ResolvedField(
                 id,
+                withUserId,
                 rememberValue(id, componentType) {
                     val stateFactory = rememberValue("$id@stateFactory", componentType) {
                         inflateStateFactory(componentType)

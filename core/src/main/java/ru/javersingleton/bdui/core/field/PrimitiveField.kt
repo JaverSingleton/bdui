@@ -24,6 +24,7 @@ data class PrimitiveField(
     ): Field<PrimitiveData> = scope.run {
         ResolvedField(
             id = id,
+            withUserId,
             value = rememberValue(id, value) { PrimitiveData(id = id, value) },
         )
     }

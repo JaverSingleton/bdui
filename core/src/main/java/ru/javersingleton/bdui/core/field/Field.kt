@@ -24,14 +24,7 @@ data class ResolvedField<T: ResolvedData>(
     val value: Value<T>,
 ) : Field<T> {
 
-    constructor(
-        id: String,
-        value: Value<T>
-    ) : this(id = id, withUserId = true, value)
-
-    constructor(
-        value: Value<T>
-    ) : this(id = newId(), withUserId = false, value)
+    constructor(value: Value<T>): this(id = newId(), withUserId = false, value)
 
     override fun resolve(scope: Lambda.Scope, args: Map<String, Value<*>>): Field<T> = this
 

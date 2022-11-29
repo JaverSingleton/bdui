@@ -20,6 +20,7 @@ data class EmptyField(
     ): Field<EmptyData> = scope.run {
         ResolvedField(
             id = id,
+            withUserId,
             value = rememberValue(id, null) { EmptyData(id = id) },
         )
     }

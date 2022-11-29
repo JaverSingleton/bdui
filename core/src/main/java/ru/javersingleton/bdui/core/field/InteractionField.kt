@@ -33,6 +33,7 @@ data class InteractionField(
 
         ResolvedField(
             id = id,
+            withUserId,
             value = rememberValue(
                 id,
                 setOf(args, interactionFactory, params)

@@ -25,6 +25,7 @@ data class ReferenceField(
         argument.current?.let {
             ResolvedField(
                 id = id,
+                withUserId,
                 value = argument.current as Value<ResolvedData>,
             )
         } ?: this@ReferenceField

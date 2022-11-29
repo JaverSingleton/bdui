@@ -39,6 +39,7 @@ data class FunctionField(
             @Suppress("UNCHECKED_CAST")
             ResolvedField(
                 id = id,
+                withUserId,
                 value = function.current?.calculate(
                     scope,
                     id,
