@@ -15,7 +15,7 @@ class CombineArraysFunction : Function {
                 ArrayData(
                     id = "$id@result",
                     values?.fields?.flatMap { resolvedField ->
-                        when (val data: ResolvedData? = resolvedField.value.current()) {
+                        when (val data: ResolvedData? = resolvedField.current()) {
                             null -> listOf()
                             is ArrayData -> data.fields
                             else -> listOf(resolvedField)

@@ -31,7 +31,7 @@ data class StructureField(
                     rememberValue(id, targetFields) {
                         StructureData(
                             id = id,
-                            targetFields.associate { (key, value) -> key to (value as ResolvedField) }
+                            targetFields.associate { (key, value) -> key to (value as ResolvedField).value }
                         )
                     }
                 )
@@ -65,7 +65,7 @@ data class StructureField(
                 rememberValue(id, resolvedFields) {
                     StructureData(
                         id = id,
-                        resolvedFields
+                        resolvedFields.mapValues { it.value.value }
                     )
                 }
             )
@@ -83,7 +83,7 @@ data class StructureField(
         if (targetFields == null) {
             return this
         }
-        return StructureField(id = id, fields = fields + targetFields.fields)
+        return StructureField(id = id, fields = fields + targetFields.fields.mapValues { ResolvedField(it.value) })
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -119,10 +119,10 @@ data class StructureField(
 
 data class StructureData(
     val id: String,
-    internal val fields: Map<String, ResolvedField<*>> = mapOf()
+    internal val fields: Map<String, Value<out ResolvedData>> = mapOf()
 ): ResolvedData {
 
-    fun prop(name: String): Value<*> = fields[name]?.value ?: Value.NULL
+    fun prop(name: String): Value<*> = fields[name] ?: Value.NULL
 
     fun hasProp(name: String): Boolean = fields.containsKey(name)
 
@@ -130,11 +130,11 @@ data class StructureData(
         fields.forEach { (key, _) -> func(key) }
     }
 
-    fun unbox(): Map<String, Value<*>> = fields.mapValues { it.value.value }
+    fun unbox(): Map<String, Value<*>> = fields.mapValues { it.value }
 
     override fun toField(): Field<StructureData> = StructureField(
         id = id,
-        fields = fields.mapValues { (_, value) -> value.value.currentQuiet<ResolvedData> { it }.toField() }
+        fields = fields.mapValues { (_, value) -> value.currentQuiet<ResolvedData> { it }.toField() }
     )
 
 }

@@ -28,7 +28,7 @@ data class ArrayField(
                 ResolvedField(
                     id,
                     rememberValue(id, targetFields) {
-                        ArrayData(id, targetFields.map { it as ResolvedField<*> }.toList())
+                        ArrayData(id, targetFields.map { (it as ResolvedField<*>).value }.toList())
                     }
                 )
             }
@@ -75,16 +75,16 @@ data class ArrayField(
 
 data class ArrayData(
     val id: String,
-    internal val fields: List<ResolvedField<*>>
+    internal val fields: List<Value<out ResolvedData>>
 ): ResolvedData {
 
-    operator fun get(index: Int): Value<*> = fields[index].value
+    operator fun get(index: Int): Value<*> = fields[index]
 
     val size get() = fields.size
 
     override fun toField(): Field<ArrayData> = ArrayField(
         id = id,
-        fields = fields.map { it.value.currentQuiet<ResolvedData> { empty -> empty }.toField() }
+        fields = fields.map { it.currentQuiet<ResolvedData> { empty -> empty }.toField() }
     )
 
 }
