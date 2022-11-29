@@ -50,6 +50,7 @@ class MainBeduinContext(
             "Text" -> TextComponent.StateFactory
             "Button" -> ButtonComponent.StateFactory
             "Input" -> InputComponent.StateFactory
+            "Switch" -> SwitchComponent.StateFactory
             "Image" -> ImageComponent.StateFactory
             "Toolbar" -> ToolbarComponent.StateFactory
             else -> MetaComponent.StateFactory

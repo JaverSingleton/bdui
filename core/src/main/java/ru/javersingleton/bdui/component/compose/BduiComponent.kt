@@ -42,6 +42,10 @@ fun BduiComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<InputState>,
         )
+        "Switch" -> SwitchComponent(
+            modifier = modifier,
+            componentState = componentStructure.value as Value<SwitchState>,
+        )
         "Image" -> ImageComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<ImageState>,

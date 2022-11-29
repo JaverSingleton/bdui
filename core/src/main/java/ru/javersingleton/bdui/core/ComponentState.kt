@@ -49,6 +49,11 @@ object ComponentState {
                 return primitive?.asString()
             }
 
+            fun Value<*>.asBoolean(): Boolean? {
+                val primitive: PrimitiveData? = current()
+                return primitive?.asBoolean()
+            }
+
             fun Value<*>.asInt(): Int? {
                 val primitive: PrimitiveData? = current()
                 return primitive?.asInt()

@@ -93,7 +93,6 @@
         ]
       }
     },
-
     "ContactScreen": {
       "state": {
         "title": "",
@@ -153,7 +152,47 @@
         ]
       }
     },
-
+    "OfflineSwitcher": {
+      "state": {
+        "offlineMode": false,
+        "onOfflineModeChange": null
+      },
+      "rootComponent": {
+        "componentType": "Box",
+        "children": [
+          {
+            "componentType": "Row",
+            "layout_width": "wrapContent",
+            "layout_padding": {
+              "start": 16,
+              "end": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "children": [
+              {
+                "componentType": "Text",
+                "text": "Offline mode",
+                "textAlign": "Center",
+                "layout_width": "wrapContent",
+                "layout_padding": {
+                  "start": 16,
+                  "end": 16,
+                  "top": 12,
+                  "bottom": 12
+                }
+              },
+              {
+                "componentType": "Switch",
+                "checked": "{{offlineMode}}",
+                "layout_width": "wrapContent",
+                "onCheckedChange": "{{onOfflineModeChange}}"
+              }
+            ]
+          }
+        ]
+      }
+    },
     "_ContactItem": {
       "state": {
         "avatar": "",
@@ -178,31 +217,23 @@
       }
     }
   },
-
-
-
-
-
-
-
-
   "state": {
     "id": "root",
     "componentType": "ContactScreen",
     "offlineMode": false,
     "title": "Contacts",
-    "input_value": "",
+    "inputValue": "",
     "footer": {
       "componentType": "Column",
       "children": [
         {
           "componentType": "Input",
-          "text": "{{input_value}}",
+          "text": "{{inputValue}}",
           "onTextChanged": {
             "effectType": "StatePatch",
             "patch": {
               "id": "root",
-              "input_value": {
+              "inputValue": {
                 "functionType": "MaxLength",
                 "value": "{{args.text}}",
                 "length": 5
@@ -218,7 +249,18 @@
             "effectType": "StatePatch",
             "patch": {
               "id": "button",
-              "text": "{{input_value}}"
+              "text": "{{inputValue}}"
+            }
+          }
+        },
+        {
+          "componentType": "OfflineSwitcher",
+          "offlineMode": "{{offlineMode}}",
+          "onOfflineModeChange": {
+            "effectType": "StatePatch",
+            "patch": {
+              "id": "root",
+              "offlineMode": "{{args.checked}}"
             }
           }
         }
@@ -237,6 +279,7 @@
           "effectType": "StatePatch",
           "patch": {
             "id": "contact1",
+            "name": "{{inputValue}}",
             "online": {
               "functionType": "Not",
               "value": "{{contact1.online}}"
@@ -256,6 +299,7 @@
           "effectType": "StatePatch",
           "patch": {
             "id": "contact2",
+            "name": "{{inputValue}}",
             "online": {
               "functionType": "Not",
               "value": "{{contact2.online}}"
@@ -275,6 +319,7 @@
           "effectType": "StatePatch",
           "patch": {
             "id": "contact3",
+            "name": "{{inputValue}}",
             "online": {
               "functionType": "Not",
               "value": "{{contact3.online}}"
