@@ -11,10 +11,12 @@
           "value": "{{online}}",
           "trueResult": "Online",
           "falseResult": "{{lastSeen}}"
-        }
+        },
+        "onClick": null
       },
       "rootComponent": {
         "componentType": "Box",
+        "onClick": "{{onClick}}",
         "children": [
           {
             "componentType": "Row",
@@ -158,13 +160,15 @@
         "name": "",
         "lastSeen": "",
         "offlineMode": false,
-        "online": false
+        "online": false,
+        "onClick": null
       },
       "rootComponent": {
         "componentType": "ContactItem",
         "avatar": "{{avatar}}",
         "name": "{{name}}",
         "lastSeen": "{{lastSeen}}",
+        "onClick": "{{onClick}}",
         "online": {
           "functionType": "Condition",
           "value": "{{offlineMode}}",
@@ -187,19 +191,24 @@
     "componentType": "ContactScreen",
     "offlineMode": false,
     "title": "Contacts",
-    "inputValue": "",
+    "input_value": "",
+    "contact2_online": false,
     "footer": {
       "componentType": "Column",
       "children": [
         {
           "componentType": "Input",
-          "text": "{{inputValue}}",
+          "text": "{{input_value}}",
           "onTextChanged": {
             "effectType": "StatePatch",
             "patch": {
               "id": "root",
               "componentType": "ContactScreen",
-              "inputValue": "{{args.text}}"
+              "input_value": {
+                "functionType": "MaxLength",
+                "value": "{{args.text}}",
+                "length": 5
+              }
             }
           }
         },
@@ -212,7 +221,7 @@
             "patch": {
               "id": "button",
               "componentType": "Button",
-              "text": "{{inputValue}}"
+              "text": "{{input_value}}"
             }
           }
         }
@@ -233,8 +242,19 @@
         "avatar": "https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg",
         "name": "Broken Cat",
         "lastSeen": "20.11.2022",
-        "online": true,
-        "offlineMode": "{{offlineMode}}"
+        "online": "{{contact2_online}}",
+        "offlineMode": "{{offlineMode}}",
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "componentType": "ContactScreen",
+            "id": "root",
+            "contact2_online": {
+              "functionType": "Not",
+              "value": "{{contact2_online}}"
+            }
+          }
+        }
       },
       {
         "componentType": "_ContactItem",

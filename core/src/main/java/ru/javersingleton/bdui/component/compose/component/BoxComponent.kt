@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Color.parseColor
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +26,13 @@ fun BoxComponent(
     Box(
         modifier = Modifier
             .background(color = Color(parseColor(state.backgroundColor)))
+            .then(
+                if (state.onClick != null) {
+                    Modifier.clickable { state.onClick.invoke() }
+                } else {
+                    Modifier
+                }
+            )
             .then(modifier)
     ) {
         state.children.forEach { child ->

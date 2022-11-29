@@ -33,6 +33,7 @@ class MainBeduinContext(
             "CheckEquals" -> CheckEqualsFunction()
             "CombineArrays" -> CombineArraysFunction()
             "CheckNull" -> CheckNullFunction()
+            "MaxLength" -> MaxLengthFunction()
             "Not" -> NotFunction()
             else -> throw IllegalArgumentException("Function $functionType not found")
         }

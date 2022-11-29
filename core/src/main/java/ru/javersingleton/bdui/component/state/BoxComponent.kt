@@ -26,7 +26,12 @@ object BoxComponent {
                         )
                     }
                 }.filterNotNull(),
-                backgroundColor = prop("backgroundColor").asString() ?: "#00000000"
+                backgroundColor = prop("backgroundColor").asString() ?: "#00000000",
+                onClick = prop("onClick").asInteraction()?.let { callback ->
+                    {
+                        callback.invoke(mapOf())
+                    }
+                }
             )
 
     }
@@ -36,6 +41,7 @@ object BoxComponent {
 data class BoxState(
     val children: List<Child>,
     val backgroundColor: String,
+    val onClick: (() -> Unit)?,
 ) {
 
     data class Child(

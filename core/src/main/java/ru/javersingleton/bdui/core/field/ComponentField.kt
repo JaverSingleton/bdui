@@ -46,7 +46,10 @@ data class ComponentField(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<ComponentData> {
+    override fun mergeDeeply(
+        targetFieldId: String,
+        targetField: Field<*>
+    ): ComponentField {
         return if (targetFieldId != id) {
             val targetParams = params.mergeDeeply(targetFieldId, targetField)
             if (targetParams != params) {
@@ -67,7 +70,7 @@ data class ComponentField(
                 }
             } else {
                 targetField.copyWithId(id = id)
-            } as Field<ComponentData>
+            } as ComponentField
         }
     }
 
