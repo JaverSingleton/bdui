@@ -19,7 +19,7 @@ data class ReferenceField(
 
     @Suppress("UNCHECKED_CAST")
     override fun resolve(scope: Lambda.Scope, args: References): Field<ResolvedData> = scope.run {
-        val resultValue: Value<ResolvedData> = rememberValue(id, args) {
+        val resultValue: Value<ResolvedData> = rememberValue(id, setOf(args, refFieldName)) {
             val refPath = refFieldName.split(".")
             var result: Value<*>? = args[refPath[0]].currentQuiet
             for (i in (1 until refPath.size)) {
