@@ -1,0 +1,312 @@
+{
+  "components": {
+    "ContactItem": {
+      "state": {
+        "avatar": "",
+        "name": "",
+        "lastSeen": "",
+        "online": false,
+        "targetLastSeen": {
+          "functionType": "Condition",
+          "value": "{{online}}",
+          "trueResult": "Online",
+          "falseResult": "{{lastSeen}}"
+        },
+        "onClick": null
+      },
+      "rootComponent": {
+        "componentType": "Box",
+        "onClick": "{{onClick}}",
+        "children": [
+          {
+            "componentType": "Row",
+            "layout_width": "fillMax",
+            "layout_padding": {
+              "start": 16,
+              "end": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "children": [
+              {
+                "componentType": "Box",
+                "layout_width": 72,
+                "layout_height": 72,
+                "children": [
+                  {
+                    "componentType": "Image",
+                    "src": "{{avatar}}",
+                    "contentScale": "Crop",
+                    "clip": "Circle",
+                    "layout_width": "fillMax",
+                    "layout_height": "fillMax"
+                  },
+                  {
+                    "functionType": "Condition",
+                    "value": "{{online}}",
+                    "trueResult": {
+                      "componentType": "Image",
+                      "src": "https://zibuhoker.ru/ifm/indicator.png",
+                      "layout_alignment": "BottomEnd",
+                      "contentScale": "Inside",
+                      "clip": "Circle",
+                      "layout_width": 24,
+                      "layout_height": 24,
+                      "layout_padding": {
+                        "end": 2,
+                        "bottom": 2
+                      }
+                    },
+                    "falseResult": null
+                  }
+                ]
+              },
+              {
+                "componentType": "Column",
+                "layout_width": "fillMax",
+                "children": [
+                  {
+                    "componentType": "Text",
+                    "text": "{{name}}",
+                    "textSize": 16,
+                    "layout_width": "fillMax",
+                    "layout_padding": {
+                      "top": 8,
+                      "start": 8
+                    }
+                  },
+                  {
+                    "componentType": "Text",
+                    "text": "{{targetLastSeen}}",
+                    "textSize": 12,
+                    "layout_width": "fillMax",
+                    "layout_padding": {
+                      "top": 8,
+                      "start": 8,
+                      "bottom": 8
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ContactScreen": {
+      "state": {
+        "title": "",
+        "contacts": []
+      },
+      "rootComponent": {
+        "componentType": "Column",
+        "children": [
+          {
+            "componentType": "Column",
+            "children": {
+              "functionType": "CombineArrays",
+              "arrays": [
+                {
+                  "componentType": "Toolbar",
+                  "title": "{{title}}"
+                },
+                {
+                  "componentType": "LazyColumn",
+                  "layout_height": "fillMax",
+                  "children": "{{contacts}}"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "state": {
+    "id": "root",
+    "componentType": "ContactScreen",
+    "title": "Contacts",
+    "contacts": [
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg",
+        "name": "Happy Cat",
+        "lastSeen": "21.11.2022",
+        "online": true,
+        "id": "contact1",
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact1",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact1.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact2",
+        "avatar": "https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg",
+        "name": "Broken Cat",
+        "lastSeen": "20.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact2",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact2.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact3",
+        "avatar": "https://zibuhoker.ru/ifm/nyan-cat.jpg",
+        "name": "Nyan Cat",
+        "lastSeen": "23.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact3",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact3.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact4",
+        "avatar": "https://i.pinimg.com/736x/ba/92/7f/ba927ff34cd961ce2c184d47e8ead9f6.jpg",
+        "name": "Smile Cat",
+        "lastSeen": "24.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact4",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact4.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact5",
+        "avatar": "https://wompampsupport.azureedge.net/fetchimage?siteId=7575&v=2&jpgQuality=100&width=700&url=https%3A%2F%2Fi.kym-cdn.com%2Fphotos%2Fimages%2Fnewsfeed%2F002%2F205%2F309%2F1d3.jpg",
+        "name": "Hehe Cat",
+        "lastSeen": "25.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact5",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact5.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact6",
+        "avatar": "https://i.ytimg.com/vi/Zr-qM5Vrd0g/maxresdefault.jpg",
+        "name": "Fat Cat",
+        "lastSeen": "26.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact6",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact6.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact7",
+        "avatar": "https://static.displate.com/857x1200/displate/2022-07-07/fb201c5aef2a8558a1eec3a095be6d49_1c1023275f02c2ee7bc146309a812775.jpg",
+        "name": "Polite Cat",
+        "lastSeen": "27.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact7",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact7.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact8",
+        "avatar": "https://i0.wp.com/suddenlycat.com/wp-content/uploads/2020/09/Screenshot-2020-08-30-at-3.25.29-PM.png?resize=242%2C300&ssl=1",
+        "name": "Poker Cat",
+        "lastSeen": "28.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact8",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact8.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact9",
+        "avatar": "https://i.pinimg.com/564x/4e/c4/f2/4ec4f2d69c9bc6b152abcb420252c3a8.jpg",
+        "name": "What Cat",
+        "lastSeen": "29.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact9",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact9.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "id": "contact10",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

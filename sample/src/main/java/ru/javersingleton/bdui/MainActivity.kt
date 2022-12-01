@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val reader = asset("sample1.json")
+        val reader = asset("sample2.json")
         val parser = JsonParser(componentsCache)
         val controller = parser.parse(reader)
 

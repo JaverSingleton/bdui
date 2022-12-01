@@ -53,6 +53,7 @@ class MainBeduinContext(
             "Switch" -> SwitchComponent.StateFactory
             "Image" -> ImageComponent.StateFactory
             "Toolbar" -> ToolbarComponent.StateFactory
+            "LazyColumn" -> LazyColumnComponent.StateFactory
             else -> MetaComponent.StateFactory
         }
 

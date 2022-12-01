@@ -54,6 +54,10 @@ fun BduiComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<ToolbarState>,
         )
+        "LazyColumn" -> LazyColumnComponent(
+            modifier = modifier,
+            componentState = componentStructure.value as Value<LazyColumnState>,
+        )
         else -> MetaComponent(
             modifier = modifier,
             componentState = componentStructure.value as Value<MetaState>,
