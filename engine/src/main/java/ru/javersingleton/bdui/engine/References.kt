@@ -24,9 +24,9 @@ class MutableReferences : References {
 
         values = targetValues
 
-        refs.forEach { (key, value) ->
-            Log.d("Beduin", "Reference: id=$key, value=${value.currentQuiet}")
-        }
+//        refs.forEach { (key, value) ->
+//            Log.d("Beduin", "Reference: id=$key, value=${value.currentQuiet}")
+//        }
     }
 
 }
