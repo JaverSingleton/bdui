@@ -7,7 +7,6 @@ import ru.javersingleton.bdui.engine.core.ReadableValue
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.field.ComponentData
 
-@Suppress("UNCHECKED_CAST")
 @Composable
 fun InnerComponent(
     modifier: Modifier = Modifier,
@@ -19,7 +18,7 @@ fun InnerComponent(
         context.inflateComponentRender(data.componentType)
     }
     render(
-        modifier,
+        modifier.recomposeHighlighter(),
         data.value
     )
 }
