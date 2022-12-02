@@ -1,0 +1,25 @@
+plugins {
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.kapt
+}
+
+android {
+    compileSdk 32
+}
+
+dependencies {
+    api project(path: ':engine')
+    api project(path: ':render:compose')
+
+    api project(path: ':component:button:compose')
+    api project(path: ':component:box:compose')
+    api project(path: ':component:column:compose')
+    api project(path: ':component:image:compose')
+    api project(path: ':component:input:compose')
+    api project(path: ':component:row:compose')
+    api project(path: ':component:switch:compose')
+    api project(path: ':component:text:compose')
+    api project(path: ':component:toolbar:compose')
+    api project(path: ':component:meta:compose')
+}

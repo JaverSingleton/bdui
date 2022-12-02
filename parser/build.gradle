@@ -30,5 +30,5 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':core')
+    implementation project(path: ':engine')
 }

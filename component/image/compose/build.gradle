@@ -1,0 +1,23 @@
+plugins {
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.kapt
+}
+
+android {
+    compileSdk 32
+
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
+    }
+}
+
+dependencies {
+    implementation libs.bundles.compose
+    implementation libs.coil
+    api project(path: ':engine')
+    implementation project(path: ':render:compose')
+}

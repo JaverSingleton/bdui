@@ -2,33 +2,24 @@ package ru.javersingleton.bdui.parser
 
 import org.json.JSONArray
 import org.json.JSONObject
-import ru.javersingleton.bdui.core.BeduinController
-import ru.javersingleton.bdui.core.ComponentsCache
-import ru.javersingleton.bdui.core.MainBeduinContext
-import ru.javersingleton.bdui.core.MetaComponentBlueprint
-import ru.javersingleton.bdui.core.field.*
+import ru.javersingleton.bdui.engine.meta.MetaComponentsStorage
+import ru.javersingleton.bdui.engine.meta.MetaComponentBlueprint
+import ru.javersingleton.bdui.engine.field.*
 import java.io.Reader
 
 class JsonParser(
-    private val componentsCache: ComponentsCache
+    private val componentsCache: MetaComponentsStorage
 ) : Parser {
 
-    override fun parse(reader: Reader): BeduinController {
+    // TODO Узнать может ли быть результат NULL
+    override fun parse(reader: Reader): ComponentField {
         val json = reader.readText()
         val obj = JSONObject(json)
         parseMetaComponentsMap(obj.getJSONObject(COMPONENTS), componentsCache)
-        val state = parseComponent(obj.getJSONObject(STATE))
-        val context = MainBeduinContext(componentsCache)
-        return BeduinController(context, state)
+        return parseComponent(obj.getJSONObject(STATE))!!
     }
 
-    override fun parseObject(reader: Reader): Field<*> {
-        val json = reader.readText()
-        val obj = JSONObject(json)
-        return parseObject(obj)
-    }
-
-    private fun parseMetaComponentsMap(obj: JSONObject, componentsCache: ComponentsCache) {
+    private fun parseMetaComponentsMap(obj: JSONObject, componentsCache: MetaComponentsStorage) {
         val blueprints = ArrayList<Pair<String, MetaComponentBlueprint>>()
         obj.keys().forEach { key ->
             val blueprint = parseMetaComponent(obj.getJSONObject(key))
