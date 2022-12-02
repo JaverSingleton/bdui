@@ -8,6 +8,7 @@ fun FunctionsRegister.withBase(): FunctionsRegister = apply {
         CheckNullFunction,
         CombineArraysFunction,
         ConditionFunction,
+        JoinToStringFunction,
         MaxLengthFunction,
         NotFunction
     )
