@@ -306,6 +306,397 @@
             }
           }
         }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "ContactItem",
+        "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
+        "name": "Mask Cat",
+        "lastSeen": "30.11.2022",
+        "online": false,
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact10",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact10.online}}"
+            }
+          }
+        }
       }
     ]
   }

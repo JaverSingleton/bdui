@@ -9,7 +9,7 @@ import ru.javersingleton.bdui.engine.field.ComponentData
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-fun Component(
+fun InnerComponent(
     modifier: Modifier = Modifier,
     data: ComponentData
 ) {

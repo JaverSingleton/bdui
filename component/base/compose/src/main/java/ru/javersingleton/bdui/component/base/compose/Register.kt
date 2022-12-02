@@ -5,6 +5,7 @@ import ru.javersingleton.bdui.component.button.compose.ButtonComponent
 import ru.javersingleton.bdui.component.column.compose.ColumnComponent
 import ru.javersingleton.bdui.component.image.compose.ImageComponent
 import ru.javersingleton.bdui.component.input.compose.InputComponent
+import ru.javersingleton.bdui.component.lazy_column.compose.LazyColumnComponent
 import ru.javersingleton.bdui.component.meta.compose.MetaComponent
 import ru.javersingleton.bdui.component.row.compose.RowComponent
 import ru.javersingleton.bdui.component.switch.compose.SwitchComponent
@@ -16,6 +17,7 @@ fun ComponentsRegister.withBase(): ComponentsRegister = apply {
     register(
         BoxComponent,
         ColumnComponent,
+        LazyColumnComponent,
         ButtonComponent,
         ImageComponent,
         InputComponent,

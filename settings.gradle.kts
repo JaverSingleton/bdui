@@ -26,6 +26,7 @@ include(
     ":component:switch:compose",
     ":component:text:compose",
     ":component:toolbar:compose",
+    ":component:lazy_column:compose",
     ":component:meta:compose",
     ":component:base:compose",
     ":component:common",

@@ -10,7 +10,7 @@ fun Beduin(
     controller: BeduinController
 ) {
     val state = controller.root.subscribeAsState()
-    Component(
+    InnerComponent(
         modifier = modifier,
         data = state.value
     )
