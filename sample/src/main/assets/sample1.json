@@ -5,16 +5,18 @@
         "avatar": "",
         "name": "",
         "lastSeen": "",
+        "online": false,
         "targetLastSeen": {
           "functionType": "Condition",
           "value": "{{online}}",
           "trueResult": "Online",
           "falseResult": "{{lastSeen}}"
         },
-        "online": false
+        "onClick": null
       },
       "rootComponent": {
         "componentType": "Box",
+        "onClick": "{{onClick}}",
         "children": [
           {
             "componentType": "Row",
@@ -97,25 +99,13 @@
         "header": {
           "functionType": "Condition",
           "value": {
-            "functionType": "CheckEquals",
-            "value1": "{{title}}",
-            "value2": ""
+            "functionType": "CheckNull",
+            "value": "{{title}}"
           },
           "trueResult": null,
           "falseResult": {
             "componentType": "Toolbar",
-            "title": {
-              "functionType": "Condition",
-              "value": "{{offlineMode}}",
-              "trueResult": {
-                "functionType": "JoinToString",
-                "items": [
-                  "{{title}}",
-                  " (Offline mode)"
-                ]
-              },
-              "falseResult": "{{title}}"
-            }
+            "title": "{{title}}"
           }
         },
         "contacts": [],
@@ -133,12 +123,16 @@
             "children": {
               "functionType": "CombineArrays",
               "arrays": [
-                [
-                  "{{header}}"
-                ],
+                "{{header}}",
                 "{{contacts}}",
-                [
-                  {
+                {
+                  "functionType": "Condition",
+                  "value": {
+                    "functionType": "CheckNull",
+                    "value": "{{footer}}"
+                  },
+                  "trueResult": null,
+                  "falseResult": {
                     "componentType": "Box",
                     "layout_height": "fillMax",
                     "layout_padding": {
@@ -151,9 +145,50 @@
                       "{{footer}}"
                     ]
                   }
-                ]
+                }
               ]
             }
+          }
+        ]
+      }
+    },
+    "OfflineSwitcher": {
+      "state": {
+        "offlineMode": false,
+        "onOfflineModeChange": null
+      },
+      "rootComponent": {
+        "componentType": "Box",
+        "children": [
+          {
+            "componentType": "Row",
+            "layout_width": "wrapContent",
+            "layout_padding": {
+              "start": 16,
+              "end": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "children": [
+              {
+                "componentType": "Text",
+                "text": "Offline mode",
+                "textAlign": "Center",
+                "layout_width": "wrapContent",
+                "layout_padding": {
+                  "start": 16,
+                  "end": 16,
+                  "top": 12,
+                  "bottom": 12
+                }
+              },
+              {
+                "componentType": "Switch",
+                "checked": "{{offlineMode}}",
+                "layout_width": "wrapContent",
+                "onCheckedChange": "{{onOfflineModeChange}}"
+              }
+            ]
           }
         ]
       }
@@ -164,13 +199,15 @@
         "name": "",
         "lastSeen": "",
         "offlineMode": false,
-        "online": false
+        "online": false,
+        "onClick": null
       },
       "rootComponent": {
         "componentType": "ContactItem",
         "avatar": "{{avatar}}",
         "name": "{{name}}",
         "lastSeen": "{{lastSeen}}",
+        "onClick": "{{onClick}}",
         "online": {
           "functionType": "Condition",
           "value": "{{offlineMode}}",
@@ -183,8 +220,52 @@
   "state": {
     "id": "root",
     "componentType": "ContactScreen",
-    "offlineMode": "true",
+    "offlineMode": false,
     "title": "Contacts",
+    "inputValue": "",
+    "footer": {
+      "componentType": "Column",
+      "children": [
+        {
+          "componentType": "Input",
+          "text": "{{inputValue}}",
+          "onTextChanged": {
+            "effectType": "StatePatch",
+            "patch": {
+              "id": "root",
+              "inputValue": {
+                "functionType": "MaxLength",
+                "value": "{{args.text}}",
+                "length": 5
+              }
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "id": "button",
+          "text": "Click Me",
+          "onClick": {
+            "effectType": "StatePatch",
+            "patch": {
+              "id": "button",
+              "text": "{{inputValue}}"
+            }
+          }
+        },
+        {
+          "componentType": "OfflineSwitcher",
+          "offlineMode": "{{offlineMode}}",
+          "onOfflineModeChange": {
+            "effectType": "StatePatch",
+            "patch": {
+              "id": "root",
+              "offlineMode": "{{args.checked}}"
+            }
+          }
+        }
+      ]
+    },
     "contacts": [
       {
         "componentType": "_ContactItem",
@@ -192,7 +273,19 @@
         "name": "Happy Cat",
         "lastSeen": "21.11.2022",
         "online": true,
-        "offlineMode": "{{offlineMode}}"
+        "offlineMode": "{{offlineMode}}",
+        "id": "contact1",
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact1",
+            "name": "{{inputValue}}",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact1.online}}"
+            }
+          }
+        }
       },
       {
         "componentType": "_ContactItem",
@@ -200,8 +293,19 @@
         "avatar": "https://cdn-cbeko.nitrocdn.com/YAysSGytvxeVxHWdRPueSoYmAixjAhdB/assets/static/optimized/rev-a51233b/wp-content/uploads/2021/07/broken-15.jpeg",
         "name": "Broken Cat",
         "lastSeen": "20.11.2022",
-        "online": true,
-        "offlineMode": "{{offlineMode}}"
+        "online": false,
+        "offlineMode": "{{offlineMode}}",
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact2",
+            "name": "{{inputValue}}",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact2.online}}"
+            }
+          }
+        }
       },
       {
         "componentType": "_ContactItem",
@@ -210,7 +314,18 @@
         "name": "Nyan Cat",
         "lastSeen": "23.11.2022",
         "online": false,
-        "offlineMode": "{{offlineMode}}"
+        "offlineMode": "{{offlineMode}}",
+        "onClick": {
+          "effectType": "StatePatch",
+          "patch": {
+            "id": "contact3",
+            "name": "{{inputValue}}",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact3.online}}"
+            }
+          }
+        }
       }
     ]
   }

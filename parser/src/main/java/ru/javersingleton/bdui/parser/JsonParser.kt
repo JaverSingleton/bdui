@@ -2,41 +2,24 @@ package ru.javersingleton.bdui.parser
 
 import org.json.JSONArray
 import org.json.JSONObject
-import ru.javersingleton.bdui.core.BeduinController
-import ru.javersingleton.bdui.core.ComponentsCache
-import ru.javersingleton.bdui.core.MainBeduinContext
-import ru.javersingleton.bdui.core.MetaComponentBlueprint
-import ru.javersingleton.bdui.core.field.ArrayField
-import ru.javersingleton.bdui.core.field.ComponentField
-import ru.javersingleton.bdui.core.field.EmptyField
-import ru.javersingleton.bdui.core.field.Field
-import ru.javersingleton.bdui.core.field.FunctionField
-import ru.javersingleton.bdui.core.field.PrimitiveField
-import ru.javersingleton.bdui.core.field.ReferenceField
-import ru.javersingleton.bdui.core.field.StructureField
-import ru.javersingleton.bdui.core.field.newId
+import ru.javersingleton.bdui.engine.meta.MetaComponentsStorage
+import ru.javersingleton.bdui.engine.meta.MetaComponentBlueprint
+import ru.javersingleton.bdui.engine.field.*
 import java.io.Reader
 
 class JsonParser(
-    private val componentsCache: ComponentsCache
+    private val componentsCache: MetaComponentsStorage
 ) : Parser {
 
-    override fun parse(reader: Reader): BeduinController {
+    // TODO Узнать может ли быть результат NULL
+    override fun parse(reader: Reader): ComponentField {
         val json = reader.readText()
         val obj = JSONObject(json)
         parseMetaComponentsMap(obj.getJSONObject(COMPONENTS), componentsCache)
-        val state = parseComponent(obj.getJSONObject(STATE))
-        val context = MainBeduinContext(componentsCache)
-        return BeduinController(context, state)
+        return parseComponent(obj.getJSONObject(STATE))!!
     }
 
-    override fun parseObject(reader: Reader): Field<*> {
-        val json = reader.readText()
-        val obj = JSONObject(json)
-        return parseObject(obj)
-    }
-
-    private fun parseMetaComponentsMap(obj: JSONObject, componentsCache: ComponentsCache) {
+    private fun parseMetaComponentsMap(obj: JSONObject, componentsCache: MetaComponentsStorage) {
         val blueprints = ArrayList<Pair<String, MetaComponentBlueprint>>()
         obj.keys().forEach { key ->
             val blueprint = parseMetaComponent(obj.getJSONObject(key))
@@ -63,13 +46,13 @@ class JsonParser(
                 val isRef = strVal.startsWith(REF_PREFIX).and(strVal.endsWith(REF_SUFFIX))
                 if (isRef) {
                     ReferenceField(
-                        strVal.substring(
+                        refFieldName = strVal.substring(
                             REF_PREFIX.length,
                             strVal.length - REF_SUFFIX.length
                         )
                     )
                 } else {
-                    PrimitiveField(strVal)
+                    PrimitiveField(value = strVal)
                 }
             }
         }
@@ -80,17 +63,21 @@ class JsonParser(
         for (i in 0 until arr.length()) {
             fields += parseField(arr[i])
         }
-        return ArrayField(fields = fields.toTypedArray())
+        return ArrayField(fields = fields)
     }
 
     private fun parseObject(obj: JSONObject): Field<*> {
-        return parseComponent(obj) ?: parseFunction(obj) ?: parseStructure(obj) ?: parseEmpty(obj)
+        return parseComponent(obj)
+            ?: parseInteraction(obj)
+            ?: parseFunction(obj)
+            ?: parseStructure(obj)
+            ?: parseEmpty(obj)
     }
 
     private fun parseComponent(obj: JSONObject): ComponentField? {
         obj.opt(COMPONENT_TYPE) ?: return null
         var type = ""
-        var id: String = newId()
+        var id: String? = null
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             when (key) {
@@ -102,14 +89,14 @@ class JsonParser(
         return ComponentField(
             id = id,
             componentType = type,
-            params = StructureField(*fields.toTypedArray())
+            params = StructureField(fields = linkedMapOf(*fields.toTypedArray()))
         )
     }
 
     private fun parseFunction(obj: JSONObject): FunctionField? {
         obj.opt(FUNCTION_TYPE) ?: return null
         var type = ""
-        var id: String = newId()
+        var id: String? = null
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             when (key) {
@@ -121,7 +108,31 @@ class JsonParser(
         return FunctionField(
             id = id,
             functionType = type,
-            params = StructureField(*fields.toTypedArray())
+            params = StructureField(fields = linkedMapOf(*fields.toTypedArray()))
+        )
+    }
+
+    private fun parseInteraction(obj: JSONObject): InteractionField? {
+        obj.opt(EFFECT_TYPE) ?: return null
+        var type = ""
+        var name = ""
+        var id: String? = null
+        val fields = ArrayList<Pair<String, Field<*>>>()
+        obj.keys().forEach { key ->
+            when (key) {
+                EFFECT_TYPE -> {
+                    type = "effect"
+                    name = obj.getString(key)
+                }
+                ID -> id = obj.getString(key)
+                else -> fields += key to parseField(obj.getNullable(key))
+            }
+        }
+        return InteractionField(
+            id = id,
+            interactionType = type,
+            interactionName = name,
+            params = StructureField(fields = linkedMapOf(*fields.toTypedArray()))
         )
     }
 
@@ -129,7 +140,7 @@ class JsonParser(
         if (obj.length() == 0 || (obj.length() == 1 && obj.has(ID))) {
             return null
         }
-        var id: String = newId()
+        var id: String? = null
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             when (key) {
@@ -144,7 +155,7 @@ class JsonParser(
     }
 
     private fun parseEmpty(obj: JSONObject? = null): EmptyField {
-        val id: String = obj?.optString(ID) ?: newId()
+        val id: String? = obj?.optString(ID)
         return EmptyField(id)
     }
 
@@ -157,6 +168,7 @@ private const val COMPONENTS = "components"
 private const val ROOT_COMPONENT = "rootComponent"
 private const val COMPONENT_TYPE = "componentType"
 private const val FUNCTION_TYPE = "functionType"
+private const val EFFECT_TYPE = "effectType"
 private const val ID = "id"
 private const val REF_PREFIX = "{{"
 private const val REF_SUFFIX = "}}"

@@ -41,12 +41,17 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':core')
+    implementation project(path: ':engine')
+    implementation project(path: ':parser')
+    implementation project(path: ':render:compose')
+    implementation project(path: ':function:base')
+    implementation project(path: ':interaction:base')
+
+    implementation project(path: ':component:base:compose')
 
     implementation libs.appCompat
     implementation libs.material
 
     implementation libs.bundles.compose
     implementation libs.activity.compose
-    implementation project(path: ':parser')
 }

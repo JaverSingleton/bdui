@@ -3,46 +3,59 @@ package ru.javersingleton.bdui
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
-import ru.javersingleton.bdui.component.compose.BeduinComponent
-import ru.javersingleton.bdui.core.MemoryComponentsCache
-import ru.javersingleton.bdui.core.field.ComponentField
-import ru.javersingleton.bdui.core.plus
+import ru.javersingleton.bdui.component.base.compose.withBase
+import ru.javersingleton.bdui.engine.BeduinController
+import ru.javersingleton.bdui.engine.interaction.Effect
+import ru.javersingleton.bdui.engine.meta.InMemoryComponentsStorage
+import ru.javersingleton.bdui.engine.meta.MetaComponentsStorage
+import ru.javersingleton.bdui.engine.register.EffectsRegister
+import ru.javersingleton.bdui.engine.register.FunctionsRegister
+import ru.javersingleton.bdui.function.base.withBase
+import ru.javersingleton.bdui.interaction.base.effect.withBase
 import ru.javersingleton.bdui.parser.JsonParser
+import ru.javersingleton.bdui.render.compose.Beduin
+import ru.javersingleton.bdui.render.compose.BeduinComposeContext
+import ru.javersingleton.bdui.render.compose.BeduinScope
+import ru.javersingleton.bdui.render.compose.ComponentsRegister
 import java.io.Reader
 
 class MainActivity : AppCompatActivity() {
 
-    private val componentsCache = MemoryComponentsCache()
+    private val metaComponents: MetaComponentsStorage = InMemoryComponentsStorage()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val reader = asset("sample1.json")
-        val parser = JsonParser(componentsCache)
-        val controller = parser.parse(reader)
+        val reader = asset("sample2.json")
+        val parser = JsonParser(metaComponents)
 
-        var patchIndex = 1
+        val context = BeduinComposeContext(
+            metaComponents = metaComponents,
+            nativeComponents = ComponentsRegister().withBase(),
+            functions = FunctionsRegister().withBase(),
+            effects = EffectsRegister().withBase()
+        )
+
+        val controller = BeduinController(
+            context,
+            state = parser.parse(reader)
+        ) { controller, interaction ->
+            when (interaction) {
+                is Effect -> controller.state = interaction.run(controller.state)
+            }
+        }
 
         setContent {
             Column {
-                BeduinComponent(
-                    controller = controller,
-                    modifier = Modifier
-                        .clickable {
-                            controller.state += asset("sample1_patch$patchIndex.json").let { reader ->
-                                parser.parseObject(reader)
-                            } as ComponentField
-                            patchIndex++
-                            if (patchIndex > 4) {
-                                patchIndex = 1
-                            }
-                        }
-                        .fillMaxWidth()
-                )
+                BeduinScope(context = context) {
+                    Beduin(
+                        controller = controller,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
