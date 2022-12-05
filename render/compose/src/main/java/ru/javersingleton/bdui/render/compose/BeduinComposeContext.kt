@@ -3,7 +3,7 @@ package ru.javersingleton.bdui.render.compose
 import ru.javersingleton.bdui.engine.BeduinContext
 import ru.javersingleton.bdui.engine.MainBeduinContext
 import ru.javersingleton.bdui.engine.meta.MetaComponentsStorage
-import ru.javersingleton.bdui.engine.register.EffectsRegister
+import ru.javersingleton.bdui.engine.register.InteractionsRegister
 import ru.javersingleton.bdui.engine.register.FunctionsRegister
 
 class BeduinComposeContext(
@@ -15,7 +15,7 @@ class BeduinComposeContext(
         metaComponents: MetaComponentsStorage,
         nativeComponents: ComponentsRegister,
         functions: FunctionsRegister,
-        effects: EffectsRegister,
+        effects: InteractionsRegister,
     ) : this(
         beduinContext = MainBeduinContext(
             metaComponents,

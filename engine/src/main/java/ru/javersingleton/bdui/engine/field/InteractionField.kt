@@ -10,22 +10,20 @@ data class InteractionField(
     override val id: String,
     override val withUserId: Boolean,
     private val interactionType: String,
-    private val interactionName: String,
     private val params: Field<StructureData>,
 ) : Field<InteractionData> {
 
     constructor(
         id: String? = null,
         interactionType: String,
-        interactionName: String,
         params: Field<StructureData>
-    ) : this(id = id ?: newId(), withUserId = id != null, interactionType, interactionName, params)
+    ) : this(id = id ?: newId(), withUserId = id != null, interactionType, params)
 
     override fun resolve(
         scope: Lambda.Scope,
         args: References
     ): Field<InteractionData> = scope.run {
-        val interactionFactory = inflateInteractionFactory(interactionType, interactionName)
+        val interactionFactory = inflateInteractionFactory(interactionType)
 
         val resultValue = rememberValue(
             id,

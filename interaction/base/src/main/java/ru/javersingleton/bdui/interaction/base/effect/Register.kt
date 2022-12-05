@@ -1,8 +1,8 @@
 package ru.javersingleton.bdui.interaction.base.effect
 
-import ru.javersingleton.bdui.engine.register.EffectsRegister
+import ru.javersingleton.bdui.engine.register.InteractionsRegister
 
-fun EffectsRegister.withBase(): EffectsRegister = apply {
+fun InteractionsRegister.withBase(): InteractionsRegister = apply {
     register(
         StatePatchEffect.Factory
     )

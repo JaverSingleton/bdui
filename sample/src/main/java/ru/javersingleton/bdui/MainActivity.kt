@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.component.base.compose.withBase
 import ru.javersingleton.bdui.engine.BeduinController
-import ru.javersingleton.bdui.engine.interaction.Effect
 import ru.javersingleton.bdui.engine.meta.InMemoryComponentsStorage
 import ru.javersingleton.bdui.engine.meta.MetaComponentsStorage
-import ru.javersingleton.bdui.engine.register.EffectsRegister
+import ru.javersingleton.bdui.engine.plus
+import ru.javersingleton.bdui.engine.register.InteractionsRegister
 import ru.javersingleton.bdui.engine.register.FunctionsRegister
 import ru.javersingleton.bdui.function.base.withBase
+import ru.javersingleton.bdui.interaction.base.effect.StatePatchEffect
 import ru.javersingleton.bdui.interaction.base.effect.withBase
 import ru.javersingleton.bdui.parser.JsonParser
 import ru.javersingleton.bdui.render.compose.Beduin
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             metaComponents = metaComponents,
             nativeComponents = ComponentsRegister().withBase(),
             functions = FunctionsRegister().withBase(),
-            effects = EffectsRegister().withBase()
+            effects = InteractionsRegister().withBase()
         )
 
         val controller = BeduinController(
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             state = parser.parse(reader)
         ) { controller, interaction ->
             when (interaction) {
-                is Effect -> controller.state = interaction.run(controller.state)
+                is StatePatchEffect -> controller.state = controller.state + interaction.patch
             }
         }
 

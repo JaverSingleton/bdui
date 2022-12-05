@@ -113,16 +113,14 @@ class JsonParser(
     }
 
     private fun parseInteraction(obj: JSONObject): InteractionField? {
-        obj.opt(EFFECT_TYPE) ?: return null
+        obj.opt(INTERACTION_TYPE) ?: return null
         var type = ""
-        var name = ""
         var id: String? = null
         val fields = ArrayList<Pair<String, Field<*>>>()
         obj.keys().forEach { key ->
             when (key) {
-                EFFECT_TYPE -> {
-                    type = "effect"
-                    name = obj.getString(key)
+                INTERACTION_TYPE -> {
+                    type = obj.getString(key)
                 }
                 ID -> id = obj.getString(key)
                 else -> fields += key to parseField(obj.getNullable(key))
@@ -131,7 +129,6 @@ class JsonParser(
         return InteractionField(
             id = id,
             interactionType = type,
-            interactionName = name,
             params = StructureField(fields = linkedMapOf(*fields.toTypedArray()))
         )
     }
@@ -168,7 +165,7 @@ private const val COMPONENTS = "components"
 private const val ROOT_COMPONENT = "rootComponent"
 private const val COMPONENT_TYPE = "componentType"
 private const val FUNCTION_TYPE = "functionType"
-private const val EFFECT_TYPE = "effectType"
+private const val INTERACTION_TYPE = "interactionType"
 private const val ID = "id"
 private const val REF_PREFIX = "{{"
 private const val REF_SUFFIX = "}}"
