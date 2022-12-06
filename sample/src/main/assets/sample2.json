@@ -1,5 +1,47 @@
 {
   "components": {
+    "StoryItem": {
+      "state": {
+        "image": "",
+        "text": ""
+      },
+      "rootComponent": {
+        "componentType": "Box",
+        "children": [
+          {
+            "componentType": "Box",
+            "layout_padding": {
+              "start": 4,
+              "end": 4,
+              "top": 8,
+              "bottom": 8
+            },
+            "children": [
+              {
+                "componentType": "Image",
+                "src": "{{image}}",
+                "contentScale": "Crop",
+                "layout_width": "72",
+                "layout_height": "92"
+              },
+              {
+                "componentType": "Text",
+                "text": "{{text}}",
+                "textSize": 12,
+                "layout_width": "fillMax",
+                "layout_alignment": "BottomStart",
+                "layout_padding": {
+                  "start": 8,
+                  "end": 8,
+                  "top": 8,
+                  "bottom": 8
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     "ContactItem": {
       "state": {
         "avatar": "",
@@ -93,6 +135,16 @@
         ]
       }
     },
+    "StoriesContainerItem": {
+      "state": {
+        "stories": []
+      },
+      "rootComponent": {
+        "componentType": "LazyRow",
+        "layout_height": "wrapContent",
+        "children": "{{stories}}"
+      }
+    },
     "ContactScreen": {
       "state": {
         "title": "",
@@ -127,6 +179,51 @@
     "componentType": "ContactScreen",
     "title": "Contacts",
     "contacts": [
+      {
+        "componentType": "StoriesContainerItem",
+        "stories": [
+          {
+            "componentType": "StoryItem",
+            "image": "https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg",
+            "text": "Happy Cat"
+          },
+          {
+            "componentType": "StoryItem",
+            "image": "https://zibuhoker.ru/ifm/broken-20.jpeg",
+            "text": "Broken Cat"
+          },
+          {
+            "componentType": "StoryItem",
+            "image": "https://zibuhoker.ru/ifm/nyan-cat.jpg",
+            "text": "Nyan Cat"
+          },
+          {
+            "componentType": "StoryItem",
+            "image": "https://i.pinimg.com/736x/ba/92/7f/ba927ff34cd961ce2c184d47e8ead9f6.jpg",
+            "text": "Smile Cat"
+          },
+          {
+            "componentType": "StoryItem",
+            "image": "https://wompampsupport.azureedge.net/fetchimage?siteId=7575&v=2&jpgQuality=100&width=700&url=https%3A%2F%2Fi.kym-cdn.com%2Fphotos%2Fimages%2Fnewsfeed%2F002%2F205%2F309%2F1d3.jpg",
+            "text": "Hehe Cat"
+          },
+          {
+            "componentType": "StoryItem",
+            "image": "https://i.ytimg.com/vi/Zr-qM5Vrd0g/maxresdefault.jpg",
+            "text": "Fat Cat"
+          },
+          {
+            "componentType": "StoryItem",
+            "image": "https://static.displate.com/857x1200/displate/2022-07-07/fb201c5aef2a8558a1eec3a095be6d49_1c1023275f02c2ee7bc146309a812775.jpg",
+            "text": "Polite Cat"
+          },
+          {
+            "componentType": "StoryItem",
+            "image": "https://i0.wp.com/suddenlycat.com/wp-content/uploads/2020/09/Screenshot-2020-08-30-at-3.25.29-PM.png?resize=242%2C300&ssl=1",
+            "text": "Poker Cat"
+          }
+        ]
+      },
       {
         "componentType": "ContactItem",
         "avatar": "https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg",
