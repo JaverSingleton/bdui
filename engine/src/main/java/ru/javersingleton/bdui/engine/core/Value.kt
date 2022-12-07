@@ -34,6 +34,26 @@ class ConstValue<T : Any?>(override val currentValue: T) : ReadableValue<T> {
 
 }
 
+class LazyValue<T : Any?>(
+    script: () -> T
+) : ReadableValue<T> {
+
+    private val lazyValue: T by lazy { script() }
+
+    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
+        object : ReadableValue.Subscription {
+
+            override fun unsubscribe() {
+                // Do Nothing
+            }
+
+        }
+
+    override val currentValue: T
+        get() = lazyValue
+
+}
+
 interface ReadableValue<T> : Value<T> {
 
     val currentValue: T

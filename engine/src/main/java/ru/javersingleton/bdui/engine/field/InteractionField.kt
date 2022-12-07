@@ -1,9 +1,8 @@
 package ru.javersingleton.bdui.engine.field
 
-import ru.javersingleton.bdui.engine.core.ConstValue
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.BeduinContext
 import ru.javersingleton.bdui.engine.References
-import ru.javersingleton.bdui.engine.core.Value
+import ru.javersingleton.bdui.engine.core.*
 import ru.javersingleton.bdui.engine.interaction.Interaction
 
 data class InteractionField(
@@ -32,10 +31,12 @@ data class InteractionField(
             InteractionData(
                 raw = this@InteractionField
             ) { externalArgs ->
-                val callbackArgs = ReferencesWrapper(args, externalArgs)
-                val resolvedParamsField = (params.resolve(this, callbackArgs) as ResolvedField)
-                val resolvedParams = resolvedParamsField.value.current { StructureData(it.id) }
-                interactionFactory.create(resolvedParams.unbox())
+                InteractionScope(this).run {
+                    val callbackArgs = ReferencesWrapper(args, externalArgs)
+                    val resolvedParamsField = (params.resolve(this, callbackArgs) as ResolvedField)
+                    val resolvedParams = resolvedParamsField.value.current { StructureData(it.id) }
+                    interactionFactory.create(resolvedParams.unbox())
+                }
             }
         }
         ResolvedField(
@@ -59,6 +60,22 @@ data class InteractionField(
 
     override fun copyWithId(id: String): Field<InteractionData> = copy(id = id)
 
+
+}
+
+class InteractionScope(context: BeduinContext) : Lambda.Scope, BeduinContext by context {
+
+    override fun <T> rememberValue(
+        callId: String,
+        key: Any?,
+        func: Lambda.Scope.() -> T
+    ): Value<T> = LazyValue { func() }
+
+    override fun <T> Value<*>.current(): T? =
+        currentQuiet()
+
+    override fun <T> Value<*>.current(default: (emptyData: EmptyData) -> T): T =
+        currentQuiet(default)
 
 }
 
