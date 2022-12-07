@@ -61,4 +61,4 @@ class BeduinController(
 }
 
 operator fun ComponentField.plus(target: Field<*>): ComponentField =
-    mergeDeeply(targetFieldId = target.id, targetField = target) as ComponentField
+    mergeDeeply(targetFieldId = target.id, targetField = target)

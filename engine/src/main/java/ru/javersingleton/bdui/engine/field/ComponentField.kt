@@ -1,7 +1,8 @@
 package ru.javersingleton.bdui.engine.field
 
-import ru.javersingleton.bdui.engine.core.Lambda
+import androidx.compose.runtime.Stable
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 
 data class ComponentField(
@@ -99,6 +100,7 @@ data class ComponentField(
 
 }
 
+@Stable
 data class ComponentData(
     val id: String,
     val componentType: String,

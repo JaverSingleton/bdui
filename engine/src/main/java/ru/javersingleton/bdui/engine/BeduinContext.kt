@@ -1,13 +1,15 @@
 package ru.javersingleton.bdui.engine
 
-import ru.javersingleton.bdui.engine.register.ComponentStatesRegister
-import ru.javersingleton.bdui.engine.register.InteractionsRegister
-import ru.javersingleton.bdui.engine.register.FunctionsRegister
+import androidx.compose.runtime.Stable
 import ru.javersingleton.bdui.engine.function.Function
 import ru.javersingleton.bdui.engine.interaction.Interaction
 import ru.javersingleton.bdui.engine.meta.MetaComponentBlueprint
 import ru.javersingleton.bdui.engine.meta.MetaComponentsStorage
+import ru.javersingleton.bdui.engine.register.ComponentStatesRegister
+import ru.javersingleton.bdui.engine.register.FunctionsRegister
+import ru.javersingleton.bdui.engine.register.InteractionsRegister
 
+@Stable
 interface BeduinContext {
 
     fun inflateFunction(functionType: String): Function
