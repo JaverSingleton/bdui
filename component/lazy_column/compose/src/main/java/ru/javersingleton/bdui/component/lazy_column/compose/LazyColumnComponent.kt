@@ -46,6 +46,7 @@ object LazyColumnComponent: ComponentRender<LazyColumnState>(LazyColumnStateFact
                 itemContent = { item ->
                     InnerComponent(
                         data = item.component,
+                        modifier = toModifier(params = item.params)
                     )
                 }
             )

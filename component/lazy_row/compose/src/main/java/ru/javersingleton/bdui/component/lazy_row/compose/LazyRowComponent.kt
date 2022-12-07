@@ -46,6 +46,7 @@ object LazyRowComponent: ComponentRender<LazyRowState>(LazyRowStateFactory) {
                 itemContent = { item ->
                     InnerComponent(
                         data = item.component,
+                        modifier = toModifier(params = item.params)
                     )
                 }
             )

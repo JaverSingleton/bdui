@@ -141,7 +141,6 @@
       },
       "rootComponent": {
         "componentType": "LazyRow",
-        "layout_height": "wrapContent",
         "children": "{{stories}}"
       }
     },
