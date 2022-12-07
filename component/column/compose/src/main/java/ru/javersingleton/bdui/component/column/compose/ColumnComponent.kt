@@ -13,7 +13,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object ColumnComponent: ComponentRender<ColumnState>(ColumnStateFactory) {
 
-    override val type: String = "Column"
+    override val key: String = "Column"
 
     @Composable
     override fun Render(

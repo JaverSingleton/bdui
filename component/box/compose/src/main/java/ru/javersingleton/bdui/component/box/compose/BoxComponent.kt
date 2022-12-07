@@ -18,7 +18,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object BoxComponent: ComponentRender<BoxState>(BoxStateFactory) {
 
-    override val type: String = "Box"
+    override val key: String = "Box"
 
     @Composable
     override fun Render(

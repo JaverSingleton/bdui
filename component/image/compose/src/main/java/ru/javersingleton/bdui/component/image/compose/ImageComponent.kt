@@ -13,7 +13,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object ImageComponent : ComponentRender<ImageState>(ImageStateFactory) {
 
-    override val type: String = "Image"
+    override val key: String = "Image"
 
     @Composable
     override fun Render(

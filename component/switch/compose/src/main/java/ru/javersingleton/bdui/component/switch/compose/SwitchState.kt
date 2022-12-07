@@ -7,7 +7,7 @@ import ru.javersingleton.bdui.engine.field.StructureData
 
 object SwitchStateFactory : ComponentStateFactory<SwitchState>() {
 
-    override val type: String = "Switch"
+    override val key: String = "Switch"
 
     override fun Scope.create(componentType: String): SwitchState = SwitchState(
         checked = prop("checked").asBoolean() ?: false,

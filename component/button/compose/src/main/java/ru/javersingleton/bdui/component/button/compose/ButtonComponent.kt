@@ -11,7 +11,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object ButtonComponent: ComponentRender<ButtonState>(ButtonStateFactory) {
 
-    override val type: String = "Button"
+    override val key: String = "Button"
 
     @Composable
     override fun Render(

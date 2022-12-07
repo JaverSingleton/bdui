@@ -9,7 +9,7 @@ import ru.javersingleton.bdui.engine.function.Function
 
 object MaxLengthFunction: Function {
 
-    override val type: String = "MaxLength"
+    override val key: String = "MaxLength"
 
     override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> = scope.run {
         rememberValue(id, params) {

@@ -13,7 +13,7 @@ data class StatePatchEffect(
 
     object Factory: Interaction.Factory {
 
-        override val type: String = "StatePatch"
+        override val key: String = "StatePatch"
 
         override fun create(params: Map<String, Value<*>>): Interaction {
             val data: ResolvedData? = params["patch"]?.currentQuiet()

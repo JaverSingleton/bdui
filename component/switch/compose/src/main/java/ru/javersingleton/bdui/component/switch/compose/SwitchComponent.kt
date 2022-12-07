@@ -10,7 +10,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object SwitchComponent : ComponentRender<SwitchState>(SwitchStateFactory) {
 
-    override val type: String = "Switch"
+    override val key: String = "Switch"
 
     @Composable
     override fun Render(
