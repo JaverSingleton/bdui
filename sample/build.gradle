@@ -45,9 +45,11 @@ dependencies {
     implementation project(path: ':parser')
     implementation project(path: ':render:compose')
     implementation project(path: ':function:base')
-    implementation project(path: ':interaction:base')
+    implementation project(path: ':interaction:base:flow')
 
     implementation project(path: ':component:base:compose')
+
+    implementation libs.coroutines
 
     implementation libs.appCompat
     implementation libs.material

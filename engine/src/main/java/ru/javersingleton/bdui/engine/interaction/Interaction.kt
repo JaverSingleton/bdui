@@ -1,11 +1,11 @@
 package ru.javersingleton.bdui.engine.interaction
 
-import ru.javersingleton.bdui.engine.register.Register
 import ru.javersingleton.bdui.engine.core.Value
+import ru.javersingleton.bdui.engine.register.StaticKeyRegister
 
 interface Interaction {
 
-    interface Factory : Register.Element {
+    interface Factory : StaticKeyRegister.Element<String> {
 
         fun create(
             params: Map<String, Value<*>>

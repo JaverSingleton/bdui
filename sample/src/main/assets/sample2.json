@@ -249,12 +249,16 @@
         "lastSeen": "20.11.2022",
         "online": false,
         "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact2",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact2.online}}"
+          "interactionType": "Delay",
+          "seconds": 2,
+          "onFinished": {
+            "interactionType": "StatePatch",
+            "patch": {
+              "id": "contact2",
+              "online": {
+                "functionType": "Not",
+                "value": "{{contact2.online}}"
+              }
             }
           }
         }

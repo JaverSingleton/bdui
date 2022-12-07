@@ -10,7 +10,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object InputComponent : ComponentRender<InputState>(InputStateFactory) {
 
-    override val type: String = "Input"
+    override val key: String = "Input"
 
     @Composable
     override fun Render(

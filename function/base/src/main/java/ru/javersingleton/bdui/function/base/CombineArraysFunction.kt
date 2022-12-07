@@ -9,7 +9,7 @@ import ru.javersingleton.bdui.engine.function.Function
 
 object CombineArraysFunction : Function {
 
-    override val type: String = "CombineArrays"
+    override val key: String = "CombineArrays"
 
     override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> =
         scope.run {

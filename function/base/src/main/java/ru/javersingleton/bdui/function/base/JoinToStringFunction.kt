@@ -10,7 +10,7 @@ import ru.javersingleton.bdui.engine.function.Function
 
 object JoinToStringFunction : Function {
 
-    override val type: String = "JoinToString"
+    override val key: String = "JoinToString"
 
 
     override fun calculate(

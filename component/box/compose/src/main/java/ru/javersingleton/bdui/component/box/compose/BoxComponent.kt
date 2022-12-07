@@ -11,14 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import ru.javersingleton.bdui.render.compose.InnerComponent
-import ru.javersingleton.bdui.render.compose.subscribeAsState
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
+import ru.javersingleton.bdui.render.compose.InnerComponent
+import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object BoxComponent: ComponentRender<BoxState>(BoxStateFactory) {
 
-    override val type: String = "Box"
+    override val key: String = "Box"
 
     @Composable
     override fun Render(

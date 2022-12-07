@@ -4,9 +4,9 @@ import android.util.Log
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.field.*
-import ru.javersingleton.bdui.engine.register.Register
+import ru.javersingleton.bdui.engine.register.StaticKeyRegister
 
-abstract class ComponentStateFactory<T : Any?> : Register.Element {
+abstract class ComponentStateFactory<T : Any?> : StaticKeyRegister.Element<String> {
 
     internal fun calculate(
         componentType: String,

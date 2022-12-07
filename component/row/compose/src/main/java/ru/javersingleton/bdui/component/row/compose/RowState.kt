@@ -6,7 +6,7 @@ import ru.javersingleton.bdui.engine.field.ComponentData
 
 object RowStateFactory : ComponentStateFactory<RowState>() {
 
-    override val type: String = "Row"
+    override val key: String = "Row"
 
     override fun Scope.create(componentType: String): RowState = RowState(
         children = prop("children").asList {

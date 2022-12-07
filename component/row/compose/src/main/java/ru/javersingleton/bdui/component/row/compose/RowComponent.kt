@@ -7,13 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.render.compose.InnerComponent
 import ru.javersingleton.bdui.render.compose.ComponentRender
+import ru.javersingleton.bdui.render.compose.InnerComponent
 import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object RowComponent : ComponentRender<RowState>(RowStateFactory) {
 
-    override val type: String = "Row"
+    override val key: String = "Row"
 
     @Composable
     override fun Render(
