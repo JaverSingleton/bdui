@@ -40,7 +40,12 @@ interface MutableRegister<T : Register.Element, K> : Register<T, K> {
 
     fun clear()
 
-    fun unregister(vararg element: T)
+    fun unregister(elements: List<T>)
+
+    @Suppress("unused")
+    fun unregister(vararg element: T) {
+        unregister(element.toList())
+    }
 
 }
 
@@ -92,8 +97,8 @@ class ByRelevantStrategy<T : ByRelevantStrategy.Element<K>, K> :
         factories.clear()
     }
 
-    override fun unregister(vararg element: T) {
-        factories.removeAll(element.toSet())
+    override fun unregister(elements: List<T>) {
+        factories.removeAll(elements.toSet())
     }
 
     override operator fun get(key: K): T =
@@ -140,8 +145,8 @@ class ByTypeStrategy<T : ByTypeStrategy.Element<K>, K> : Register.AccessStrategy
         factories.clear()
     }
 
-    override fun unregister(vararg element: T) {
-        element.forEach {
+    override fun unregister(elements: List<T>) {
+        elements.forEach {
             val factory = factories[it.type]
             if (factory == it) {
                 factories.remove(it.type)
