@@ -1,4 +1,4 @@
-package ru.javersingleton.bdui.component.lazy_column.compose
+package ru.javersingleton.bdui.component.lazy_row.compose
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -21,18 +21,18 @@ import ru.javersingleton.bdui.render.compose.InnerComponent
 import ru.javersingleton.bdui.render.compose.ComponentRender
 import ru.javersingleton.bdui.render.compose.subscribeAsState
 
-object LazyColumnComponent: ComponentRender<LazyColumnState>(LazyColumnStateFactory) {
+object LazyRowComponent: ComponentRender<LazyRowState>(LazyRowStateFactory) {
 
-    override val type: String = "LazyColumn"
+    override val type: String = "LazyRow"
 
     @Composable
     override fun Render(
         modifier: Modifier,
-        stateValue: Value<LazyColumnState>
+        stateValue: Value<LazyRowState>
     ) {
         val state = stateValue.subscribeAsState().value
-        Log.d("Beduin", "OnComponentRender: componentType=LazyColumn")
-        LazyColumn(
+        Log.d("Beduin", "OnComponentRender: componentType=LazyRow")
+        LazyRow(
             modifier = modifier
         ) {
             items(
@@ -57,7 +57,7 @@ object LazyColumnComponent: ComponentRender<LazyColumnState>(LazyColumnStateFact
 
 @Composable
 @SuppressLint("ModifierFactoryExtensionFunction", "ComposableModifierFactory")
-private fun LazyItemScope.toModifier(params: LazyColumnState.Child.Params): Modifier {
+private fun LazyItemScope.toModifier(params: LazyRowState.Child.Params): Modifier {
     var result: Modifier = Modifier
     result = when {
         params.width == "fillMax" -> result.fillMaxWidth()
