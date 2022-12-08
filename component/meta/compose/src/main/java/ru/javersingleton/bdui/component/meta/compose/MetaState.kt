@@ -12,7 +12,7 @@ data class MetaState(
 
 object MetaStateFactory : ComponentStateFactory<MetaState>() {
 
-    override val key: String = "Meta"
+    override val type: String = "Meta"
 
     override fun Scope.create(componentType: String): MetaState {
         val blueprint = rememberValue("componentType", componentType) {

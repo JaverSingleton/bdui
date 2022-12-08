@@ -12,7 +12,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object TextComponent : ComponentRender<TextState>(TextStateFactory) {
 
-    override val key: String = "Text"
+    override val type: String = "Text"
 
     @Composable
     override fun Render(

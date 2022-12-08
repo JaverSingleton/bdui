@@ -5,11 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.register.StaticKeyRegister
+import ru.javersingleton.bdui.engine.register.ByTypeStrategy
 
 abstract class ComponentRender<T>(
     val stateFactory: ComponentStateFactory<T>
-) : StaticKeyRegister.Element<String> {
+) : ByTypeStrategy.Element<String> {
 
     @SuppressLint("ComposableNaming")
     @Composable

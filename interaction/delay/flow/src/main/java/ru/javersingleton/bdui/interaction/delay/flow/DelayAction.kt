@@ -13,7 +13,7 @@ data class DelayAction(
 
     object Factory: Interaction.Factory {
 
-        override val key: String = "Delay"
+        override val type: String = "Delay"
 
         override fun create(params: Map<String, Value<*>>): Interaction {
             val seconds = params["seconds"]?.currentQuiet<PrimitiveData>()?.asInt() ?: 0

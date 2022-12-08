@@ -48,6 +48,7 @@ object LazyColumnComponent: ComponentRender<LazyColumnState>(LazyColumnStateFact
 
 }
 
+@Suppress("unused")
 @Composable
 @SuppressLint("ModifierFactoryExtensionFunction", "ComposableModifierFactory")
 private fun LazyItemScope.toModifier(params: LazyColumnState.Child.Params): Modifier {

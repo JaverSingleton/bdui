@@ -7,7 +7,7 @@ import ru.javersingleton.bdui.engine.field.StructureData
 
 object InputStateFactory : ComponentStateFactory<InputState>() {
 
-    override val key: String = "Input"
+    override val type: String = "Input"
 
     override fun Scope.create(componentType: String): InputState =
         InputState(

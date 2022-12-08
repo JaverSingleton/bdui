@@ -4,9 +4,9 @@ import android.util.Log
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.field.*
-import ru.javersingleton.bdui.engine.register.StaticKeyRegister
+import ru.javersingleton.bdui.engine.register.ByTypeStrategy
 
-abstract class ComponentStateFactory<T : Any?> : StaticKeyRegister.Element<String> {
+abstract class ComponentStateFactory<T : Any?> : ByTypeStrategy.Element<String> {
 
     internal fun calculate(
         componentType: String,
@@ -24,8 +24,10 @@ abstract class ComponentStateFactory<T : Any?> : StaticKeyRegister.Element<Strin
         val args: StructureData?,
     ) : Lambda.Scope by scope {
 
+        @Suppress("unused")
         fun Value<*>.asComponent(): ComponentData? = current()
 
+        @Suppress("unused")
         fun <T> Value<*>.asLayoutParams(func: StructureData.() -> T): T? {
             val componentStructure: ComponentData? = current()
             return componentStructure?.params?.func()
@@ -84,6 +86,7 @@ abstract class ComponentStateFactory<T : Any?> : StaticKeyRegister.Element<Strin
 
         fun prop(name: String): Value<*> = args?.prop(name) ?: Value.NULL
 
+        @Suppress("unused")
         fun hasProp(name: String): Boolean = args?.hasProp(name) == true
 
     }

@@ -26,7 +26,7 @@ data class BoxState(
 
 object BoxStateFactory : ComponentStateFactory<BoxState>() {
 
-    override val key: String = "Box"
+    override val type: String = "Box"
 
     override fun Scope.create(componentType: String): BoxState =
         BoxState(

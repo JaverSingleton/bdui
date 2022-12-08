@@ -4,7 +4,7 @@ import ru.javersingleton.bdui.engine.ComponentStateFactory
 
 object TextStateFactory : ComponentStateFactory<TextState>() {
 
-    override val key: String = "Text"
+    override val type: String = "Text"
 
     override fun Scope.create(componentType: String): TextState = TextState(
         text = prop("text").asString() ?: "",

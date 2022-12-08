@@ -4,7 +4,7 @@ import ru.javersingleton.bdui.engine.ComponentStateFactory
 
 object ImageStateFactory : ComponentStateFactory<ImageState>() {
 
-    override val key: String = "Image"
+    override val type: String = "Image"
 
     override fun Scope.create(componentType: String): ImageState = ImageState(
         src = prop("src").asString() ?: "",

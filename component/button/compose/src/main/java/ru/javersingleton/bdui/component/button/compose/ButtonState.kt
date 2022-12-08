@@ -9,7 +9,7 @@ data class ButtonState(
 
 object ButtonStateFactory : ComponentStateFactory<ButtonState>() {
 
-    override val key: String = "Button"
+    override val type: String = "Button"
 
     override fun Scope.create(componentType: String): ButtonState = ButtonState(
         text = prop("text").asString() ?: "",

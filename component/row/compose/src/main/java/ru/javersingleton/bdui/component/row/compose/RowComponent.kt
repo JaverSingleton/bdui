@@ -13,7 +13,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object RowComponent : ComponentRender<RowState>(RowStateFactory) {
 
-    override val key: String = "Row"
+    override val type: String = "Row"
 
     @Composable
     override fun Render(
@@ -36,6 +36,7 @@ object RowComponent : ComponentRender<RowState>(RowStateFactory) {
 
 }
 
+@Suppress("unused")
 @Composable
 @SuppressLint("ModifierFactoryExtensionFunction", "ComposableModifierFactory")
 private fun RowScope.toModifier(params: RowState.Child.Params): Modifier {

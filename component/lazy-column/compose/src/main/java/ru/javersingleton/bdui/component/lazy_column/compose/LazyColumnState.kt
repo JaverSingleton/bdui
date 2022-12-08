@@ -23,7 +23,7 @@ data class LazyColumnState(
 
 object LazyColumnStateFactory : ComponentStateFactory<LazyColumnState>() {
 
-    override val key: String = "LazyColumn"
+    override val type: String = "LazyColumn"
 
     override fun Scope.create(componentType: String): LazyColumnState = LazyColumnState(
         children = prop("children").asList {
