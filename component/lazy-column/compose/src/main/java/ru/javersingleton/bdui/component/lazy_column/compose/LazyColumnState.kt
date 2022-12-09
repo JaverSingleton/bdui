@@ -1,17 +1,21 @@
 package ru.javersingleton.bdui.component.lazy_column.compose
 
+import androidx.compose.runtime.Immutable
 import ru.javersingleton.bdui.component.common.Padding
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.field.ComponentData
 
+@Immutable
 data class LazyColumnState(
     val children: List<Child>,
 ) {
 
+    @Immutable
     data class Child(
         val component: ComponentData,
         val params: Params
     ) {
+        @Immutable
         data class Params(
             val width: String,
             val height: String,

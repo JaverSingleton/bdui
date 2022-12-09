@@ -1,7 +1,9 @@
 package ru.javersingleton.bdui.engine.core
 
+import androidx.compose.runtime.Stable
 import ru.javersingleton.bdui.engine.field.EmptyData
 
+@Stable
 interface Value<T : Any?> {
 
     object NULL : ReadableValue<Any?> {
@@ -54,6 +56,7 @@ class LazyValue<T : Any?>(
 
 }
 
+@Stable
 interface ReadableValue<T> : Value<T> {
 
     val currentValue: T
