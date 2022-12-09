@@ -10,7 +10,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object MetaComponent: ComponentRender<MetaState>(MetaStateFactory) {
 
-    override val key: String = "Meta"
+    override val type: String = "Meta"
 
     @Composable
     override fun Render(

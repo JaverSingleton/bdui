@@ -11,7 +11,7 @@ import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object ToolbarComponent : ComponentRender<ToolbarState>(ToolbarStateFactory) {
 
-    override val key: String = "Toolbar"
+    override val type: String = "Toolbar"
 
     @Composable
     override fun Render(

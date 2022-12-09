@@ -10,7 +10,7 @@ import ru.javersingleton.bdui.engine.function.Function
 
 object ConditionFunction: Function {
 
-    override val key: String = "Condition"
+    override val type: String = "Condition"
 
 
     override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> = scope.run {

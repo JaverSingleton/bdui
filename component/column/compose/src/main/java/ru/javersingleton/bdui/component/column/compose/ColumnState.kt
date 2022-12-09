@@ -22,7 +22,7 @@ data class ColumnState(
 
 object ColumnStateFactory : ComponentStateFactory<ColumnState>() {
 
-    override val key: String = "Column"
+    override val type: String = "Column"
 
     override fun Scope.create(componentType: String): ColumnState = ColumnState(
         children = prop("children").asList {

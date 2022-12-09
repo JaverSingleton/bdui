@@ -10,7 +10,7 @@ import ru.javersingleton.bdui.engine.function.Function
 
 object NotFunction: Function {
 
-    override val key: String = "Not"
+    override val type: String = "Not"
 
     override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> = scope.run {
         rememberValue(id, params) {

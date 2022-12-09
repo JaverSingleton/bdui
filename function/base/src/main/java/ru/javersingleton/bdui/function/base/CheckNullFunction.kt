@@ -9,7 +9,7 @@ import ru.javersingleton.bdui.engine.function.Function
 
 object CheckNullFunction: Function {
 
-    override val key: String = "CheckNull"
+    override val type: String = "CheckNull"
 
     override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> = scope.run {
         rememberValue(id, params) {
