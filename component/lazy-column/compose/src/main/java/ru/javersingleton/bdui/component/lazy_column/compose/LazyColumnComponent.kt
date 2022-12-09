@@ -29,7 +29,7 @@ object LazyColumnComponent: ComponentRender<LazyColumnState>(LazyColumnStateFact
             modifier = modifier
         ) {
             items(
-                items = state.children,
+                items = state.children.value,
                 key = { item ->
                     item.component.id
                 },

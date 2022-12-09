@@ -6,8 +6,12 @@ import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.field.ComponentData
 
 @Immutable
+data class ImmutableList(
+    val value: List<LazyColumnState.Child>,
+)
+
 data class LazyColumnState(
-    val children: List<Child>,
+    val children: ImmutableList,
 ) {
 
     @Immutable
@@ -30,20 +34,22 @@ object LazyColumnStateFactory : ComponentStateFactory<LazyColumnState>() {
     override val type: String = "LazyColumn"
 
     override fun Scope.create(componentType: String): LazyColumnState = LazyColumnState(
-        children = prop("children").asList {
-            asComponentWithParams { component ->
-                LazyColumnState.Child(
-                    component,
-                    LazyColumnState.Child.Params(
-                        width = prop("layout_width").asString() ?: "fillMax",
-                        height = prop("layout_height").asString() ?: "wrapContent",
-                        padding = prop("layout_padding").asObject {
-                            Padding.create(this@create, this)
-                        },
+        children = ImmutableList(
+            prop("children").asList {
+                asComponentWithParams { component ->
+                    LazyColumnState.Child(
+                        component,
+                        LazyColumnState.Child.Params(
+                            width = prop("layout_width").asString() ?: "fillMax",
+                            height = prop("layout_height").asString() ?: "wrapContent",
+                            padding = prop("layout_padding").asObject {
+                                Padding.create(this@create, this)
+                            },
+                        )
                     )
-                )
-            }
-        }.filterNotNull()
+                }
+            }.filterNotNull()
+        )
     )
 
 }
