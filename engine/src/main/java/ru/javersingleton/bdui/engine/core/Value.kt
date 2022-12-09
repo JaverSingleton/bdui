@@ -10,7 +10,16 @@ interface Value<T : Any?> {
 
         override val currentValue: Any? = null
 
-        override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
+        override fun subscribe(callback: ReadableValue.Subscription.Callback): ReadableValue.Subscription =
+            object : ReadableValue.Subscription {
+
+                override fun unsubscribe() {
+                    // Do Nothing
+                }
+
+            }
+
+        override fun subscribeEndpoint(callback: ReadableValue.Subscription.EndCallback): ReadableValue.Subscription =
             object : ReadableValue.Subscription {
 
                 override fun unsubscribe() {
@@ -25,7 +34,43 @@ interface Value<T : Any?> {
 
 class ConstValue<T : Any?>(override val currentValue: T) : ReadableValue<T> {
 
-    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
+    override fun subscribe(callback: ReadableValue.Subscription.Callback): ReadableValue.Subscription =
+        object : ReadableValue.Subscription {
+
+            override fun unsubscribe() {
+                // Do Nothing
+            }
+
+        }
+
+    override fun subscribeEndpoint(callback: ReadableValue.Subscription.EndCallback): ReadableValue.Subscription =
+        object : ReadableValue.Subscription {
+
+            override fun unsubscribe() {
+                // Do Nothing
+            }
+
+        }
+
+}
+
+class DynamicValue<T : Any?>(
+    private val script: () -> T
+) : ReadableValue<T> {
+
+    override val currentValue: T
+        get() = script()
+
+    override fun subscribe(callback: ReadableValue.Subscription.Callback): ReadableValue.Subscription =
+        object : ReadableValue.Subscription {
+
+            override fun unsubscribe() {
+                // Do Nothing
+            }
+
+        }
+
+    override fun subscribeEndpoint(callback: ReadableValue.Subscription.EndCallback): ReadableValue.Subscription =
         object : ReadableValue.Subscription {
 
             override fun unsubscribe() {
@@ -42,7 +87,10 @@ class LazyValue<T : Any?>(
 
     private val lazyValue: T by lazy { script() }
 
-    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
+    override val currentValue: T
+        get() = lazyValue
+
+    override fun subscribe(callback: ReadableValue.Subscription.Callback): ReadableValue.Subscription =
         object : ReadableValue.Subscription {
 
             override fun unsubscribe() {
@@ -51,8 +99,14 @@ class LazyValue<T : Any?>(
 
         }
 
-    override val currentValue: T
-        get() = lazyValue
+    override fun subscribeEndpoint(callback: ReadableValue.Subscription.EndCallback): ReadableValue.Subscription =
+        object : ReadableValue.Subscription {
+
+            override fun unsubscribe() {
+                // Do Nothing
+            }
+
+        }
 
 }
 
@@ -61,11 +115,43 @@ interface ReadableValue<T> : Value<T> {
 
     val currentValue: T
 
-    fun subscribe(callback: (Value<*>) -> Unit): Subscription
+    fun subscribe(callback: Subscription.Callback): Subscription
+
+    fun subscribeEndpoint(callback: Subscription.EndCallback): Subscription
 
     interface Subscription {
 
         fun unsubscribe()
+
+        interface Callback {
+
+            fun onInvalidated(reason: String, poster: Poster)
+
+        }
+
+        class BasePoster: Poster {
+            private val posts: MutableMap<EndCallback, List<String>> = mutableMapOf()
+
+            override fun postInvalidate(reason: String, callback: EndCallback) {
+                posts[callback] = (posts[callback] ?: listOf()) + listOf(reason)
+            }
+
+            fun invalidateAll() {
+                posts.forEach { (callback, reason) ->
+                    callback.onInvalidated(reason.joinToString(separator = " and "))
+                }
+            }
+        }
+
+        interface Poster {
+
+            fun postInvalidate(reason: String, callback: EndCallback)
+
+        }
+
+        interface EndCallback {
+            fun onInvalidated(reason: String)
+        }
 
     }
 
@@ -77,8 +163,11 @@ data class LambdaValue<T : Any?>(private val lambda: Lambda) : ReadableValue<T> 
     override val currentValue: T
         get() = lambda.currentValue as T
 
-    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
+    override fun subscribe(callback: ReadableValue.Subscription.Callback): ReadableValue.Subscription =
         lambda.subscribe(callback)
+
+    override fun subscribeEndpoint(callback: ReadableValue.Subscription.EndCallback): ReadableValue.Subscription =
+        lambda.subscribeEndpoint(callback)
 
 }
 

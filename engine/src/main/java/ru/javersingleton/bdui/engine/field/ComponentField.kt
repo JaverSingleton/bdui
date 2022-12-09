@@ -48,6 +48,7 @@ data class ComponentField(
 
                 ComponentData(
                     id = id,
+                    withUserId = withUserId,
                     componentType = componentType,
                     params = externalParams.current { empty ->
                         StructureData(empty.id, fields = mapOf())
@@ -117,13 +118,28 @@ data class ComponentField(
 @Stable
 data class ComponentData(
     val id: String,
+    val withUserId: Boolean,
     val componentType: String,
     val params: StructureData,
     val value: Value<*>
 ) : ResolvedData {
 
+    constructor(
+        id: String? = null,
+        componentType: String,
+        params: StructureData,
+        value: Value<*>
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null,
+        componentType,
+        params,
+        value
+    )
+
     override fun asField(): Field<ComponentData> = ComponentField(
-        id = id,
+        id = id.takeIf { withUserId } ?: newId(),
+        withUserId = withUserId,
         componentType = componentType,
         params = params.asField()
     )

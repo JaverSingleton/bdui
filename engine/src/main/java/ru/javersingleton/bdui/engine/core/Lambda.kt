@@ -1,64 +1,72 @@
 package ru.javersingleton.bdui.engine.core
 
+import android.util.Log
 import ru.javersingleton.bdui.engine.BeduinContext
 import ru.javersingleton.bdui.engine.field.EmptyData
 
 class Lambda(
+    private val tag: String,
     private val context: BeduinContext,
     private var script: Scope.() -> Any? = { throw IllegalStateException() }
-) : ReadableValue<Any?> {
+) : ReadableValue<Any?>, ReadableValue.Subscription.Callback {
 
-    var tag: String = ""
+    override fun toString(): String {
+        return "Lambda@$tag"
+    }
 
     fun setBody(
         script: Scope.() -> Any? = this.script
     ) {
         if (this.script != script) {
             this.script = script
-            invalidate()
+            val poster = ReadableValue.Subscription.BasePoster()
+            onInvalidated(tag, poster)
+            poster.invalidateAll()
         }
     }
 
     private var _value: Lazy<Any?> = emptyValue()
     override val currentValue: Any? get() = _value.value
+    private var isValueCalculated = false
 
     private fun emptyValue(): Lazy<Any?> = lazy { invoke() }
 
     private var cache: Map<Any?, CachedState> = mapOf()
 
-    private var subscriptions: List<ReadableValue.Subscription> = listOf()
-    private val subscribers: MutableSet<(Value<*>) -> Unit> = mutableSetOf()
+    private var subscriptions: Set<ReadableValue.Subscription> = setOf()
+    private val subscribers: MutableSet<ReadableValue.Subscription.Callback> = mutableSetOf()
+    private val endpointSubscribers: MutableSet<ReadableValue.Subscription.EndCallback> = mutableSetOf()
 
-    private var isInvalidating = false
-    // TODO Возможно стоить поддержать reInvalidation если считанная ранее переменная изменилась
-
-    private fun notifyStateChanged() {
-        if (isInvalidating) {
+    override fun onInvalidated(reason: String, poster: ReadableValue.Subscription.Poster) {
+        if (!isValueCalculated) {
             return
         }
+        Log.d("Beduin", "Lambda $tag invalidated by $reason")
+        isValueCalculated = false
+        _value = emptyValue()
 
-        isInvalidating = true
-        subscribers.toList().forEach { callback ->
-            callback(this)
+        subscribers.forEach {
+            it.onInvalidated("$tag by $reason", poster)
+        }
+        endpointSubscribers.forEach {
+            poster.postInvalidate("$tag by $reason", it)
         }
     }
 
-    private fun invalidate() {
-        _value = emptyValue()
-        notifyStateChanged()
-    }
-
-    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
+    override fun subscribe(callback: ReadableValue.Subscription.Callback): ReadableValue.Subscription =
         Subscription(callback)
+
+    override fun subscribeEndpoint(callback: ReadableValue.Subscription.EndCallback): ReadableValue.Subscription =
+        EndpointSubscription(callback)
 
     private fun invoke(): Any? {
         val call = Call()
         val result = call.script()
+        isValueCalculated = true
 
         subscriptions.forEach { it.unsubscribe() }
-        subscriptions = call.targetDependencies.map { it.subscribe { invalidate() } }
+        subscriptions = call.targetDependencies.map { it.subscribe(this) }.toSet()
         cache = call.targetCache
-        isInvalidating = false
 
         return result
     }
@@ -80,17 +88,15 @@ class Lambda(
             return if (cachedState != null && cachedState.input == key) {
                 cachedState.output
             } else {
-                val tag = "$callId@($key)"
                 val targetLambda = if (cachedState?.output is Lambda) {
-                        cachedState.output.apply {
-                            setBody(func)
-                        }
-                    } else {
-                        Lambda(context).apply {
-                            setBody(func)
-                        }
+                    cachedState.output.apply {
+                        setBody(func)
                     }
-                targetLambda.tag = tag
+                } else {
+                    Lambda(tag = callId, context).apply {
+                        setBody(func)
+                    }
+                }
                 val newCachedState = CachedState(
                     key,
                     targetLambda
@@ -140,7 +146,7 @@ class Lambda(
     }
 
     inner class Subscription(
-        private val callback: (Value<*>) -> Unit
+        private val callback: ReadableValue.Subscription.Callback
     ) : ReadableValue.Subscription {
 
         init {
@@ -149,6 +155,20 @@ class Lambda(
 
         override fun unsubscribe() {
             subscribers.remove(callback)
+        }
+
+    }
+
+    inner class EndpointSubscription(
+        private val callback: ReadableValue.Subscription.EndCallback
+    ) : ReadableValue.Subscription {
+
+        init {
+            endpointSubscribers.add(callback)
+        }
+
+        override fun unsubscribe() {
+            endpointSubscribers.remove(callback)
         }
 
     }

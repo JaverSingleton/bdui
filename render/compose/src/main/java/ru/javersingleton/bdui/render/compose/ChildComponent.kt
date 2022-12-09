@@ -25,13 +25,18 @@ fun InnerComponent(
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-fun <T> Value<T>.subscribeAsState(): State<T> {
+fun <T> Value<T>.subscribeAsState(name: String = "Noname"): State<T> {
     val readableState = this as ReadableValue<T>
     val result = remember(readableState) { mutableStateOf(readableState.currentValue) }
     DisposableEffect(key1 = readableState) {
-        val subscription = readableState.subscribe { newState ->
-            result.value = (newState as ReadableValue<T>).currentValue
-        }
+        val subscription = readableState.subscribeEndpoint(
+            object : ReadableValue.Subscription.EndCallback {
+                override fun onInvalidated(reason: String) {
+                    Log.d("Beduin", "Component $name invalidated by $reason")
+                    result.value = readableState.currentValue
+                }
+            }
+        )
         onDispose { subscription.unsubscribe() }
     }
 

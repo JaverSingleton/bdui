@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field
 
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
 
@@ -92,9 +92,19 @@ data class StructureField(
 }
 
 data class StructureData(
-    val id: String = newId(),
+    val id: String,
+    private val withUserId: Boolean,
     internal val fields: Map<String, Value<out ResolvedData>> = mapOf()
 ) : ResolvedData {
+
+    constructor(
+        id: String? = null,
+        fields: Map<String, Value<out ResolvedData>> = mapOf()
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null,
+        fields,
+    )
 
     fun prop(name: String): Value<*> = fields[name] ?: Value.NULL
 
@@ -107,7 +117,8 @@ data class StructureData(
     fun unbox(): Map<String, Value<*>> = fields
 
     override fun asField(): Field<StructureData> = StructureField(
-        id = id,
+        id = id.takeIf { withUserId } ?: newId(),
+        withUserId = withUserId,
         fields = fields.mapValues { (_, value) ->
             value.currentQuiet<ResolvedData> { it }.asField()
         }

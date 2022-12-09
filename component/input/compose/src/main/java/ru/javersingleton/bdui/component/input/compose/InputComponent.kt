@@ -17,7 +17,7 @@ object InputComponent : ComponentRender<InputState>(InputStateFactory) {
         modifier: Modifier,
         stateValue: Value<InputState>
     ) {
-        val state = stateValue.subscribeAsState().value
+        val state = stateValue.subscribeAsState(type).value
         Log.d("Beduin", "OnComponentRender: componentType=Input")
         TextField(
             value = state.text,

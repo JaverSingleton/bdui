@@ -25,6 +25,7 @@
         }
       },
       {
+        "id": "addButton",
         "componentType": "Button",
         "text": "Add Button",
         "onClick": {
@@ -34,7 +35,6 @@
             "children": {
               "functionType": "CombineArrays",
               "arrays": [
-                "{{children}}",
                 {
                   "componentType": "Button",
                   "text": "New button"

@@ -9,6 +9,11 @@
         "id": "root",
         "text": "{{args.text}}"
       }
+    },
+    "text": {
+      "fieldType": "Primitive",
+      "id": "inputText",
+      "value": "Default"
     }
   }
 }

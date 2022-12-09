@@ -10,6 +10,7 @@ fun FunctionsRegister.withBase(): FunctionsRegister = apply {
         ConditionFunction,
         JoinToStringFunction,
         MaxLengthFunction,
-        NotFunction
+        NotFunction,
+        RandomStringFunction,
     )
 }

@@ -9,5 +9,6 @@ android {
 }
 
 dependencies {
+    implementation libs.bundles.compose
     api project(path: ':engine')
 }

@@ -1,8 +1,10 @@
 package ru.javersingleton.bdui.component.common
 
+import androidx.compose.runtime.Immutable
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.field.StructureData
 
+@Immutable
 data class Padding(
     val start: Int,
     val end: Int,

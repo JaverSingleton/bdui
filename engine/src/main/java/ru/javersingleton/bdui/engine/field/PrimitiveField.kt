@@ -6,7 +6,7 @@ import ru.javersingleton.bdui.engine.core.Lambda
 data class PrimitiveField(
     override val id: String,
     override val withUserId: Boolean,
-    private val value: String,
+    val value: String,
 ) : Field<PrimitiveData> {
 
     constructor(

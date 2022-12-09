@@ -13,7 +13,7 @@ class BeduinController(
 ) : BeduinContext by context {
 
     private var lastState: ComponentField? = null
-    private val lambda = Lambda(this)
+    private val lambda = Lambda("BeduinController", this)
 
     val root: Value<ComponentData> = LambdaValue(lambda)
 
@@ -28,7 +28,7 @@ class BeduinController(
             lambda.setBody {
                 // TODO Избавится от Nullable
                 val args = rememberValue(
-                    "root@references",
+                    "controller@references",
                     value.componentType
                 ) { MutableReferences() }.current!!
                 val paramsField = value.params.resolve(this, args) as ResolvedField<StructureData>
