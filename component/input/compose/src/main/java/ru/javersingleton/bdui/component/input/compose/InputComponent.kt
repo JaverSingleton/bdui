@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
-import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object InputComponent : ComponentRender<InputState>(InputStateFactory) {
 
@@ -17,7 +16,7 @@ object InputComponent : ComponentRender<InputState>(InputStateFactory) {
         modifier: Modifier,
         stateValue: Value<InputState>
     ) {
-        val state = stateValue.subscribeAsState(type).value
+        val state = stateValue.subscribeAsState().value
         Log.d("Beduin", "OnComponentRender: componentType=Input")
         TextField(
             value = state.text,

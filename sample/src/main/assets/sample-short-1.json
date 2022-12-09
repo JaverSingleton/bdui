@@ -22,6 +22,11 @@
             "id": "input",
             "text": "{{args.text}}"
           }
+        },
+        "text": {
+          "fieldType": "Primitive",
+          "id": "inputValue",
+          "value": ""
         }
       },
       {

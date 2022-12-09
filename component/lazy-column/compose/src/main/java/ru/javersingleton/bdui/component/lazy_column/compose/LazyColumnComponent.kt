@@ -12,9 +12,8 @@ import androidx.compose.ui.unit.dp
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
 import ru.javersingleton.bdui.render.compose.InnerComponent
-import ru.javersingleton.bdui.render.compose.subscribeAsState
 
-object LazyColumnComponent: ComponentRender<LazyColumnState>(LazyColumnStateFactory) {
+object LazyColumnComponent : ComponentRender<LazyColumnState>(LazyColumnStateFactory) {
 
     override val type: String = "LazyColumn"
 

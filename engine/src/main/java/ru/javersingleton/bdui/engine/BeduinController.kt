@@ -25,7 +25,7 @@ class BeduinController(
             }
 
             lastState = value
-            lambda.setBody {
+            lambda.setBody (reason = "rootState changes") {
                 // TODO Избавится от Nullable
                 val args = rememberValue(
                     "controller@references",

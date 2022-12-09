@@ -15,12 +15,13 @@ class Lambda(
     }
 
     fun setBody(
-        script: Scope.() -> Any? = this.script
+        reason: String,
+        script: Scope.() -> Any? = this.script,
     ) {
         if (this.script != script) {
             this.script = script
             val poster = ReadableValue.Subscription.BasePoster()
-            onInvalidated(tag, poster)
+            onInvalidated(reason, poster)
             poster.invalidateAll()
         }
     }
@@ -39,17 +40,18 @@ class Lambda(
 
     override fun onInvalidated(reason: String, poster: ReadableValue.Subscription.Poster) {
         if (!isValueCalculated) {
+            Log.d("Beduin-Invalidating", "Lambda $tag skipped invalidating called by $reason")
             return
         }
-        Log.d("Beduin", "Lambda $tag invalidated by $reason")
+        Log.d("Beduin-Invalidating", "Lambda $tag invalidated by $reason")
         isValueCalculated = false
         _value = emptyValue()
 
         subscribers.forEach {
-            it.onInvalidated("$tag by $reason", poster)
+            it.onInvalidated(tag, poster)
         }
         endpointSubscribers.forEach {
-            poster.postInvalidate("$tag by $reason", it)
+            poster.postInvalidate(tag, it)
         }
     }
 
@@ -62,6 +64,7 @@ class Lambda(
     private fun invoke(): Any? {
         val call = Call()
         val result = call.script()
+        Log.d("Beduin-Invalidating", "Lambda $tag calculated")
         isValueCalculated = true
 
         subscriptions.forEach { it.unsubscribe() }
@@ -90,11 +93,11 @@ class Lambda(
             } else {
                 val targetLambda = if (cachedState?.output is Lambda) {
                     cachedState.output.apply {
-                        setBody(func)
+                        setBody("changes (${cachedState.input} -> $key)", func)
                     }
                 } else {
                     Lambda(tag = callId, context).apply {
-                        setBody(func)
+                        setBody("creating", func)
                     }
                 }
                 val newCachedState = CachedState(

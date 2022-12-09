@@ -169,6 +169,9 @@ data class LambdaValue<T : Any?>(private val lambda: Lambda) : ReadableValue<T> 
     override fun subscribeEndpoint(callback: ReadableValue.Subscription.EndCallback): ReadableValue.Subscription =
         lambda.subscribeEndpoint(callback)
 
+    override fun toString(): String {
+        return lambda.toString()
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

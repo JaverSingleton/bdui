@@ -32,7 +32,7 @@ fun <T> Value<T>.subscribeAsState(name: String = "Noname"): State<T> {
         val subscription = readableState.subscribeEndpoint(
             object : ReadableValue.Subscription.EndCallback {
                 override fun onInvalidated(reason: String) {
-                    Log.d("Beduin", "Component $name invalidated by $reason")
+                    Log.d("Beduin-Invalidating", "Component $name invalidated by $reason")
                     result.value = readableState.currentValue
                 }
             }

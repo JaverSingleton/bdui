@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
 import ru.javersingleton.bdui.render.compose.InnerComponent
-import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object BoxComponent: ComponentRender<BoxState>(BoxStateFactory) {
 
