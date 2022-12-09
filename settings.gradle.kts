@@ -36,5 +36,6 @@ include(
     ":interaction:base:flow",
     ":interaction:state-patch:flow",
     ":interaction:delay:flow",
+    ":interaction:value-callback:flow",
     ":sample"
 )

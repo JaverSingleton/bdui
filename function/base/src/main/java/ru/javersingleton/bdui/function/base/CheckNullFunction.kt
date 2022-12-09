@@ -15,8 +15,7 @@ object CheckNullFunction: Function {
         rememberValue(id, params) {
             val value = params.prop("value").current
             PrimitiveData(
-                id = "$id@result",
-                (value == null).toString()
+                value = (value == null).toString()
             )
         }
     }

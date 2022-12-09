@@ -1,0 +1,14 @@
+{
+  "components": {},
+  "state": {
+    "id": "root",
+    "componentType": "Input",
+    "onTextChanged": {
+      "interactionType": "StatePatch",
+      "patch": {
+        "id": "root",
+        "text": "{{args.text}}"
+      }
+    }
+  }
+}

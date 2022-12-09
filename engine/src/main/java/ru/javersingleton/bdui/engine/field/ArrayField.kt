@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field
 
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
 
@@ -14,7 +14,11 @@ data class ArrayField(
     constructor(
         id: String? = null,
         fields: List<Field<*>>
-    ) : this(id = id ?: newId(), withUserId = id != null, fields)
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null,
+        fields
+    )
 
     override fun resolve(scope: Lambda.Scope, args: References): Field<ArrayData> =
         scope.run {
@@ -49,34 +53,44 @@ data class ArrayField(
 
     @Suppress("UNCHECKED_CAST")
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<ArrayData> {
-        return if (targetFieldId != id) {
-            val targetFields = fields.map { it.mergeDeeply(targetFieldId, targetField) }
-            if (targetFields == fields) {
+        if (targetFieldId != id) {
+            val targetFields = fields.map {
+                it.mergeDeeply(
+                    targetFieldId = targetFieldId,
+                    targetField = targetField
+                )
+            }
+            return if (targetFields == fields) {
                 this
             } else {
                 copy(fields = targetFields)
             }
-        } else {
-            if (targetField is ArrayField) {
-                val changedFields = fields.map { value ->
-                    targetField.fields.firstOrNull { it.id == value.id }
-                        ?.let { targetFieldElement ->
-                            value.mergeDeeply(
-                                value.id,
-                                targetFieldElement
-                            )
-                        }
-                        ?: value
-                }
-                if (changedFields == fields) {
-                    this
-                } else {
-                    copy(fields = changedFields)
-                }
-            } else {
-                targetField.copyWithId(id = id)
-            } as Field<ArrayData>
         }
+
+        return if (targetField is ArrayField) {
+            //TODO Написать нормальный мёрдж массивов с сохранением позиций
+            var changedFields = fields.map { value ->
+                targetField.fields
+                    .firstOrNull { it.id == value.id }
+                    ?.let {
+                        value.mergeDeeply(
+                            targetFieldId = value.id,
+                            targetField = it
+                        )
+                    } ?: value
+            }
+            changedFields = changedFields + targetField.fields.filter { element1 ->
+                changedFields.firstOrNull { element2 -> element1.id == element2.id } == null
+            }
+
+            if (changedFields == fields) {
+                this
+            } else {
+                copy(fields = changedFields)
+            }
+        } else {
+            targetField.copyWithId(id = id)
+        } as Field<ArrayData>
     }
 
     override fun copyWithId(id: String): Field<ArrayData> = copy(id = id)

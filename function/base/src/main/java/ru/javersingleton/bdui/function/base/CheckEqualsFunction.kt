@@ -16,8 +16,7 @@ object CheckEqualsFunction: Function {
             val value1 = params.prop("value1").current
             val value2 = params.prop("value2").current
             PrimitiveData(
-                id = "$id@result",
-                (value1 == value2).toString()
+                value = (value1 == value2).toString()
             )
         }
     }

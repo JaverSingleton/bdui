@@ -17,9 +17,9 @@ object NotFunction: Function {
             val value: PrimitiveData = params.prop("value").current()
                 ?: throw IllegalArgumentException("You must set value for Not")
             if (value.asBoolean()) {
-                PrimitiveData(id = "$id@value", "false")
+                PrimitiveData(value = "false")
             } else {
-                PrimitiveData(id = "$id@value", "true")
+                PrimitiveData(value = "true")
             }
         }
     }

@@ -16,7 +16,12 @@ data class ComponentField(
         id: String? = null,
         componentType: String,
         params: Field<StructureData>
-    ) : this(id = id ?: newId(), withUserId = id != null, componentType, params)
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null,
+        componentType,
+        params
+    )
 
     override fun resolve(scope: Lambda.Scope, args: References): Field<ComponentData> =
         scope.run {
@@ -29,10 +34,17 @@ data class ComponentField(
 
             val dataWithUserId: MutableMap<String, Value<*>> = mutableMapOf()
             dataWithUserId.putAll(externalParamsField.dataWithUserId)
-            val resultValue = rememberValue(id, componentType) {
-                val stateFactory = rememberValue("$id@stateFactory", componentType) {
-                    inflateStateFactory(componentType)
-                }
+            val resultValue = rememberValue(
+                id,
+                setOf(
+                    componentType,
+                    externalParams
+                )
+            ) {
+                val stateFactory = rememberValue(
+                    "$id@stateFactory",
+                    componentType
+                ) { inflateStateFactory(componentType) }
 
                 ComponentData(
                     id = id,
@@ -40,17 +52,21 @@ data class ComponentField(
                     params = externalParams.current { empty ->
                         StructureData(empty.id, fields = mapOf())
                     },
-                    value = rememberValue("$id@value", componentType) {
-                        val externalParams: StructureData =
-                            externalParams.current { empty ->
-                                StructureData(empty.id, fields = mapOf())
-                            }
+                    value = rememberValue(
+                        "$id@value",
+                        setOf(componentType, externalParams)
+                    ) {
+                        val externalParamsValue: StructureData = externalParams.current { empty ->
+                            StructureData(
+                                empty.id,
+                                fields = mapOf()
+                            )
+                        }
                         stateFactory.current?.calculate(
                             scope = this,
-                            args = externalParams,
+                            args = externalParamsValue,
                             componentType = componentType
-                        )
-                            ?: throw IllegalArgumentException("StateFactory $componentType not found")
+                        ) ?: throw IllegalArgumentException("StateFactory $componentType not found")
                     }
                 )
             }
@@ -82,9 +98,7 @@ data class ComponentField(
                 is StructureField -> {
                     params.mergeDeeply(params.id, targetField)
                 }
-                else -> {
-                    throw IllegalArgumentException("FieldType changing is forbidden for StatePatch")
-                }
+                else -> throw IllegalArgumentException("FieldType changing is forbidden for StatePatch")
             }
         } else {
             params.mergeDeeply(targetFieldId, targetField)

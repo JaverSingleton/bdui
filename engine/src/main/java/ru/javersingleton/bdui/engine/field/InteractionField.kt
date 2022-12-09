@@ -52,9 +52,9 @@ data class InteractionField(
     }
 
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<InteractionData> {
-        if (targetFieldId == id) {
-            TODO("Реализовать mergeDeeply для InteractionField")
-        }
+//        if (targetFieldId == id) {
+//            TODO("Реализовать mergeDeeply для InteractionField")
+//        }
         return this
     }
 

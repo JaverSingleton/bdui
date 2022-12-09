@@ -19,35 +19,33 @@ class Lambda(
         }
     }
 
-    private var isValueCalculated = false
     private var _value: Lazy<Any?> = emptyValue()
     override val currentValue: Any? get() = _value.value
 
-    private fun emptyValue(): Lazy<Any?> = lazy {
-        isValueCalculated = true
-        invoke()
-    }
+    private fun emptyValue(): Lazy<Any?> = lazy { invoke() }
 
     private var cache: Map<Any?, CachedState> = mapOf()
 
     private var subscriptions: List<ReadableValue.Subscription> = listOf()
     private val subscribers: MutableSet<(Value<*>) -> Unit> = mutableSetOf()
+
+    private var isInvalidating = false
     // TODO Возможно стоить поддержать reInvalidation если считанная ранее переменная изменилась
 
-    private fun notifyValueChanged() {
+    private fun notifyStateChanged() {
+        if (isInvalidating) {
+            return
+        }
+
+        isInvalidating = true
         subscribers.toList().forEach { callback ->
             callback(this)
         }
     }
 
     private fun invalidate() {
-        if (!isValueCalculated) {
-            return
-        }
-
         _value = emptyValue()
-        isValueCalculated = false
-        notifyValueChanged()
+        notifyStateChanged()
     }
 
     override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
@@ -60,6 +58,7 @@ class Lambda(
         subscriptions.forEach { it.unsubscribe() }
         subscriptions = call.targetDependencies.map { it.subscribe { invalidate() } }
         cache = call.targetCache
+        isInvalidating = false
 
         return result
     }
