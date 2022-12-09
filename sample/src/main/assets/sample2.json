@@ -231,7 +231,7 @@
         "online": true,
         "id": "contact1",
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact1",
             "online": {
@@ -249,12 +249,16 @@
         "lastSeen": "20.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
-          "patch": {
-            "id": "contact2",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact2.online}}"
+          "interactionType": "Delay",
+          "seconds": 2,
+          "onFinished": {
+            "interactionType": "StatePatch",
+            "patch": {
+              "id": "contact2",
+              "online": {
+                "functionType": "Not",
+                "value": "{{contact2.online}}"
+              }
             }
           }
         }
@@ -267,7 +271,7 @@
         "lastSeen": "23.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact3",
             "online": {
@@ -285,7 +289,7 @@
         "lastSeen": "24.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact4",
             "online": {
@@ -303,7 +307,7 @@
         "lastSeen": "25.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact5",
             "online": {
@@ -321,7 +325,7 @@
         "lastSeen": "26.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact6",
             "online": {
@@ -339,7 +343,7 @@
         "lastSeen": "27.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact7",
             "online": {
@@ -357,7 +361,7 @@
         "lastSeen": "28.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact8",
             "online": {
@@ -375,7 +379,7 @@
         "lastSeen": "29.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact9",
             "online": {
@@ -393,7 +397,7 @@
         "lastSeen": "30.11.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact10",
             "online": {
@@ -411,7 +415,7 @@
         "lastSeen": "01.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact11",
             "online": {
@@ -429,7 +433,7 @@
         "lastSeen": "02.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact12",
             "online": {
@@ -447,7 +451,7 @@
         "lastSeen": "03.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact13",
             "online": {
@@ -465,7 +469,7 @@
         "lastSeen": "04.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact14",
             "online": {
@@ -483,7 +487,7 @@
         "lastSeen": "05.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact15",
             "online": {
@@ -501,7 +505,7 @@
         "lastSeen": "06.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact16",
             "online": {
@@ -519,7 +523,7 @@
         "lastSeen": "07.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact17",
             "online": {
@@ -537,7 +541,7 @@
         "lastSeen": "08.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact18",
             "online": {
@@ -555,7 +559,7 @@
         "lastSeen": "09.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact19",
             "online": {
@@ -573,7 +577,7 @@
         "lastSeen": "10.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact20",
             "online": {
@@ -591,7 +595,7 @@
         "lastSeen": "11.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact21",
             "online": {
@@ -609,7 +613,7 @@
         "lastSeen": "12.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact22",
             "online": {
@@ -627,7 +631,7 @@
         "lastSeen": "13.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact23",
             "online": {
@@ -645,7 +649,7 @@
         "lastSeen": "14.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact24",
             "online": {
@@ -663,7 +667,7 @@
         "lastSeen": "15.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact25",
             "online": {
@@ -681,7 +685,7 @@
         "lastSeen": "16.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact26",
             "online": {
@@ -699,7 +703,7 @@
         "lastSeen": "17.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact27",
             "online": {
@@ -717,7 +721,7 @@
         "lastSeen": "18.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact28",
             "online": {
@@ -735,7 +739,7 @@
         "lastSeen": "19.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact29",
             "online": {
@@ -753,7 +757,7 @@
         "lastSeen": "20.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact30",
             "online": {
@@ -771,7 +775,7 @@
         "lastSeen": "21.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact31",
             "online": {
@@ -789,7 +793,7 @@
         "lastSeen": "22.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact32",
             "online": {
@@ -807,7 +811,7 @@
         "lastSeen": "23.12.2022",
         "online": false,
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact33",
             "online": {

@@ -3,13 +3,13 @@ package ru.javersingleton.bdui.component.column.compose
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.javersingleton.bdui.render.compose.InnerComponent
-import ru.javersingleton.bdui.render.compose.subscribeAsState
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
+import ru.javersingleton.bdui.render.compose.InnerComponent
+import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object ColumnComponent: ComponentRender<ColumnState>(ColumnStateFactory) {
 
@@ -36,6 +36,7 @@ object ColumnComponent: ComponentRender<ColumnState>(ColumnStateFactory) {
 
 }
 
+@Suppress("unused")
 @Composable
 @SuppressLint("ModifierFactoryExtensionFunction", "ComposableModifierFactory")
 private fun ColumnScope.toModifier(params: ColumnState.Child.Params): Modifier {

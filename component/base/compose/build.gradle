@@ -21,7 +21,7 @@ dependencies {
     api project(path: ':component:switch:compose')
     api project(path: ':component:text:compose')
     api project(path: ':component:toolbar:compose')
-    api project(path: ':component:lazy_column:compose')
+    api project(path: ':component:lazy-column:compose')
     api project(path: ':component:lazy_row:compose')
     api project(path: ':component:meta:compose')
 }

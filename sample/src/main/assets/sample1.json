@@ -230,7 +230,7 @@
           "componentType": "Input",
           "text": "{{inputValue}}",
           "onTextChanged": {
-            "effectType": "StatePatch",
+            "interactionType": "StatePatch",
             "patch": {
               "id": "root",
               "inputValue": {
@@ -246,7 +246,7 @@
           "id": "button",
           "text": "Click Me",
           "onClick": {
-            "effectType": "StatePatch",
+            "interactionType": "StatePatch",
             "patch": {
               "id": "button",
               "text": "{{inputValue}}"
@@ -257,7 +257,7 @@
           "componentType": "OfflineSwitcher",
           "offlineMode": "{{offlineMode}}",
           "onOfflineModeChange": {
-            "effectType": "StatePatch",
+            "interactionType": "StatePatch",
             "patch": {
               "id": "root",
               "offlineMode": "{{args.checked}}"
@@ -276,7 +276,7 @@
         "offlineMode": "{{offlineMode}}",
         "id": "contact1",
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact1",
             "name": "{{inputValue}}",
@@ -296,7 +296,7 @@
         "online": false,
         "offlineMode": "{{offlineMode}}",
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact2",
             "name": "{{inputValue}}",
@@ -316,7 +316,7 @@
         "online": false,
         "offlineMode": "{{offlineMode}}",
         "onClick": {
-          "effectType": "StatePatch",
+          "interactionType": "StatePatch",
           "patch": {
             "id": "contact3",
             "name": "{{inputValue}}",

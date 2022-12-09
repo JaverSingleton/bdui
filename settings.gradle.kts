@@ -26,12 +26,15 @@ include(
     ":component:switch:compose",
     ":component:text:compose",
     ":component:toolbar:compose",
-    ":component:lazy_column:compose",
     ":component:lazy_row:compose",
+    ":component:lazy-column:compose",
     ":component:meta:compose",
     ":component:base:compose",
     ":component:common",
     ":function:base",
-    ":interaction:base",
+    ":handler:flow",
+    ":interaction:base:flow",
+    ":interaction:state-patch:flow",
+    ":interaction:delay:flow",
     ":sample"
 )
