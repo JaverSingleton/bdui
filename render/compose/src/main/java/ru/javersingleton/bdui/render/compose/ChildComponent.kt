@@ -29,15 +29,19 @@ fun <T> Value<T>.subscribeAsState(name: String = "Noname"): State<T> {
     val readableState = this as ReadableValue<T>
     val result = remember(readableState) { mutableStateOf(readableState.currentValue) }
     DisposableEffect(key1 = readableState) {
-        val subscription = readableState.subscribeEndpoint(
-            object : ReadableValue.Subscription.EndCallback {
-                override fun onInvalidated(reason: String) {
+        val subscription = readableState.bindValidityWith(
+            shouldDefer = true,
+            child = object : ReadableValue.Invalidatable {
+                override fun onInvalidated(
+                    reason: String,
+                    postInvalidate: (reason: String, ReadableValue.Invalidatable) -> Unit
+                ) {
                     Log.d("Beduin-Invalidating", "Component $name invalidated by $reason")
                     result.value = readableState.currentValue
                 }
             }
         )
-        onDispose { subscription.unsubscribe() }
+        onDispose { subscription.unbind() }
     }
 
     return result
