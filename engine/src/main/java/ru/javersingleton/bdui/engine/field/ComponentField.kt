@@ -51,7 +51,11 @@ data class ComponentField(
                     withUserId = withUserId,
                     componentType = componentType,
                     params = externalParams.current { empty ->
-                        StructureData(empty.id, fields = mapOf())
+                        StructureData(
+                            id = empty.id,
+                            withUserId = empty.withUserId,
+                            fields = mapOf()
+                        )
                     },
                     value = rememberValue(
                         "$id@value",
@@ -59,7 +63,8 @@ data class ComponentField(
                     ) {
                         val externalParamsValue: StructureData = externalParams.current { empty ->
                             StructureData(
-                                empty.id,
+                                id = empty.id,
+                                withUserId = empty.withUserId,
                                 fields = mapOf()
                             )
                         }

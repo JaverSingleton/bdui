@@ -33,8 +33,8 @@ data class StructureField(
             }
             val resultValue = rememberValue(id, targetFields) {
                 StructureData(
-                    id = id,
-                    withUserId = withUserId,
+                    id,
+                    withUserId,
                     targetFields.associate { (key, value) -> key to (value as ResolvedField).value }
                 )
             }

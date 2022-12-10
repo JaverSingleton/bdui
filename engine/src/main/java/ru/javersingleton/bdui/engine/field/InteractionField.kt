@@ -41,7 +41,7 @@ data class InteractionField(
         }
         ResolvedField(
             id = id,
-            withUserId,
+            withUserId = withUserId,
             value = resultValue,
             dataWithUserId = if (withUserId) {
                 mapOf(id to resultValue)

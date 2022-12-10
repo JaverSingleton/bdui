@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field
 
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
 
 data class EmptyField(
     override val id: String,
@@ -16,7 +16,7 @@ data class EmptyField(
         scope: Lambda.Scope,
         args: References
     ): Field<EmptyData> = scope.run {
-        val resultValue = rememberValue(id, null) { EmptyData(id = id) }
+        val resultValue = rememberValue(id, null) { EmptyData(id, withUserId) }
         ResolvedField(
             id = id,
             withUserId = withUserId,
@@ -46,6 +46,19 @@ data class EmptyField(
 
 }
 
-data class EmptyData(val id: String) : ResolvedData {
+data class EmptyData(
+    val id: String,
+    val withUserId: Boolean
+) : ResolvedData {
+
+    @Suppress("unused")
+    constructor(
+        id: String? = null
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null
+    )
+
     override fun asField(): Field<EmptyData> = EmptyField(id)
+
 }

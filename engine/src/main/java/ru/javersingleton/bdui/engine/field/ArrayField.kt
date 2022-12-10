@@ -35,7 +35,11 @@ data class ArrayField(
                 values.add(resolvedElement.value)
             }
             val resultValue = rememberValue(id, targetFields) {
-                ArrayData(id, targetFields.map { (it as ResolvedField<*>).value }.toList())
+                ArrayData(
+                    id,
+                    withUserId,
+                    targetFields.map { (it as ResolvedField<*>).value }.toList()
+                )
             }
             if (withUserId) {
                 dataWithUserId[id] = resultValue
@@ -99,15 +103,26 @@ data class ArrayField(
 
 data class ArrayData(
     val id: String,
+    val withUserId: Boolean,
     val fields: List<Value<out ResolvedData>>
 ) : ResolvedData {
+
+    constructor(
+        id: String? = null,
+        fields: List<Value<out ResolvedData>>
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null,
+        fields
+    )
 
     operator fun get(index: Int): Value<*> = fields[index]
 
     val size get() = fields.size
 
     override fun asField(): Field<ArrayData> = ArrayField(
-        id = id,
+        id = id.takeIf { withUserId } ?: newId(),
+        withUserId = withUserId,
         fields = fields.map { it.currentQuiet<ResolvedData> { empty -> empty }.asField() }
     )
 

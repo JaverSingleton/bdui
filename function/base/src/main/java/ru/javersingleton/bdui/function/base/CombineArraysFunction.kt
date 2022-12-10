@@ -16,8 +16,7 @@ object CombineArraysFunction : Function {
             rememberValue(id, params) {
                 val values: ArrayData? = params.prop("arrays").current()
                 ArrayData(
-                    id = "$id@result",
-                    values?.fields?.flatMap { resolvedField ->
+                    fields = values?.fields?.flatMap { resolvedField ->
                         when (val data: ResolvedData? = resolvedField.current()) {
                             null -> listOf()
                             is ArrayData -> data.fields

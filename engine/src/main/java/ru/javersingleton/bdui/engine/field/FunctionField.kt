@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field
 
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
 
 data class FunctionField(
     override val id: String,
@@ -31,7 +31,10 @@ data class FunctionField(
                 scope,
                 id,
                 params.value.current {
-                    StructureData(id = it.id)
+                    StructureData(
+                        id = it.id,
+                        withUserId = it.withUserId
+                    )
                 }
             ) ?: throw IllegalArgumentException("Function $functionType not found")
             @Suppress("UNCHECKED_CAST")

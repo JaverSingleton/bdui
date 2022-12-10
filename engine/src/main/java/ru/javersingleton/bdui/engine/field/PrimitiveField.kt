@@ -20,7 +20,8 @@ data class PrimitiveField(
     ): Field<PrimitiveData> = scope.run {
         val resultValue = rememberValue(id, value) {
             PrimitiveData(
-                id = id.takeIf { withUserId },
+                id = id,
+                withUserId = withUserId,
                 value
             )
         }
@@ -53,9 +54,19 @@ data class PrimitiveField(
 }
 
 data class PrimitiveData(
-    private val id: String? = null,
-    private val value: String
+    val id: String,
+    val withUserId: Boolean,
+    val value: String
 ) : ResolvedData {
+
+    constructor(
+        id: String? = null,
+        value: String
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null,
+        value
+    )
 
     fun asString(): String = value
 
@@ -67,8 +78,8 @@ data class PrimitiveData(
     fun asFloat(): Float = value.toFloat()
 
     override fun asField(): Field<PrimitiveData> = PrimitiveField(
-        id = id ?: newId(),
-        withUserId = id != null,
+        id = id.takeIf { withUserId } ?: newId(),
+        withUserId = withUserId,
         value
     )
 
