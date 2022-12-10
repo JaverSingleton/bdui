@@ -1,7 +1,7 @@
 {
   "components": {},
   "state": {
-    "id": "root",
+    "id": "rootShort1",
     "componentType": "LazyColumn",
     "children": [
       {
@@ -36,7 +36,7 @@
         "onClick": {
           "interactionType": "StatePatch",
           "patch": {
-            "id": "root",
+            "id": "rootShort1",
             "children": {
               "functionType": "CombineArrays",
               "arrays": [
