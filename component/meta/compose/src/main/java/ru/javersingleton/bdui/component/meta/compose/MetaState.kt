@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.component.meta.compose
 
 import ru.javersingleton.bdui.engine.ComponentStateFactory
-import ru.javersingleton.bdui.engine.MutableReferences
+import ru.javersingleton.bdui.engine.MutableArgumentsStorage
 import ru.javersingleton.bdui.engine.field.ResolvedField
 import ru.javersingleton.bdui.engine.field.entity.ComponentData
 import ru.javersingleton.bdui.engine.field.entity.StructureData
@@ -25,7 +25,7 @@ object MetaStateFactory : ComponentStateFactory<MetaState>() {
         val args = rememberValue(
             "${args!!.id}@references",
             componentType
-        ) { MutableReferences() }.current!!
+        ) { MutableArgumentsStorage() }.current!!
         val paramsField = currentParams.resolve(this, args) as ResolvedField<StructureData>
         val paramsData =
             (paramsField.value.current?.unbox() ?: mapOf()) + paramsField.dataWithUserId

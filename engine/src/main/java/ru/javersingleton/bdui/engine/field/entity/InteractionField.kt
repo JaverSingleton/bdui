@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field.entity
 
+import ru.javersingleton.bdui.engine.ArgumentsStorage
 import ru.javersingleton.bdui.engine.BeduinContext
-import ru.javersingleton.bdui.engine.References
 import ru.javersingleton.bdui.engine.core.*
 import ru.javersingleton.bdui.engine.field.Field
 import ru.javersingleton.bdui.engine.field.ResolvedData
@@ -24,7 +24,7 @@ data class InteractionField(
 
     override fun resolve(
         scope: Lambda.Scope,
-        args: References
+        args: ArgumentsStorage
     ): Field<InteractionData> = scope.run {
         val interactionFactory = inflateInteractionFactory(interactionType)
 
@@ -36,7 +36,7 @@ data class InteractionField(
                 raw = this@InteractionField
             ) { externalArgs ->
                 InteractionScope(this).run {
-                    val callbackArgs = ReferencesWrapper(args, externalArgs)
+                    val callbackArgs = ArgumentsStorageWrapper(args, externalArgs)
                     val resolvedParamsField = (params.resolve(this, callbackArgs) as ResolvedField)
                     val resolvedParams = resolvedParamsField.value.current { StructureData(it.id) }
                     interactionFactory.create(resolvedParams.unbox())
@@ -83,14 +83,14 @@ class InteractionScope(context: BeduinContext) : Lambda.Scope, BeduinContext by 
 
 }
 
-class ReferencesWrapper(
-    private val parent: References,
-    private val newRefs: Map<String, Value<*>>
-) : References {
+class ArgumentsStorageWrapper(
+    private val parent: ArgumentsStorage,
+    private val newArgs: Map<String, Value<*>>
+) : ArgumentsStorage {
 
     override fun get(refName: String): Value<Value<*>> =
         when {
-            newRefs.containsKey(refName) -> ConstValue(newRefs[refName]!!)
+            newArgs.containsKey(refName) -> ConstValue(newArgs[refName]!!)
             else -> parent[refName]
         }
 

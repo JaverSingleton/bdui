@@ -34,7 +34,7 @@ class BeduinController(
                 val args = rememberValue(
                     "controller@references",
                     value.componentType
-                ) { MutableReferences() }.current!!
+                ) { MutableArgumentsStorage() }.current!!
                 val paramsField = value.params.resolve(this, args) as ResolvedField<StructureData>
                 val paramsData =
                     (paramsField.value.current?.unbox() ?: mapOf()) + paramsField.dataWithUserId

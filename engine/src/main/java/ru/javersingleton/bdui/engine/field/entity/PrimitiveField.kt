@@ -1,6 +1,6 @@
 package ru.javersingleton.bdui.engine.field.entity
 
-import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.ArgumentsStorage
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.field.Field
 import ru.javersingleton.bdui.engine.field.ResolvedData
@@ -20,7 +20,7 @@ data class PrimitiveField(
 
     override fun resolve(
         scope: Lambda.Scope,
-        args: References
+        args: ArgumentsStorage
     ): Field<PrimitiveData> = scope.run {
         val resultValue = rememberValue(id, value) {
             PrimitiveData(
