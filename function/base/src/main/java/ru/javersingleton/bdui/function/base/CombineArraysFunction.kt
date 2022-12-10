@@ -2,9 +2,9 @@ package ru.javersingleton.bdui.function.base
 
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.field.ArrayData
 import ru.javersingleton.bdui.engine.field.ResolvedData
-import ru.javersingleton.bdui.engine.field.StructureData
+import ru.javersingleton.bdui.engine.field.entity.ArrayData
+import ru.javersingleton.bdui.engine.field.entity.StructureData
 import ru.javersingleton.bdui.engine.function.Function
 
 object CombineArraysFunction : Function {

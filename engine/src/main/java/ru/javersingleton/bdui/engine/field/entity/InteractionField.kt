@@ -1,8 +1,12 @@
-package ru.javersingleton.bdui.engine.field
+package ru.javersingleton.bdui.engine.field.entity
 
 import ru.javersingleton.bdui.engine.BeduinContext
 import ru.javersingleton.bdui.engine.References
 import ru.javersingleton.bdui.engine.core.*
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.ResolvedData
+import ru.javersingleton.bdui.engine.field.ResolvedField
+import ru.javersingleton.bdui.engine.field.newId
 import ru.javersingleton.bdui.engine.interaction.Interaction
 
 data class InteractionField(

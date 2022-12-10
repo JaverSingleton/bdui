@@ -1,7 +1,11 @@
-package ru.javersingleton.bdui.engine.field
+package ru.javersingleton.bdui.engine.field.entity
 
 import ru.javersingleton.bdui.engine.References
 import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.ResolvedData
+import ru.javersingleton.bdui.engine.field.ResolvedField
+import ru.javersingleton.bdui.engine.field.newId
 
 data class FunctionField(
     override val id: String,
@@ -38,16 +42,16 @@ data class FunctionField(
                 }
             ) ?: throw IllegalArgumentException("Function $functionType not found")
             @Suppress("UNCHECKED_CAST")
-            ResolvedField(
-                id = id,
-                withUserId = withUserId,
-                value = resultValue,
-                dataWithUserId = if (withUserId) {
-                    mapOf(id to resultValue)
-                } else {
-                    mapOf()
-                }
-            )
+            (ResolvedField(
+        id = id,
+        withUserId = withUserId,
+        value = resultValue,
+        dataWithUserId = if (withUserId) {
+            mapOf(id to resultValue)
+        } else {
+            mapOf()
+        }
+    ))
         }
 
     @Suppress("UNCHECKED_CAST")

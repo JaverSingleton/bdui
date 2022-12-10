@@ -5,7 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import ru.javersingleton.bdui.engine.core.ReadableValue
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.field.ComponentData
+import ru.javersingleton.bdui.engine.field.entity.ComponentData
 
 @Composable
 fun InnerComponent(

@@ -1,9 +1,13 @@
-package ru.javersingleton.bdui.engine.field
+package ru.javersingleton.bdui.engine.field.entity
 
 import androidx.compose.runtime.Stable
 import ru.javersingleton.bdui.engine.References
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.ResolvedData
+import ru.javersingleton.bdui.engine.field.ResolvedField
+import ru.javersingleton.bdui.engine.field.newId
 
 data class ComponentField(
     override val id: String,

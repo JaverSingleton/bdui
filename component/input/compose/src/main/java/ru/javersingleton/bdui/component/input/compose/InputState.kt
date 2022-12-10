@@ -2,8 +2,8 @@ package ru.javersingleton.bdui.component.input.compose
 
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.core.ConstValue
-import ru.javersingleton.bdui.engine.field.PrimitiveData
-import ru.javersingleton.bdui.engine.field.StructureData
+import ru.javersingleton.bdui.engine.field.entity.PrimitiveData
+import ru.javersingleton.bdui.engine.field.entity.StructureData
 
 object InputStateFactory : ComponentStateFactory<InputState>() {
 

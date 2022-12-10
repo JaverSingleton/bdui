@@ -3,7 +3,7 @@ package ru.javersingleton.bdui.component.box.compose
 import ru.javersingleton.bdui.component.common.Padding
 import ru.javersingleton.bdui.component.common.Padding.Companion.create
 import ru.javersingleton.bdui.engine.ComponentStateFactory
-import ru.javersingleton.bdui.engine.field.ComponentData
+import ru.javersingleton.bdui.engine.field.entity.ComponentData
 
 data class BoxState(
     val children: List<Child>,

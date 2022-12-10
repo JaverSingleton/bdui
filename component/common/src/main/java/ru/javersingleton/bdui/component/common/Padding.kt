@@ -2,7 +2,7 @@ package ru.javersingleton.bdui.component.common
 
 import androidx.compose.runtime.Immutable
 import ru.javersingleton.bdui.engine.ComponentStateFactory
-import ru.javersingleton.bdui.engine.field.StructureData
+import ru.javersingleton.bdui.engine.field.entity.StructureData
 
 @Immutable
 data class Padding(

@@ -2,7 +2,7 @@ package ru.javersingleton.bdui.engine.core
 
 import android.util.Log
 import ru.javersingleton.bdui.engine.BeduinContext
-import ru.javersingleton.bdui.engine.field.EmptyData
+import ru.javersingleton.bdui.engine.field.entity.EmptyData
 
 class Lambda(
     private val id: String,

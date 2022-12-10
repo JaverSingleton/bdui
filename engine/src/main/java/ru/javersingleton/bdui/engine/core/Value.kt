@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.core
 
 import androidx.compose.runtime.Stable
-import ru.javersingleton.bdui.engine.field.EmptyData
+import ru.javersingleton.bdui.engine.field.entity.EmptyData
 
 @Stable
 interface Value<T : Any?> {

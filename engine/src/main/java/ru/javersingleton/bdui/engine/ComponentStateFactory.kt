@@ -4,6 +4,7 @@ import android.util.Log
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.field.*
+import ru.javersingleton.bdui.engine.field.entity.*
 import ru.javersingleton.bdui.engine.register.ByTypeStrategy
 
 abstract class ComponentStateFactory<T : Any?> : ByTypeStrategy.Element<String> {

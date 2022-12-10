@@ -1,6 +1,6 @@
 package ru.javersingleton.bdui.handler.flow
 
-import ru.javersingleton.bdui.engine.field.ComponentField
+import ru.javersingleton.bdui.engine.field.entity.ComponentField
 import ru.javersingleton.bdui.engine.interaction.Interaction
 
 interface EffectHandler : InteractionHandler {
