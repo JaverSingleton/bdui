@@ -1,13 +1,10 @@
 package ru.javersingleton.bdui.engine.field.entity
 
-import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.ArgumentsStorage
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
-import ru.javersingleton.bdui.engine.field.Field
-import ru.javersingleton.bdui.engine.field.ResolvedData
-import ru.javersingleton.bdui.engine.field.ResolvedField
-import ru.javersingleton.bdui.engine.field.newId
+import ru.javersingleton.bdui.engine.field.*
 
 
 data class StructureField(
@@ -21,7 +18,7 @@ data class StructureField(
         fields: Map<String, Field<*>>
     ) : this(id = id ?: newId(), withUserId = id != null, fields)
 
-    override fun resolve(scope: Lambda.Scope, args: References): Field<StructureData> =
+    override fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<StructureData> =
         scope.run {
             val targetFields = fields.map { (name, field) -> name to field.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {
@@ -100,7 +97,7 @@ data class StructureData(
     val id: String,
     private val withUserId: Boolean,
     internal val fields: Map<String, Value<out ResolvedData>> = mapOf()
-) : ResolvedData {
+) : ResolvedData, PropertiesHolder {
 
     constructor(
         id: String? = null,
@@ -111,15 +108,15 @@ data class StructureData(
         fields,
     )
 
-    fun prop(name: String): Value<*> = fields[name] ?: Value.NULL
+    override fun prop(name: String): Value<*> = fields[name] ?: Value.NULL
 
-    fun hasProp(name: String): Boolean = fields.containsKey(name)
+    override fun hasProp(name: String): Boolean = fields.containsKey(name)
 
-    fun forEach(func: (key: String) -> Unit) {
+    override fun forEach(func: (key: String) -> Unit) {
         fields.forEach { (key, _) -> func(key) }
     }
 
-    fun unbox(): Map<String, Value<*>> = fields
+    override fun unbox(): Map<String, Value<*>> = fields
 
     override fun asField(): Field<StructureData> = StructureField(
         id = id.takeIf { withUserId } ?: newId(),

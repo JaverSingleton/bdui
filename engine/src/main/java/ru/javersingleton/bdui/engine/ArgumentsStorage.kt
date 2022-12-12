@@ -1,11 +1,9 @@
 package ru.javersingleton.bdui.engine
 
-import android.util.Log
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.core.currentQuiet
 
-class MutableReferences : References {
+class MutableArgumentsStorage : ArgumentsStorage {
 
     private var values: Map<String, Value<Value<*>>> = mapOf()
 
@@ -23,15 +21,11 @@ class MutableReferences : References {
         }
 
         values = targetValues
-
-//        refs.forEach { (key, value) ->
-//            Log.d("Beduin", "Reference: id=$key, value=${value.currentQuiet}")
-//        }
     }
 
 }
 
-interface References {
+interface ArgumentsStorage {
 
     operator fun get(refName: String): Value<Value<*>>
 

@@ -1,6 +1,6 @@
 package ru.javersingleton.bdui.engine.field.entity
 
-import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.ArgumentsStorage
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
@@ -24,7 +24,7 @@ data class ArrayField(
         fields
     )
 
-    override fun resolve(scope: Lambda.Scope, args: References): Field<ArrayData> =
+    override fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<ArrayData> =
         scope.run {
             val targetFields = fields.map { field -> field.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {
