@@ -1,0 +1,15 @@
+{
+  "components": {},
+  "state": {
+    "id": "rootShort2",
+    "componentType": "Button",
+    "text": "Text1",
+    "onClick": {
+      "interactionType": "StatePatch",
+      "patch": {
+        "id": "rootShort2",
+        "text": "Clicked Text1"
+      }
+    }
+  }
+}

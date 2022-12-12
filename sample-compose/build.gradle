@@ -1,0 +1,59 @@
+plugins {
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.kapt
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "ru.javersingleton.bdui"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        buildConfig = true
+        compose = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
+    }
+}
+
+dependencies {
+    implementation project(path: ':engine')
+    implementation project(path: ':parser')
+    implementation project(path: ':render:compose')
+    implementation project(path: ':function:base')
+    implementation project(path: ':interaction:base:flow')
+
+    implementation project(path: ':component:base:compose')
+
+    implementation libs.coroutines
+
+    implementation libs.appCompat
+    implementation libs.material
+
+    implementation libs.bundles.compose
+    implementation libs.activity.compose
+}

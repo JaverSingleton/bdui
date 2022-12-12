@@ -1,0 +1,340 @@
+{
+  "components": {
+    "ContactItem": {
+      "state": {
+        "avatar": "",
+        "name": "",
+        "lastSeen": "",
+        "online": false,
+        "targetLastSeen": {
+          "functionType": "Condition",
+          "value": "{{online}}",
+          "trueResult": "Online",
+          "falseResult": "{{lastSeen}}"
+        },
+        "onClick": null
+      },
+      "rootComponent": {
+        "componentType": "Box",
+        "onClick": "{{onClick}}",
+        "children": [
+          {
+            "componentType": "Row",
+            "layout_width": "fillMax",
+            "layout_padding": {
+              "start": 16,
+              "end": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "children": [
+              {
+                "componentType": "Box",
+                "layout_width": 72,
+                "layout_height": 72,
+                "children": [
+                  {
+                    "componentType": "Image",
+                    "src": "{{avatar}}",
+                    "contentScale": "Crop",
+                    "clip": "Circle",
+                    "layout_width": "fillMax",
+                    "layout_height": "fillMax"
+                  },
+                  {
+                    "functionType": "Condition",
+                    "value": "{{online}}",
+                    "trueResult": {
+                      "componentType": "Image",
+                      "src": "https://zibuhoker.ru/ifm/indicator.png",
+                      "layout_alignment": "BottomEnd",
+                      "contentScale": "Inside",
+                      "clip": "Circle",
+                      "layout_width": 24,
+                      "layout_height": 24,
+                      "layout_padding": {
+                        "end": 2,
+                        "bottom": 2
+                      }
+                    },
+                    "falseResult": null
+                  }
+                ]
+              },
+              {
+                "componentType": "Column",
+                "layout_width": "fillMax",
+                "children": [
+                  {
+                    "componentType": "Text",
+                    "text": "{{name}}",
+                    "textSize": 16,
+                    "layout_width": "fillMax",
+                    "layout_padding": {
+                      "top": 8,
+                      "start": 8
+                    }
+                  },
+                  {
+                    "componentType": "Text",
+                    "text": "{{targetLastSeen}}",
+                    "textSize": 12,
+                    "layout_width": "fillMax",
+                    "layout_padding": {
+                      "top": 8,
+                      "start": 8,
+                      "bottom": 8
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "ContactScreen": {
+      "state": {
+        "title": "",
+        "header": {
+          "functionType": "Condition",
+          "value": {
+            "functionType": "CheckNull",
+            "value": "{{title}}"
+          },
+          "trueResult": null,
+          "falseResult": {
+            "componentType": "Toolbar",
+            "title": "{{title}}"
+          }
+        },
+        "contacts": [],
+        "footer": {
+          "componentType": "Button",
+          "text": "Submit",
+          "layout_alignment": "BottomCenter"
+        }
+      },
+      "rootComponent": {
+        "componentType": "Column",
+        "children": [
+          {
+            "componentType": "Column",
+            "children": {
+              "functionType": "CombineArrays",
+              "arrays": [
+                "{{header}}",
+                "{{contacts}}",
+                {
+                  "functionType": "Condition",
+                  "value": {
+                    "functionType": "CheckNull",
+                    "value": "{{footer}}"
+                  },
+                  "trueResult": null,
+                  "falseResult": {
+                    "componentType": "Box",
+                    "layout_height": "fillMax",
+                    "layout_padding": {
+                      "start": 10,
+                      "end": 10,
+                      "top": 4,
+                      "bottom": 4
+                    },
+                    "children": [
+                      "{{footer}}"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "OfflineSwitcher": {
+      "state": {
+        "offlineMode": false,
+        "onOfflineModeChange": null
+      },
+      "rootComponent": {
+        "componentType": "Box",
+        "children": [
+          {
+            "componentType": "Row",
+            "layout_width": "wrapContent",
+            "layout_padding": {
+              "start": 16,
+              "end": 16,
+              "top": 8,
+              "bottom": 8
+            },
+            "children": [
+              {
+                "componentType": "Text",
+                "text": "Offline mode",
+                "textAlign": "Center",
+                "layout_width": "wrapContent",
+                "layout_padding": {
+                  "start": 16,
+                  "end": 16,
+                  "top": 12,
+                  "bottom": 12
+                }
+              },
+              {
+                "componentType": "Switch",
+                "checked": "{{offlineMode}}",
+                "layout_width": "wrapContent",
+                "onCheckedChange": "{{onOfflineModeChange}}"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "_ContactItem": {
+      "state": {
+        "avatar": "",
+        "name": "",
+        "lastSeen": "",
+        "offlineMode": false,
+        "online": false,
+        "onClick": null
+      },
+      "rootComponent": {
+        "componentType": "ContactItem",
+        "avatar": "{{avatar}}",
+        "name": "{{name}}",
+        "lastSeen": "{{lastSeen}}",
+        "onClick": "{{onClick}}",
+        "online": {
+          "functionType": "Condition",
+          "value": "{{offlineMode}}",
+          "trueResult": false,
+          "falseResult": "{{online}}"
+        }
+      }
+    }
+  },
+  "state": {
+    "id": "rootSample1",
+    "componentType": "ContactScreen",
+    "offlineMode": false,
+    "title": "Contacts",
+    "inputValue": "",
+    "footer": {
+      "componentType": "Column",
+      "children": [
+        {
+          "componentType": "Input",
+          "text": "{{inputValue}}",
+          "onTextChanged": {
+            "interactionType": "StatePatch",
+            "patch": {
+              "id": "rootSample1",
+              "inputValue": {
+                "functionType": "MaxLength",
+                "value": "{{args.text}}",
+                "length": 5
+              }
+            }
+          }
+        },
+        {
+          "componentType": "Button",
+          "id": "button",
+          "text": "Click Me",
+          "onClick": {
+            "interactionType": "StatePatch",
+            "patch": {
+              "id": "button",
+              "text": "{{inputValue}}"
+            }
+          }
+        },
+        {
+          "componentType": "OfflineSwitcher",
+          "offlineMode": "{{offlineMode}}",
+          "onOfflineModeChange": {
+            "interactionType": "StatePatch",
+            "patch": {
+              "id": "rootSample1",
+              "offlineMode": "{{args.checked}}"
+            }
+          }
+        }
+      ]
+    },
+    "contacts": [
+      {
+        "componentType": "Button",
+        "text": "Next JSON",
+        "onClick": {
+          "interactionType": "ValueCallback",
+          "value": "sample2.json"
+        }
+      },
+      {
+        "componentType": "_ContactItem",
+        "avatar": "https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg",
+        "name": "Happy Cat",
+        "lastSeen": "21.11.2022",
+        "online": true,
+        "offlineMode": "{{offlineMode}}",
+        "id": "contact1",
+        "onClick": {
+          "interactionType": "StatePatch",
+          "patch": {
+            "id": "contact1",
+            "name": "{{inputValue}}",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact1.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "_ContactItem",
+        "id": "contact2",
+        "avatar": "https://zibuhoker.ru/ifm/broken-20.jpeg",
+        "name": "Broken Cat",
+        "lastSeen": "20.11.2022",
+        "online": false,
+        "offlineMode": "{{offlineMode}}",
+        "onClick": {
+          "interactionType": "StatePatch",
+          "patch": {
+            "id": "contact2",
+            "name": "{{inputValue}}",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact2.online}}"
+            }
+          }
+        }
+      },
+      {
+        "componentType": "_ContactItem",
+        "id": "contact3",
+        "avatar": "https://zibuhoker.ru/ifm/nyan-cat.jpg",
+        "name": "Nyan Cat",
+        "lastSeen": "23.11.2022",
+        "online": false,
+        "offlineMode": "{{offlineMode}}",
+        "onClick": {
+          "interactionType": "StatePatch",
+          "patch": {
+            "id": "contact3",
+            "name": "{{inputValue}}",
+            "online": {
+              "functionType": "Not",
+              "value": "{{contact3.online}}"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

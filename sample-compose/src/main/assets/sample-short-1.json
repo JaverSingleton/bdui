@@ -1,0 +1,54 @@
+{
+  "components": {},
+  "state": {
+    "id": "rootShort1",
+    "componentType": "LazyColumn",
+    "children": [
+      {
+        "id": "button",
+        "componentType": "Button",
+        "text": "Next JSON",
+        "onClick": {
+          "interactionType": "ValueCallback",
+          "value": "sample-short-2.json"
+        }
+      },
+      {
+        "id": "input",
+        "componentType": "Input",
+        "onTextChanged": {
+          "interactionType": "StatePatch",
+          "patch": {
+            "id": "input",
+            "text": "{{args.text}}"
+          }
+        },
+        "text": {
+          "fieldType": "Primitive",
+          "id": "inputValue",
+          "value": ""
+        }
+      },
+      {
+        "id": "addButton",
+        "componentType": "Button",
+        "text": "Add Button",
+        "onClick": {
+          "interactionType": "StatePatch",
+          "patch": {
+            "id": "rootShort1",
+            "children": {
+              "functionType": "CombineArrays",
+              "arrays": [
+                {
+                  "componentType": "Button",
+                  "text": "New button"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}
