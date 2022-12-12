@@ -1,9 +1,13 @@
-package ru.javersingleton.bdui.engine.field
+package ru.javersingleton.bdui.engine.field.entity
 
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.ResolvedData
+import ru.javersingleton.bdui.engine.field.ResolvedField
+import ru.javersingleton.bdui.engine.field.newId
 
 
 data class ReferenceField(
@@ -21,7 +25,7 @@ data class ReferenceField(
     override fun resolve(scope: Lambda.Scope, args: References): Field<ResolvedData> = scope.run {
         val resultValue: Value<ResolvedData> = rememberValue(id, setOf(args, refFieldName)) {
             val refPath = refFieldName.split(".")
-            var result: Value<*>? = args[refPath[0]].currentQuiet
+            var result: Value<*>? = args[refPath[0]].current
             for (i in (1 until refPath.size)) {
                 val refNode = refPath[i]
                 // TODO Вынести в абстракцию

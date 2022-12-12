@@ -1,9 +1,13 @@
-package ru.javersingleton.bdui.engine.field
+package ru.javersingleton.bdui.engine.field.entity
 
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.ResolvedData
+import ru.javersingleton.bdui.engine.field.ResolvedField
+import ru.javersingleton.bdui.engine.field.newId
 
 
 data class StructureField(
@@ -33,7 +37,8 @@ data class StructureField(
             }
             val resultValue = rememberValue(id, targetFields) {
                 StructureData(
-                    id = id,
+                    id,
+                    withUserId,
                     targetFields.associate { (key, value) -> key to (value as ResolvedField).value }
                 )
             }
@@ -92,9 +97,19 @@ data class StructureField(
 }
 
 data class StructureData(
-    val id: String = newId(),
+    val id: String,
+    private val withUserId: Boolean,
     internal val fields: Map<String, Value<out ResolvedData>> = mapOf()
 ) : ResolvedData {
+
+    constructor(
+        id: String? = null,
+        fields: Map<String, Value<out ResolvedData>> = mapOf()
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null,
+        fields,
+    )
 
     fun prop(name: String): Value<*> = fields[name] ?: Value.NULL
 
@@ -107,7 +122,8 @@ data class StructureData(
     fun unbox(): Map<String, Value<*>> = fields
 
     override fun asField(): Field<StructureData> = StructureField(
-        id = id,
+        id = id.takeIf { withUserId } ?: newId(),
+        withUserId = withUserId,
         fields = fields.mapValues { (_, value) ->
             value.currentQuiet<ResolvedData> { it }.asField()
         }

@@ -2,9 +2,9 @@ package ru.javersingleton.bdui.function.base
 
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.field.PrimitiveData
 import ru.javersingleton.bdui.engine.field.ResolvedData
-import ru.javersingleton.bdui.engine.field.StructureData
+import ru.javersingleton.bdui.engine.field.entity.PrimitiveData
+import ru.javersingleton.bdui.engine.field.entity.StructureData
 import ru.javersingleton.bdui.engine.function.Function
 
 object CheckNullFunction: Function {
@@ -15,8 +15,7 @@ object CheckNullFunction: Function {
         rememberValue(id, params) {
             val value = params.prop("value").current
             PrimitiveData(
-                id = "$id@result",
-                (value == null).toString()
+                value = (value == null).toString()
             )
         }
     }

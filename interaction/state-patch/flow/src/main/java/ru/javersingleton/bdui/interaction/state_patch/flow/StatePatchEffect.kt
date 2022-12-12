@@ -2,9 +2,9 @@ package ru.javersingleton.bdui.interaction.base.effect
 
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
-import ru.javersingleton.bdui.engine.field.EmptyField
 import ru.javersingleton.bdui.engine.field.Field
 import ru.javersingleton.bdui.engine.field.ResolvedData
+import ru.javersingleton.bdui.engine.field.entity.EmptyField
 import ru.javersingleton.bdui.engine.interaction.Interaction
 
 data class StatePatchEffect(

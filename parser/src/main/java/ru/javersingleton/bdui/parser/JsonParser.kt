@@ -2,9 +2,10 @@ package ru.javersingleton.bdui.parser
 
 import org.json.JSONArray
 import org.json.JSONObject
-import ru.javersingleton.bdui.engine.meta.MetaComponentsStorage
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.entity.*
 import ru.javersingleton.bdui.engine.meta.MetaComponentBlueprint
-import ru.javersingleton.bdui.engine.field.*
+import ru.javersingleton.bdui.engine.meta.MetaComponentsStorage
 import java.io.Reader
 
 class JsonParser(
@@ -71,10 +72,16 @@ class JsonParser(
             ?: parseInteraction(obj)
             ?: parseFunction(obj)
             ?: parseStructure(obj)
+            ?: parseReference(obj)
+            ?: parsePrimitive(obj)
             ?: parseEmpty(obj)
     }
 
     private fun parseComponent(obj: JSONObject): ComponentField? {
+        val fieldType = obj.opt(FIELD_TYPE)
+        if (fieldType != null && fieldType != FieldType.COMPONENT) {
+            return null
+        }
         obj.opt(COMPONENT_TYPE) ?: return null
         var type = ""
         var id: String? = null
@@ -94,6 +101,10 @@ class JsonParser(
     }
 
     private fun parseFunction(obj: JSONObject): FunctionField? {
+        val fieldType = obj.opt(FIELD_TYPE)
+        if (fieldType != null && fieldType != FieldType.FUNCTION) {
+            return null
+        }
         obj.opt(FUNCTION_TYPE) ?: return null
         var type = ""
         var id: String? = null
@@ -113,6 +124,10 @@ class JsonParser(
     }
 
     private fun parseInteraction(obj: JSONObject): InteractionField? {
+        val fieldType = obj.opt(FIELD_TYPE)
+        if (fieldType != null && fieldType != FieldType.INTERACTION) {
+            return null
+        }
         obj.opt(INTERACTION_TYPE) ?: return null
         var type = ""
         var id: String? = null
@@ -134,6 +149,10 @@ class JsonParser(
     }
 
     private fun parseStructure(obj: JSONObject): StructureField? {
+        val fieldType = obj.opt(FIELD_TYPE)
+        if (fieldType != null && fieldType != FieldType.STRUCTURE) {
+            return null
+        }
         if (obj.length() == 0 || (obj.length() == 1 && obj.has(ID))) {
             return null
         }
@@ -151,6 +170,50 @@ class JsonParser(
         )
     }
 
+    private fun parseReference(obj: JSONObject): ReferenceField? {
+        val fieldType = obj.opt(FIELD_TYPE)
+        if (fieldType != null && fieldType != FieldType.REFERENCE) {
+            return null
+        }
+        if (obj.length() == 0 || (obj.length() == 1 && obj.has(ID))) {
+            return null
+        }
+        var id: String? = null
+        var refFieldName: String? = null
+        obj.keys().forEach { key ->
+            when (key) {
+                ID -> id = obj.getString(key)
+                "refFieldName" -> refFieldName = obj.getString(key)
+            }
+        }
+        return ReferenceField(
+            id = id,
+            refFieldName = refFieldName!!
+        )
+    }
+
+    private fun parsePrimitive(obj: JSONObject): PrimitiveField? {
+        val fieldType = obj.opt(FIELD_TYPE)
+        if (fieldType != null && fieldType != FieldType.PRIMITIVE) {
+            return null
+        }
+        if (obj.length() == 0 || (obj.length() == 1 && obj.has(ID))) {
+            return null
+        }
+        var id: String? = null
+        var value: String? = null
+        obj.keys().forEach { key ->
+            when (key) {
+                ID -> id = obj.getString(key)
+                "value" -> value = obj.getString(key)
+            }
+        }
+        return PrimitiveField(
+            id = id,
+            value = value!!
+        )
+    }
+
     private fun parseEmpty(obj: JSONObject? = null): EmptyField {
         val id: String? = obj?.optString(ID)
         return EmptyField(id)
@@ -158,6 +221,19 @@ class JsonParser(
 
     private fun JSONObject.getNullable(key: String): Any? = if (isNull(key)) null else get(key)
 
+}
+
+private const val FIELD_TYPE = "fieldType"
+enum class FieldType(
+    val value: String
+) {
+    INTERACTION("Interaction"),
+    STRUCTURE("Structure"),
+    PRIMITIVE("Primitive"),
+    COMPONENT("Component"),
+    FUNCTION("Function"),
+    REFERENCE("Reference");
+    // TODO Добавить Array и Empty
 }
 
 private const val STATE = "state"

@@ -2,9 +2,9 @@ package ru.javersingleton.bdui.component.meta.compose
 
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.MutableReferences
-import ru.javersingleton.bdui.engine.field.ComponentData
 import ru.javersingleton.bdui.engine.field.ResolvedField
-import ru.javersingleton.bdui.engine.field.StructureData
+import ru.javersingleton.bdui.engine.field.entity.ComponentData
+import ru.javersingleton.bdui.engine.field.entity.StructureData
 
 data class MetaState(
     val childComponent: ComponentData

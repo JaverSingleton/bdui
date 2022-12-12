@@ -3,7 +3,11 @@ package ru.javersingleton.bdui.engine
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.LambdaValue
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.field.*
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.ResolvedField
+import ru.javersingleton.bdui.engine.field.entity.ComponentData
+import ru.javersingleton.bdui.engine.field.entity.ComponentField
+import ru.javersingleton.bdui.engine.field.entity.StructureData
 import ru.javersingleton.bdui.engine.interaction.Interaction
 
 class BeduinController(
@@ -13,7 +17,7 @@ class BeduinController(
 ) : BeduinContext by context {
 
     private var lastState: ComponentField? = null
-    private val lambda = Lambda(this)
+    private val lambda = Lambda("BeduinController", this)
 
     val root: Value<ComponentData> = LambdaValue(lambda)
 
@@ -25,10 +29,10 @@ class BeduinController(
             }
 
             lastState = value
-            lambda.setBody {
+            lambda.setBody (reason = "rootState changes") {
                 // TODO Избавится от Nullable
                 val args = rememberValue(
-                    "root@references",
+                    "controller@references",
                     value.componentType
                 ) { MutableReferences() }.current!!
                 val paramsField = value.params.resolve(this, args) as ResolvedField<StructureData>

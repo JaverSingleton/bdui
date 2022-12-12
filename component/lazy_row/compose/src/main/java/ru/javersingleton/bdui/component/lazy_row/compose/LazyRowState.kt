@@ -2,7 +2,7 @@ package ru.javersingleton.bdui.component.lazy_row.compose
 
 import ru.javersingleton.bdui.component.common.Padding
 import ru.javersingleton.bdui.engine.ComponentStateFactory
-import ru.javersingleton.bdui.engine.field.ComponentData
+import ru.javersingleton.bdui.engine.field.entity.ComponentData
 
 data class LazyRowState(
     val children: List<Child>,

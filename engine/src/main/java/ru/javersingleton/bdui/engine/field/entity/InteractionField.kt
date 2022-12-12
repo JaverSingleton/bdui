@@ -1,8 +1,12 @@
-package ru.javersingleton.bdui.engine.field
+package ru.javersingleton.bdui.engine.field.entity
 
 import ru.javersingleton.bdui.engine.BeduinContext
 import ru.javersingleton.bdui.engine.References
 import ru.javersingleton.bdui.engine.core.*
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.ResolvedData
+import ru.javersingleton.bdui.engine.field.ResolvedField
+import ru.javersingleton.bdui.engine.field.newId
 import ru.javersingleton.bdui.engine.interaction.Interaction
 
 data class InteractionField(
@@ -41,7 +45,7 @@ data class InteractionField(
         }
         ResolvedField(
             id = id,
-            withUserId,
+            withUserId = withUserId,
             value = resultValue,
             dataWithUserId = if (withUserId) {
                 mapOf(id to resultValue)
@@ -52,9 +56,9 @@ data class InteractionField(
     }
 
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<InteractionData> {
-        if (targetFieldId == id) {
-            TODO("Реализовать mergeDeeply для InteractionField")
-        }
+//        if (targetFieldId == id) {
+//            TODO("Реализовать mergeDeeply для InteractionField")
+//        }
         return this
     }
 

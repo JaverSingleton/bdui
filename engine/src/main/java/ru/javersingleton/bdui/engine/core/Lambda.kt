@@ -1,64 +1,85 @@
 package ru.javersingleton.bdui.engine.core
 
+import android.util.Log
 import ru.javersingleton.bdui.engine.BeduinContext
-import ru.javersingleton.bdui.engine.field.EmptyData
+import ru.javersingleton.bdui.engine.field.entity.EmptyData
 
 class Lambda(
+    private val id: String,
     private val context: BeduinContext,
     private var script: Scope.() -> Any? = { throw IllegalStateException() }
-) : ReadableValue<Any?> {
+) : ReadableValue<Any?>, ReadableValue.Invalidatable {
 
-    var tag: String = ""
+    override fun toString(): String {
+        return "Lambda@$id"
+    }
 
     fun setBody(
-        script: Scope.() -> Any? = this.script
+        reason: String,
+        script: Scope.() -> Any? = this.script,
     ) {
         if (this.script != script) {
             this.script = script
-            invalidate()
+            val postponer = InvalidationPostponer()
+            onInvalidated(
+                reason = reason,
+                postInvalidate = { childReason, child -> postponer.postInvalidate(childReason, child) }
+            )
+            postponer.invalidateAll()
         }
     }
 
-    private var isValueCalculated = false
     private var _value: Lazy<Any?> = emptyValue()
     override val currentValue: Any? get() = _value.value
+    private var isValueCalculated = false
 
-    private fun emptyValue(): Lazy<Any?> = lazy {
-        isValueCalculated = true
-        invoke()
-    }
+    private fun emptyValue(): Lazy<Any?> = lazy { invoke() }
 
     private var cache: Map<Any?, CachedState> = mapOf()
 
-    private var subscriptions: List<ReadableValue.Subscription> = listOf()
-    private val subscribers: MutableSet<(Value<*>) -> Unit> = mutableSetOf()
-    // TODO Возможно стоить поддержать reInvalidation если считанная ранее переменная изменилась
+    private var validityDependencies: Set<ReadableValue.ValidityBond> = setOf()
+    private val validityBondChildren: MutableSet<ReadableValue.Invalidatable> = mutableSetOf()
+    private val deferredValidityBondChildren: MutableSet<ReadableValue.Invalidatable> =
+        mutableSetOf()
 
-    private fun notifyValueChanged() {
-        subscribers.toList().forEach { callback ->
-            callback(this)
-        }
-    }
-
-    private fun invalidate() {
+    override fun onInvalidated(
+        reason: String,
+        postInvalidate: (String, ReadableValue.Invalidatable) -> Unit
+    ) {
         if (!isValueCalculated) {
+            Log.d("Beduin-Invalidating", "Lambda $id skipped invalidating called by $reason")
             return
         }
-
-        _value = emptyValue()
+        Log.d("Beduin-Invalidating", "Lambda $id invalidated by $reason")
         isValueCalculated = false
-        notifyValueChanged()
+        _value = emptyValue()
+
+        validityBondChildren.forEach {
+            it.onInvalidated(id, postInvalidate)
+        }
+        deferredValidityBondChildren.forEach {
+            postInvalidate(id, it)
+        }
     }
 
-    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
-        Subscription(callback)
+    override fun bindValidityWith(
+        child: ReadableValue.Invalidatable,
+        shouldDefer: Boolean
+    ): ReadableValue.ValidityBond =
+        if (shouldDefer) {
+            DeferredValidityBond(child)
+        } else {
+            ValidityBond(child)
+        }
 
     private fun invoke(): Any? {
         val call = Call()
         val result = call.script()
+        Log.d("Beduin-Invalidating", "Lambda $id calculated")
+        isValueCalculated = true
 
-        subscriptions.forEach { it.unsubscribe() }
-        subscriptions = call.targetDependencies.map { it.subscribe { invalidate() } }
+        validityDependencies.forEach { it.unbind() }
+        validityDependencies = call.targetDependencies.map { it.bindValidityWith(this) }.toSet()
         cache = call.targetCache
 
         return result
@@ -81,17 +102,15 @@ class Lambda(
             return if (cachedState != null && cachedState.input == key) {
                 cachedState.output
             } else {
-                val tag = "$callId@($key)"
                 val targetLambda = if (cachedState?.output is Lambda) {
-                        cachedState.output.apply {
-                            setBody(func)
-                        }
-                    } else {
-                        Lambda(context).apply {
-                            setBody(func)
-                        }
+                    cachedState.output.apply {
+                        setBody(reason = "changes (${cachedState.input} -> $key)", func)
                     }
-                targetLambda.tag = tag
+                } else {
+                    Lambda(id = callId, context).apply {
+                        setBody(reason = "creating", func)
+                    }
+                }
                 val newCachedState = CachedState(
                     key,
                     targetLambda
@@ -140,16 +159,30 @@ class Lambda(
         }
     }
 
-    inner class Subscription(
-        private val callback: (Value<*>) -> Unit
-    ) : ReadableValue.Subscription {
+    inner class ValidityBond(
+        private val bondChild: ReadableValue.Invalidatable
+    ) : ReadableValue.ValidityBond {
 
         init {
-            subscribers.add(callback)
+            validityBondChildren.add(bondChild)
         }
 
-        override fun unsubscribe() {
-            subscribers.remove(callback)
+        override fun unbind() {
+            validityBondChildren.remove(bondChild)
+        }
+
+    }
+
+    inner class DeferredValidityBond(
+        private val bondChild: ReadableValue.Invalidatable
+    ) : ReadableValue.ValidityBond {
+
+        init {
+            deferredValidityBondChildren.add(bondChild)
+        }
+
+        override fun unbind() {
+            deferredValidityBondChildren.remove(bondChild)
         }
 
     }
@@ -173,6 +206,23 @@ class Lambda(
 
         fun <T> Value<*>.current(default: (emptyData: EmptyData) -> T): T
 
+    }
+
+    class InvalidationPostponer {
+        private val posts: MutableMap<ReadableValue.Invalidatable, List<String>> =
+            mutableMapOf()
+
+        fun postInvalidate(reason: String, callback: ReadableValue.Invalidatable) {
+            posts[callback] = (posts[callback] ?: listOf()) + listOf(reason)
+        }
+
+        fun invalidateAll() {
+            posts.forEach { (callback, reason) ->
+                callback.onInvalidated(reason.joinToString(separator = " and ")) { _, _ ->
+                    throw IllegalArgumentException("Deferring invalidation is forbidden while second step is running")
+                }
+            }
+        }
     }
 
 }

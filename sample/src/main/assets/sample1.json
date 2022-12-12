@@ -218,7 +218,7 @@
     }
   },
   "state": {
-    "id": "root",
+    "id": "rootSample1",
     "componentType": "ContactScreen",
     "offlineMode": false,
     "title": "Contacts",
@@ -232,7 +232,7 @@
           "onTextChanged": {
             "interactionType": "StatePatch",
             "patch": {
-              "id": "root",
+              "id": "rootSample1",
               "inputValue": {
                 "functionType": "MaxLength",
                 "value": "{{args.text}}",
@@ -259,7 +259,7 @@
           "onOfflineModeChange": {
             "interactionType": "StatePatch",
             "patch": {
-              "id": "root",
+              "id": "rootSample1",
               "offlineMode": "{{args.checked}}"
             }
           }
@@ -267,6 +267,14 @@
       ]
     },
     "contacts": [
+      {
+        "componentType": "Button",
+        "text": "Next JSON",
+        "onClick": {
+          "interactionType": "ValueCallback",
+          "value": "sample2.json"
+        }
+      },
       {
         "componentType": "_ContactItem",
         "avatar": "https://www.meme-arsenal.com/memes/25bd41b4371cc7b1c206f98a1619b3cb.jpg",

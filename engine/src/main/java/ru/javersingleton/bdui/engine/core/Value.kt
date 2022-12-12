@@ -1,59 +1,54 @@
 package ru.javersingleton.bdui.engine.core
 
 import androidx.compose.runtime.Stable
-import ru.javersingleton.bdui.engine.field.EmptyData
+import ru.javersingleton.bdui.engine.field.entity.EmptyData
 
 @Stable
 interface Value<T : Any?> {
 
-    object NULL : ReadableValue<Any?> {
+    object NULL : ImmutableValue<Any?>() {
 
         override val currentValue: Any? = null
-
-        override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
-            object : ReadableValue.Subscription {
-
-                override fun unsubscribe() {
-                    // Do Nothing
-                }
-
-            }
 
     }
 
 }
 
-class ConstValue<T : Any?>(override val currentValue: T) : ReadableValue<T> {
+class ConstValue<T : Any?>(override val currentValue: T) : ImmutableValue<T>()
 
-    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
-        object : ReadableValue.Subscription {
+class CalculableValue<T : Any?>(
+    private val script: () -> T
+) : ImmutableValue<T>() {
 
-            override fun unsubscribe() {
-                // Do Nothing
-            }
-
-        }
-
+    override val currentValue: T
+        get() = script()
 }
 
 class LazyValue<T : Any?>(
     script: () -> T
-) : ReadableValue<T> {
+) : ImmutableValue<T>() {
 
     private val lazyValue: T by lazy { script() }
-
-    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
-        object : ReadableValue.Subscription {
-
-            override fun unsubscribe() {
-                // Do Nothing
-            }
-
-        }
 
     override val currentValue: T
         get() = lazyValue
 
+}
+
+abstract class ImmutableValue<T>: ReadableValue<T> {
+
+    override fun bindValidityWith(
+        child: ReadableValue.Invalidatable,
+        shouldDefer: Boolean
+    ): ReadableValue.ValidityBond =
+        object : ReadableValue.ValidityBond {
+
+            override fun unbind() {
+                // Do Nothing
+            }
+
+        }
+    
 }
 
 @Stable
@@ -61,11 +56,20 @@ interface ReadableValue<T> : Value<T> {
 
     val currentValue: T
 
-    fun subscribe(callback: (Value<*>) -> Unit): Subscription
+    fun bindValidityWith(child: Invalidatable, shouldDefer: Boolean = false): ValidityBond
 
-    interface Subscription {
+    interface ValidityBond {
 
-        fun unsubscribe()
+        fun unbind()
+
+    }
+
+    interface Invalidatable {
+
+        fun onInvalidated(
+            reason: String,
+            postInvalidate: (reason: String, Invalidatable) -> Unit
+        )
 
     }
 
@@ -77,9 +81,15 @@ data class LambdaValue<T : Any?>(private val lambda: Lambda) : ReadableValue<T> 
     override val currentValue: T
         get() = lambda.currentValue as T
 
-    override fun subscribe(callback: (Value<*>) -> Unit): ReadableValue.Subscription =
-        lambda.subscribe(callback)
+    override fun bindValidityWith(
+        child: ReadableValue.Invalidatable,
+        shouldDefer: Boolean
+    ): ReadableValue.ValidityBond =
+        lambda.bindValidityWith(child, shouldDefer)
 
+    override fun toString(): String {
+        return lambda.toString()
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

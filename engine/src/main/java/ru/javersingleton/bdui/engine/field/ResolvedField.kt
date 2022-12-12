@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field
 
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 
 data class ResolvedField<T: ResolvedData>(
@@ -24,4 +24,7 @@ data class ResolvedField<T: ResolvedData>(
 
     override fun copyWithId(id: String): Field<T> = copy(id = id)
 
+    override fun toString(): String {
+        return "ResolvedField(id=$id, value=$value)"
+    }
 }

@@ -2,9 +2,9 @@ package ru.javersingleton.bdui.function.base
 
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.field.PrimitiveData
 import ru.javersingleton.bdui.engine.field.ResolvedData
-import ru.javersingleton.bdui.engine.field.StructureData
+import ru.javersingleton.bdui.engine.field.entity.PrimitiveData
+import ru.javersingleton.bdui.engine.field.entity.StructureData
 import ru.javersingleton.bdui.engine.function.Function
 
 object CheckEqualsFunction: Function {
@@ -16,8 +16,7 @@ object CheckEqualsFunction: Function {
             val value1 = params.prop("value1").current
             val value2 = params.prop("value2").current
             PrimitiveData(
-                id = "$id@result",
-                (value1 == value2).toString()
+                value = (value1 == value2).toString()
             )
         }
     }

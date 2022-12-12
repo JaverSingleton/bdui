@@ -2,9 +2,9 @@ package ru.javersingleton.bdui.function.base
 
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.field.PrimitiveData
 import ru.javersingleton.bdui.engine.field.ResolvedData
-import ru.javersingleton.bdui.engine.field.StructureData
+import ru.javersingleton.bdui.engine.field.entity.PrimitiveData
+import ru.javersingleton.bdui.engine.field.entity.StructureData
 import ru.javersingleton.bdui.engine.function.Function
 
 object MaxLengthFunction: Function {
@@ -16,8 +16,7 @@ object MaxLengthFunction: Function {
             val value: PrimitiveData = params.prop("value").current { PrimitiveData(value = "") }
             val length: PrimitiveData = params.prop("length").current { PrimitiveData(value = "0") }
             PrimitiveData(
-                id = "$id@result",
-                value.asString().take(length.asInt())
+                value = value.asString().take(length.asInt())
             )
         }
     }

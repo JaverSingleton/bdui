@@ -20,6 +20,7 @@ import ru.javersingleton.bdui.handler.flow.ActionHandler
 import ru.javersingleton.bdui.handler.flow.EffectHandler
 import ru.javersingleton.bdui.handler.flow.InteractionHandlersRegister
 import ru.javersingleton.bdui.interaction.base.effect.withBase
+import ru.javersingleton.bdui.interaction.delay.flow.ValueCallbackEvent
 import ru.javersingleton.bdui.parser.JsonParser
 import ru.javersingleton.bdui.render.compose.Beduin
 import ru.javersingleton.bdui.render.compose.BeduinComposeContext
@@ -31,12 +32,13 @@ class MainActivity : AppCompatActivity() {
 
     private val metaComponents: MetaComponentsStorage = InMemoryComponentsStorage()
 
+    private val parser = JsonParser(metaComponents)
     private val interactionHandlers = InteractionHandlersRegister().withBase()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val reader = asset("sample2.json")
+        val reader = asset("sample-short-1.json")
         val parser = JsonParser(metaComponents)
 
         val context = BeduinComposeContext(
@@ -66,16 +68,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onInteraction(controller: BeduinController, interaction: Interaction) {
-        when (val handler = interactionHandlers[interaction]) {
-            is EffectHandler -> controller.state = handler.handle(controller.state, interaction)
-            is ActionHandler -> lifecycle.coroutineScope.launch {
-                handler
-                    .handle(controller.state, interaction)
-                    .collectLatest { nextInteraction ->
-                        onInteraction(controller, nextInteraction)
-                    }
+        when (interaction) {
+            is ValueCallbackEvent -> {
+                controller.state = parser.parse(asset(interaction.value.asString()))
             }
-
+            else -> {
+                when (val handler = interactionHandlers[interaction]) {
+                    is EffectHandler -> controller.state = handler.handle(controller.state, interaction)
+                    is ActionHandler -> lifecycle.coroutineScope.launch {
+                        handler
+                            .handle(controller.state, interaction)
+                            .collectLatest { nextInteraction ->
+                                onInteraction(controller, nextInteraction)
+                            }
+                    }
+                }
+            }
         }
     }
 

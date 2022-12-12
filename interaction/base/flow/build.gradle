@@ -13,4 +13,5 @@ dependencies {
     api project(path: ':handler:flow')
     api project(path: ':interaction:state-patch:flow')
     api project(path: ':interaction:delay:flow')
+    api project(path: ':interaction:value-callback:flow')
 }

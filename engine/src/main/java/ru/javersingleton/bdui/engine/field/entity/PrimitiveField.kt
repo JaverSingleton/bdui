@@ -1,12 +1,16 @@
-package ru.javersingleton.bdui.engine.field
+package ru.javersingleton.bdui.engine.field.entity
 
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.References
+import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.field.Field
+import ru.javersingleton.bdui.engine.field.ResolvedData
+import ru.javersingleton.bdui.engine.field.ResolvedField
+import ru.javersingleton.bdui.engine.field.newId
 
 data class PrimitiveField(
     override val id: String,
     override val withUserId: Boolean,
-    private val value: String,
+    val value: String,
 ) : Field<PrimitiveData> {
 
     constructor(
@@ -18,7 +22,13 @@ data class PrimitiveField(
         scope: Lambda.Scope,
         args: References
     ): Field<PrimitiveData> = scope.run {
-        val resultValue = rememberValue(id, value) { PrimitiveData(id = id, value) }
+        val resultValue = rememberValue(id, value) {
+            PrimitiveData(
+                id = id,
+                withUserId = withUserId,
+                value
+            )
+        }
         ResolvedField(
             id = id,
             withUserId = withUserId,
@@ -48,9 +58,19 @@ data class PrimitiveField(
 }
 
 data class PrimitiveData(
-    private val id: String = newId(),
-    private val value: String
+    val id: String,
+    val withUserId: Boolean,
+    val value: String
 ) : ResolvedData {
+
+    constructor(
+        id: String? = null,
+        value: String
+    ) : this(
+        id = id ?: newId(),
+        withUserId = id != null,
+        value
+    )
 
     fun asString(): String = value
 
@@ -58,8 +78,13 @@ data class PrimitiveData(
 
     fun asBoolean(): Boolean = value.toBoolean()
 
+    @Suppress("unused")
     fun asFloat(): Float = value.toFloat()
 
-    override fun asField(): Field<PrimitiveData> = PrimitiveField(id = id, value)
+    override fun asField(): Field<PrimitiveData> = PrimitiveField(
+        id = id.takeIf { withUserId } ?: newId(),
+        withUserId = withUserId,
+        value
+    )
 
 }

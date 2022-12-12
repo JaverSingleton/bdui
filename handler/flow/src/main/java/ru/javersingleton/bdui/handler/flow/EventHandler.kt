@@ -3,31 +3,31 @@ package ru.javersingleton.bdui.handler.flow
 import ru.javersingleton.bdui.engine.field.entity.ComponentField
 import ru.javersingleton.bdui.engine.interaction.Interaction
 
-interface EffectHandler : InteractionHandler {
+interface EventHandler : InteractionHandler {
 
     fun handle(
         currentState: ComponentField,
         interaction: Interaction
-    ): ComponentField
+    )
 
 }
 
-abstract class BaseEffectHandler<T : Interaction>(
+abstract class BaseEventHandler<T : Interaction>(
     override val stateFactory: Interaction.Factory
-) : EffectHandler {
+) : EventHandler {
 
     @Suppress("UNCHECKED_CAST")
     override fun handle(
         currentState: ComponentField,
         interaction: Interaction
-    ): ComponentField = handleEffect(
+    ) = handleEvent(
         currentState,
         interaction as T
     )
 
-    abstract fun handleEffect(
+    abstract fun handleEvent(
         currentState: ComponentField,
-        effect: T
-    ): ComponentField
+        event: T
+    )
 
 }
