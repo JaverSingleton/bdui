@@ -19,5 +19,5 @@ dependencies {
     implementation libs.bundles.compose
     api project(path: ':engine')
     api project(path: ':component:button:state')
-    implementation project(path: ':render:compose')
+    implementation project(path: ':render:android-view')
 }

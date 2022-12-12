@@ -16,6 +16,7 @@ rootProject.name = "bdui"
 include(
     ":engine",
     ":parser",
+    ":component:button:state",
     ":render:compose",
     ":component:button:compose",
     ":component:box:compose",
@@ -30,12 +31,16 @@ include(
     ":component:lazy-column:compose",
     ":component:meta:compose",
     ":component:base:compose",
+    ":component:base:android-view",
     ":component:common",
+    ":render:android-view",
+    ":component:button:android-view",
     ":function:base",
     ":handler:flow",
     ":interaction:base:flow",
     ":interaction:state-patch:flow",
     ":interaction:delay:flow",
     ":interaction:value-callback:flow",
-    ":sample"
+    ":sample-compose",
+    ":sample-android-view"
 )
