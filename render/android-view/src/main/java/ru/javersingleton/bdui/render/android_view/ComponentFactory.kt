@@ -7,6 +7,6 @@ abstract class ComponentFactory<T>(
     val stateFactory: ComponentStateFactory<T>
 ) : ByTypeStrategy.Element<String> {
 
-    abstract fun createComponent(): Component
+    abstract fun createComponent(context: BeduinViewContext): Component
 
 }

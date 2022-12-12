@@ -1,4 +1,4 @@
-package ru.javersingleton.bdui.component.column.compose
+package ru.javersingleton.bdui.component.column.state
 
 import ru.javersingleton.bdui.component.common.Padding
 import ru.javersingleton.bdui.engine.ComponentStateFactory

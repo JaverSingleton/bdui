@@ -6,12 +6,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.javersingleton.bdui.component.column.state.ColumnState
+import ru.javersingleton.bdui.component.column.state.ColumnStateFactory
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
 import ru.javersingleton.bdui.render.compose.InnerComponent
-import ru.javersingleton.bdui.render.compose.subscribeAsState
 
-object ColumnComponent: ComponentRender<ColumnState>(ColumnStateFactory) {
+object ColumnComponent : ComponentRender<ColumnState>(ColumnStateFactory) {
 
     override val type: String = "Column"
 
@@ -57,7 +58,7 @@ private fun ColumnScope.toModifier(params: ColumnState.Child.Params): Modifier {
     }
     if (params.padding != null) {
         result = result.padding(
-            params.padding.run {
+            params.padding!!.run {
                 PaddingValues(
                     start = start.dp,
                     end = end.dp,

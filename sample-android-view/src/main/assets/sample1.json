@@ -1,0 +1,39 @@
+{
+  "components": {
+    "TwoButtons": {
+      "state": {
+        "title1": "",
+        "title2": "{{title1}}",
+        "onClick1": null,
+        "onClick2": "{{onClick1}}"
+      },
+      "rootComponent": {
+        "componentType": "Column",
+        "children": [
+          {
+            "componentType": "Button",
+            "text": "{{title1}}",
+            "onClick": "{{onClick1}}"
+          },
+          {
+            "componentType": "Button",
+            "text": "{{title2}}",
+            "onClick": "{{onClick2}}"
+          }
+        ]
+      }
+    }
+  },
+  "state": {
+    "id": "root1",
+    "componentType": "TwoButtons",
+    "title1": "Button1",
+    "onClick1": {
+      "interactionType": "StatePatch",
+      "patch": {
+        "id": "root1",
+        "title2": "Clicked Button1"
+      }
+    }
+  }
+}

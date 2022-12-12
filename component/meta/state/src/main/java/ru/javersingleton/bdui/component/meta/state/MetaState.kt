@@ -1,4 +1,4 @@
-package ru.javersingleton.bdui.component.meta.compose
+package ru.javersingleton.bdui.component.meta.state
 
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.MutableArgumentsStorage

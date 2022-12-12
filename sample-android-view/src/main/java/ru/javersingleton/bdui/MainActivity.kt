@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val reader = asset("sample-short-2.json")
+        val reader = asset("sample1.json")
         val parser = JsonParser(metaComponents)
 
         val context = BeduinViewContext(

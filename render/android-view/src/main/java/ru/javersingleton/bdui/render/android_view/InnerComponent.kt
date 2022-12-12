@@ -11,7 +11,6 @@ class InnerComponent(
     private var componentFactory: ComponentFactory<*>? = null
     private var _component: Component? = null
     private val component: Component get() = _component!!
-    private val view get() = component.view
 
     fun createOrUpdateView(
         parent: ViewGroup,
@@ -19,17 +18,13 @@ class InnerComponent(
     ): View {
         val targetComponentFactory = context.inflateComponentFactory(state.componentType)
         if (componentFactory == targetComponentFactory) {
-            component.bindState(state.value)
-            return view
+            return component.createOrUpdateView(parent, state.value)
         }
 
         componentFactory = targetComponentFactory
-        _component = targetComponentFactory.createComponent().apply {
-            createView(parent)
-            bindState(state.value)
-        }
+        _component = targetComponentFactory.createComponent(context)
 
-        return view
+        return component.createOrUpdateView(parent, state.value)
     }
 
 }

@@ -7,11 +7,10 @@ import ru.javersingleton.bdui.engine.core.currentQuiet
 
 interface Component {
 
-    val view: View
-
-    fun createView(parent: ViewGroup)
-
-    fun bindState(state: Value<*>)
+    fun createOrUpdateView(
+        parent: ViewGroup,
+        state: Value<*>
+    ): View
 
 }
 
@@ -19,23 +18,25 @@ abstract class BaseComponent<T, V : View> : Component {
 
     abstract val type: String
 
-    private var _view: V? = null
     private var state: Value<T>? = null
     private var sub: Subscription? = null
 
-    override val view: V
-        get() = _view
-            ?: throw IllegalStateException("Call createView before render for $type component")
+    private var _view: V? = null
+    private val view: V
+        get() = _view!!
 
-    override fun createView(parent: ViewGroup) {
-        _view = onCreateView(parent)
-        this.state = null
-        sub?.unsubscribe()
-    }
+    override fun createOrUpdateView(
+        parent: ViewGroup,
+        state: Value<*>
+    ): View {
+        if (_view == null) {
+            _view = onCreateView(parent)
+            this.state = null
+            sub?.unsubscribe()
+        }
 
-    override fun bindState(state: Value<*>) {
         if (this.state == state) {
-            return
+            return view
         }
 
         @Suppress("UNCHECKED_CAST")
@@ -47,6 +48,7 @@ abstract class BaseComponent<T, V : View> : Component {
             onBindState(view, it)
         }
         onBindState(view, targetState.currentQuiet!!)
+        return view
     }
 
     abstract fun onCreateView(parent: ViewGroup): V
