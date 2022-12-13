@@ -15,4 +15,5 @@ dependencies {
     api project(path: ':component:column:android-view')
     api project(path: ':component:button:android-view')
     api project(path: ':component:meta:android-view')
+    api project(path: ':component:box:android-view')
 }

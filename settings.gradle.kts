@@ -48,3 +48,5 @@ include(
     ":sample-compose",
     ":sample-android-view"
 )
+include(":component:box:android-view")
+include(":component:box:state")

@@ -8,17 +8,22 @@
         "onClick2": "{{onClick1}}"
       },
       "rootComponent": {
-        "componentType": "Column",
+        "componentType": "Box",
         "children": [
           {
-            "componentType": "Button",
-            "text": "{{title1}}",
-            "onClick": "{{onClick1}}"
-          },
-          {
-            "componentType": "Button",
-            "text": "{{title2}}",
-            "onClick": "{{onClick2}}"
+            "componentType": "Column",
+            "children": [
+              {
+                "componentType": "Button",
+                "text": "{{title1}}",
+                "onClick": "{{onClick1}}"
+              },
+              {
+                "componentType": "Button",
+                "text": "{{title2}}",
+                "onClick": "{{onClick2}}"
+              }
+            ]
           }
         ]
       }

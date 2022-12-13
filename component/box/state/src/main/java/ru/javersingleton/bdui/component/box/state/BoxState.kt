@@ -1,4 +1,4 @@
-package ru.javersingleton.bdui.component.box.compose
+package ru.javersingleton.bdui.component.box.state
 
 import ru.javersingleton.bdui.component.common.Padding
 import ru.javersingleton.bdui.component.common.Padding.Companion.create
