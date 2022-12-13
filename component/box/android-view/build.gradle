@@ -16,7 +16,6 @@ android {
 }
 
 dependencies {
-    implementation libs.bundles.compose
     api project(path: ':engine')
     api project(path: ':component:box:state')
     implementation project(path: ':render:android-view')
