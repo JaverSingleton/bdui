@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.dp
 import ru.javersingleton.bdui.component.box.state.BoxState
 import ru.javersingleton.bdui.component.box.state.BoxStateFactory
@@ -38,7 +39,7 @@ object BoxComponent : ComponentRender<BoxState>(BoxStateFactory) {
                 )
                 .then(modifier)
         ) {
-            state.children.forEach { child ->
+            state.children.value.forEach { child ->
                 InnerComponent(
                     data = child.component,
                     modifier = toModifier(child.params),

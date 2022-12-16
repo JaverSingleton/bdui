@@ -9,7 +9,6 @@ import androidx.compose.ui.unit.dp
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
 import ru.javersingleton.bdui.render.compose.InnerComponent
-import ru.javersingleton.bdui.render.compose.subscribeAsState
 
 object RowComponent : ComponentRender<RowState>(RowStateFactory) {
 
@@ -25,7 +24,7 @@ object RowComponent : ComponentRender<RowState>(RowStateFactory) {
         Row(
             modifier = modifier
         ) {
-            state.children.forEach { child ->
+            state.children.value.forEach { child ->
                 InnerComponent(
                     data = child.component,
                     modifier = toModifier(child.params),

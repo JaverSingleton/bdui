@@ -1,12 +1,13 @@
 package ru.javersingleton.bdui.component.box.state
 
+import ru.javersingleton.bdui.component.common.ImmutableList
 import ru.javersingleton.bdui.component.common.Padding
 import ru.javersingleton.bdui.component.common.Padding.Companion.create
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.field.entity.ComponentData
 
 data class BoxState(
-    val children: List<Child>,
+    val children: ImmutableList<Child>,
     val backgroundColor: String,
     val onClick: (() -> Unit)?,
 ) {
@@ -44,7 +45,7 @@ object BoxStateFactory : ComponentStateFactory<BoxState>() {
                         )
                     )
                 }
-            }.filterNotNull(),
+            }.filterNotNull().let { ImmutableList(it) },
             backgroundColor = prop("backgroundColor").asString() ?: "#00000000",
             onClick = prop("onClick").asInteraction()?.let { callback ->
                 {

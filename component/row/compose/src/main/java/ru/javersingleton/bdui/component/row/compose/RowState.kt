@@ -1,5 +1,6 @@
 package ru.javersingleton.bdui.component.row.compose
 
+import ru.javersingleton.bdui.component.common.ImmutableList
 import ru.javersingleton.bdui.component.common.Padding
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.field.entity.ComponentData
@@ -22,13 +23,13 @@ object RowStateFactory : ComponentStateFactory<RowState>() {
                     )
                 )
             }
-        }.filterNotNull()
+        }.filterNotNull().let { ImmutableList(it) }
     )
 
 }
 
 data class RowState(
-    val children: List<Child>,
+    val children: ImmutableList<Child>,
 ) {
 
     data class Child(

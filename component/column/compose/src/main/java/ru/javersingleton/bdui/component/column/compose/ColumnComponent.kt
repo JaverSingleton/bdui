@@ -26,7 +26,7 @@ object ColumnComponent : ComponentRender<ColumnState>(ColumnStateFactory) {
         Column(
             modifier = modifier
         ) {
-            state.children.forEach { child ->
+            state.children.value.forEach { child ->
                 InnerComponent(
                     data = child.component,
                     modifier = toModifier(child.params),

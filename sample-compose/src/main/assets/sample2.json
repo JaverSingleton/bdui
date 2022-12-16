@@ -54,13 +54,24 @@
           "trueResult": "Online",
           "falseResult": "{{lastSeen}}"
         },
-        "onClick": null
+        "onClick": {
+          "interactionType": "StatePatch",
+          "targetId": "{{self.id}}",
+          "patch": {
+            "online": {
+              "functionType": "Not",
+              "value": "{{online}}"
+            }
+          }
+        }
       },
       "rootComponent": {
+        "id": "rootBox",
         "componentType": "Box",
         "onClick": "{{onClick}}",
         "children": [
           {
+            "id": "rootRow",
             "componentType": "Row",
             "layout_width": "fillMax",
             "layout_padding": {
@@ -71,11 +82,13 @@
             },
             "children": [
               {
+                "id": "avatarBox",
                 "componentType": "Box",
                 "layout_width": 72,
                 "layout_height": 72,
                 "children": [
                   {
+                    "id": "avatarImage",
                     "componentType": "Image",
                     "src": "{{avatar}}",
                     "contentScale": "Crop",
@@ -87,6 +100,7 @@
                     "functionType": "Condition",
                     "value": "{{online}}",
                     "trueResult": {
+                      "id": "indicatorImage",
                       "componentType": "Image",
                       "src": "https://zibuhoker.ru/ifm/indicator.png",
                       "layout_alignment": "BottomEnd",
@@ -104,10 +118,12 @@
                 ]
               },
               {
+                "id": "textColumn",
                 "componentType": "Column",
                 "layout_width": "fillMax",
                 "children": [
                   {
+                    "id": "titleText",
                     "componentType": "Text",
                     "text": "{{name}}",
                     "textSize": 16,
@@ -118,6 +134,7 @@
                     }
                   },
                   {
+                    "id": "subtitleText",
                     "componentType": "Text",
                     "text": "{{targetLastSeen}}",
                     "textSize": 12,
@@ -237,17 +254,7 @@
         "name": "Happy Cat",
         "lastSeen": "21.11.2022",
         "online": true,
-        "id": "contact1",
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact1",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact1.online}}"
-            }
-          }
-        }
+        "id": "contact1"
       },
       {
         "componentType": "ContactItem2",
@@ -277,17 +284,7 @@
         "avatar": "https://zibuhoker.ru/ifm/nyan-cat.jpg",
         "name": "Nyan Cat",
         "lastSeen": "23.11.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact3",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact3.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -295,17 +292,7 @@
         "avatar": "https://i.pinimg.com/736x/ba/92/7f/ba927ff34cd961ce2c184d47e8ead9f6.jpg",
         "name": "Smile Cat",
         "lastSeen": "24.11.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact4",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact4.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -313,17 +300,7 @@
         "avatar": "https://wompampsupport.azureedge.net/fetchimage?siteId=7575&v=2&jpgQuality=100&width=700&url=https%3A%2F%2Fi.kym-cdn.com%2Fphotos%2Fimages%2Fnewsfeed%2F002%2F205%2F309%2F1d3.jpg",
         "name": "Hehe Cat",
         "lastSeen": "25.11.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact5",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact5.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -331,17 +308,7 @@
         "avatar": "https://i.ytimg.com/vi/Zr-qM5Vrd0g/maxresdefault.jpg",
         "name": "Fat Cat",
         "lastSeen": "26.11.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact6",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact6.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -349,17 +316,7 @@
         "avatar": "https://static.displate.com/857x1200/displate/2022-07-07/fb201c5aef2a8558a1eec3a095be6d49_1c1023275f02c2ee7bc146309a812775.jpg",
         "name": "Polite Cat",
         "lastSeen": "27.11.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact7",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact7.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -367,17 +324,7 @@
         "avatar": "https://i0.wp.com/suddenlycat.com/wp-content/uploads/2020/09/Screenshot-2020-08-30-at-3.25.29-PM.png?resize=242%2C300&ssl=1",
         "name": "Poker Cat",
         "lastSeen": "28.11.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact8",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact8.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -385,17 +332,7 @@
         "avatar": "https://i.pinimg.com/564x/4e/c4/f2/4ec4f2d69c9bc6b152abcb420252c3a8.jpg",
         "name": "What Cat",
         "lastSeen": "29.11.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact9",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact9.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -403,17 +340,7 @@
         "avatar": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/2020/02/20/mask_cat.jpg?itok=CTKeCsDz",
         "name": "Mask Cat",
         "lastSeen": "30.11.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact10",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact10.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -421,17 +348,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat1.png",
         "name": "Hidden Cat",
         "lastSeen": "01.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact11",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact11.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -439,17 +356,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat2.png",
         "name": "Sad Cat",
         "lastSeen": "02.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact12",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact12.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -457,17 +364,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat3.png",
         "name": "Captain Cat",
         "lastSeen": "03.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact13",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact13.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -475,17 +372,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat4.png",
         "name": "Money Cat",
         "lastSeen": "04.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact14",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact14.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -493,17 +380,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat5.png",
         "name": "Lazy Cat",
         "lastSeen": "05.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact15",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact15.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -511,17 +388,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat6.png",
         "name": "Crazy Cat",
         "lastSeen": "06.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact16",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact16.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -529,17 +396,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat7.png",
         "name": "Surprised Cat",
         "lastSeen": "07.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact17",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact17.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -547,17 +404,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat8.png",
         "name": "Crying Cat",
         "lastSeen": "08.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact18",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact18.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -565,17 +412,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat9.png",
         "name": "Like Cat",
         "lastSeen": "09.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact19",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact19.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -583,17 +420,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat10.jpg",
         "name": "Boss Cat",
         "lastSeen": "10.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact20",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact20.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -601,17 +428,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat11.jpg",
         "name": "Light Cat",
         "lastSeen": "11.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact21",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact21.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -619,17 +436,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat12.jpg",
         "name": "Bib Cat",
         "lastSeen": "12.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact22",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact22.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -637,17 +444,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat13.jpg",
         "name": "Arms Cat",
         "lastSeen": "13.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact23",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact23.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -655,17 +452,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat14.jpg",
         "name": "Grid Cat",
         "lastSeen": "14.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact24",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact24.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -673,17 +460,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat15.jpg",
         "name": "Hhhh Cat",
         "lastSeen": "15.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact25",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact25.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -691,17 +468,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat16.jpg",
         "name": "Resting Cat",
         "lastSeen": "16.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact26",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact26.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -709,17 +476,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat17.jpg",
         "name": "Sink Cat",
         "lastSeen": "17.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact27",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact27.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -727,17 +484,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat18.jpg",
         "name": "Tired Cat",
         "lastSeen": "18.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact28",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact28.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -745,17 +492,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat19.jpg",
         "name": "Smiling Cat",
         "lastSeen": "19.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact29",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact29.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -763,17 +500,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat20.jpg",
         "name": "Aaaa Cat",
         "lastSeen": "20.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact30",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact30.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -781,17 +508,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat21.jpg",
         "name": "Wow Cat",
         "lastSeen": "21.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact31",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact31.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -799,17 +516,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat22.jpg",
         "name": "Whaaat Cat",
         "lastSeen": "22.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact32",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact32.online}}"
-            }
-          }
-        }
+        "online": false
       },
       {
         "componentType": "ContactItem2",
@@ -817,17 +524,7 @@
         "avatar": "https://zibuhoker.ru/ifm/cats/cat23.jpg",
         "name": "Hover Cat",
         "lastSeen": "23.12.2022",
-        "online": false,
-        "onClick": {
-          "interactionType": "StatePatch",
-          "patch": {
-            "id": "contact33",
-            "online": {
-              "functionType": "Not",
-              "value": "{{contact33.online}}"
-            }
-          }
-        }
+        "online": false
       }
     ]
   }
