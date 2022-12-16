@@ -1,0 +1,14 @@
+plugins {
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.kapt
+}
+
+android {
+    compileSdk 32
+}
+
+dependencies {
+    api project(path: ':engine')
+    api project(path: ':component:common')
+}

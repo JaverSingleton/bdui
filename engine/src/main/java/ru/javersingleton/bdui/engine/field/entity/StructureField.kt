@@ -108,6 +108,14 @@ data class StructureData(
         fields,
     )
 
+    constructor(
+        vararg fields: Pair<String, Value<out ResolvedData>>,
+        id: String? = null,
+    ) : this(
+        id = id,
+        fields = fields.toMap()
+    )
+
     override fun prop(name: String): Value<*> = fields[name] ?: Value.NULL
 
     override fun hasProp(name: String): Boolean = fields.containsKey(name)

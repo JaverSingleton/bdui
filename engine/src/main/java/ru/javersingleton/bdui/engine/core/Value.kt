@@ -16,6 +16,8 @@ interface Value<T : Any?> {
 
 class ConstValue<T : Any?>(override val currentValue: T) : ImmutableValue<T>()
 
+fun <T : Any?> T.asConstValue(): ConstValue<T> = ConstValue(this)
+
 class CalculableValue<T : Any?>(
     private val script: () -> T
 ) : ImmutableValue<T>() {
@@ -23,6 +25,8 @@ class CalculableValue<T : Any?>(
     override val currentValue: T
         get() = script()
 }
+
+fun <T : Any?> T.asCalculableValue(): CalculableValue<T> = CalculableValue{ this }
 
 class LazyValue<T : Any?>(
     script: () -> T
@@ -35,7 +39,9 @@ class LazyValue<T : Any?>(
 
 }
 
-abstract class ImmutableValue<T>: ReadableValue<T> {
+fun <T : Any?> T.asLazyValue(): LazyValue<T> = LazyValue{ this }
+
+abstract class ImmutableValue<T> : ReadableValue<T> {
 
     override fun bindValidityWith(
         child: ReadableValue.Invalidatable,
@@ -48,7 +54,7 @@ abstract class ImmutableValue<T>: ReadableValue<T> {
             }
 
         }
-    
+
 }
 
 @Stable

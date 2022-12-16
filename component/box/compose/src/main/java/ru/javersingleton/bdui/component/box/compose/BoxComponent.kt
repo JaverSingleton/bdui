@@ -10,12 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.dp
+import ru.javersingleton.bdui.component.box.state.BoxState
+import ru.javersingleton.bdui.component.box.state.BoxStateFactory
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
 import ru.javersingleton.bdui.render.compose.InnerComponent
 
-object BoxComponent: ComponentRender<BoxState>(BoxStateFactory) {
+object BoxComponent : ComponentRender<BoxState>(BoxStateFactory) {
 
     override val type: String = "Box"
 
@@ -30,15 +33,13 @@ object BoxComponent: ComponentRender<BoxState>(BoxStateFactory) {
             modifier = Modifier
                 .background(color = Color(parseColor(state.backgroundColor)))
                 .then(
-                    if (state.onClick != null) {
-                        Modifier.clickable { state.onClick.invoke() }
-                    } else {
-                        Modifier
-                    }
+                    state.onClick?.let { onClick ->
+                        Modifier.clickable { onClick.invoke() }
+                    } ?: Modifier
                 )
                 .then(modifier)
         ) {
-            state.children.forEach { child ->
+            state.children.value.forEach { child ->
                 InnerComponent(
                     data = child.component,
                     modifier = toModifier(child.params),
@@ -67,9 +68,10 @@ private fun BoxScope.toModifier(params: BoxState.Child.Params): Modifier {
         params.height.isEmpty() -> result
         else -> throw IllegalArgumentException()
     }
-    if (params.padding != null) {
+    val padding = params.padding
+    if (padding != null) {
         result = result.padding(
-            params.padding.run {
+            padding.run {
                 PaddingValues(
                     start = start.dp,
                     end = end.dp,

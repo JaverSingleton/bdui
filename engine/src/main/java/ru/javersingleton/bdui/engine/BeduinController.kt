@@ -3,10 +3,12 @@ package ru.javersingleton.bdui.engine
 import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.LambdaValue
 import ru.javersingleton.bdui.engine.core.Value
+import ru.javersingleton.bdui.engine.core.asLazyValue
 import ru.javersingleton.bdui.engine.field.Field
 import ru.javersingleton.bdui.engine.field.ResolvedField
 import ru.javersingleton.bdui.engine.field.entity.ComponentData
 import ru.javersingleton.bdui.engine.field.entity.ComponentField
+import ru.javersingleton.bdui.engine.field.entity.PrimitiveData
 import ru.javersingleton.bdui.engine.field.entity.StructureData
 import ru.javersingleton.bdui.engine.interaction.Interaction
 
@@ -30,26 +32,11 @@ class BeduinController(
 
             lastState = value
             lambda.setBody (reason = "rootState changes") {
-                // TODO Избавится от Nullable
-                val args = rememberValue(
-                    "controller@references",
-                    value.componentType
-                ) { MutableArgumentsStorage() }.current!!
-                val paramsField = value.params.resolve(this, args) as ResolvedField<StructureData>
-                val paramsData =
-                    (paramsField.value.current?.unbox() ?: mapOf()) + paramsField.dataWithUserId
-                args.replace(this, paramsData)
-                val componentField = ComponentField(
+                prepareComponentRoot(
+                    scope = this,
                     id = value.id,
-                    componentType = value.componentType,
-                    params = paramsField
-                )
-                val processedField = componentField.resolve(this, args)
-                if (processedField !is ResolvedField) {
-                    throw IllegalArgumentException()
-                }
-
-                processedField.value.current<ComponentData>()
+                    componentField = value
+                ).current
             }
         }
 
@@ -61,6 +48,37 @@ class BeduinController(
 
     override fun sendInteraction(interaction: Interaction) {
         onInteraction(this, interaction)
+    }
+
+    private fun prepareComponentRoot(
+        scope: Lambda.Scope,
+        id: String,
+        componentField: ComponentField
+    ): Value<ComponentData> = scope.run {
+        val args = rememberValue(
+            "$id@references",
+            componentField.componentType
+        ) { MutableArgumentsStorage() }.current!!
+
+        val resolvedStateField = componentField.params.resolve(this, args) as ResolvedField<StructureData>
+
+        val stateProps = (resolvedStateField.value.current?.unbox() ?: mapOf())
+        val markedProps = resolvedStateField.dataWithUserId
+
+        val selfProp = mapOf(
+            "self" to StructureData(
+                "id" to PrimitiveData(value = id).asLazyValue()
+            ).asLazyValue()
+        )
+
+        args.replace(
+            scope = this,
+            refs = stateProps + markedProps + selfProp
+        )
+        val resolvedComponentField = componentField.copy(
+            params = resolvedStateField
+        ).resolve(this, args) as ResolvedField
+        resolvedComponentField.value
     }
 }
 

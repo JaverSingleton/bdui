@@ -12,7 +12,7 @@ abstract class ComponentStateFactory<T : Any?> : ByTypeStrategy.Element<String> 
     internal fun calculate(
         componentType: String,
         scope: Lambda.Scope,
-        args: StructureData?
+        args: StructureData
     ): T {
         Log.d("Beduin", "OnStateCreate: componentType=$componentType")
         return Scope(scope, args).create(componentType)
@@ -22,7 +22,7 @@ abstract class ComponentStateFactory<T : Any?> : ByTypeStrategy.Element<String> 
 
     class Scope(
         private val scope: Lambda.Scope,
-        val args: StructureData?,
+        val args: StructureData,
     ) : Lambda.Scope by scope {
 
         @Suppress("unused")
@@ -83,12 +83,12 @@ abstract class ComponentStateFactory<T : Any?> : ByTypeStrategy.Element<String> 
             return result.toList()
         }
 
-        fun forEach(func: (key: String) -> Unit) = args?.forEach(func)
+        fun forEach(func: (key: String) -> Unit) = args.forEach(func)
 
-        fun prop(name: String): Value<*> = args?.prop(name) ?: Value.NULL
+        fun prop(name: String): Value<*> = args.prop(name)
 
         @Suppress("unused")
-        fun hasProp(name: String): Boolean = args?.hasProp(name) == true
+        fun hasProp(name: String): Boolean = args.hasProp(name)
 
     }
 

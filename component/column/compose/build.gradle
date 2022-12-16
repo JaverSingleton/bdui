@@ -18,6 +18,7 @@ android {
 dependencies {
     implementation libs.bundles.compose
     api project(path: ':engine')
+    api project(path: ':component:column:state')
     api project(path: ':component:common')
     implementation project(path: ':render:compose')
 }

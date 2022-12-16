@@ -5,11 +5,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import ru.javersingleton.bdui.component.button.state.ButtonState
+import ru.javersingleton.bdui.component.button.state.ButtonStateFactory
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
-import ru.javersingleton.bdui.render.compose.subscribeAsState
 
-object ButtonComponent: ComponentRender<ButtonState>(ButtonStateFactory) {
+object ButtonComponent : ComponentRender<ButtonState>(ButtonStateFactory) {
 
     override val type: String = "Button"
 
