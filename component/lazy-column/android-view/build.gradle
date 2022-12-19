@@ -1,0 +1,18 @@
+plugins {
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.kapt
+}
+
+android {
+    compileSdk 32
+}
+
+dependencies {
+    implementation libs.bundles.compose
+    implementation libs.recyclerView
+    api project(path: ':engine')
+    api project(path: ':component:common')
+    api project(path: ':component:lazy-column:state')
+    implementation project(path: ':render:android-view')
+}

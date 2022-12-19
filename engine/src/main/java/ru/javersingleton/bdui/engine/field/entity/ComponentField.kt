@@ -2,7 +2,7 @@ package ru.javersingleton.bdui.engine.field.entity
 
 import androidx.compose.runtime.Stable
 import ru.javersingleton.bdui.engine.ArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.field.*
 
@@ -24,7 +24,7 @@ data class ComponentField(
         params
     )
 
-    override fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<ComponentData> =
+    override fun resolve(scope: Scope, args: ArgumentsStorage): Field<ComponentData> =
         scope.run {
             val externalParamsField = params.resolve(scope, args)
             if (externalParamsField !is ResolvedField) {

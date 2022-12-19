@@ -12,6 +12,8 @@ interface Component {
         state: Value<*>
     ): View
 
+    fun updateState(state: Value<*>)
+
 }
 
 abstract class BaseComponent<T, V : View> : Component {
@@ -35,8 +37,14 @@ abstract class BaseComponent<T, V : View> : Component {
             sub?.unsubscribe()
         }
 
+        updateState(state)
+
+        return view
+    }
+
+    override fun updateState(state: Value<*>) {
         if (this.state == state) {
-            return view
+            return
         }
 
         @Suppress("UNCHECKED_CAST")
@@ -48,7 +56,6 @@ abstract class BaseComponent<T, V : View> : Component {
             onBindState(view, it)
         }
         onBindState(view, targetState.currentQuiet!!)
-        return view
     }
 
     abstract fun onCreateView(parent: ViewGroup): V

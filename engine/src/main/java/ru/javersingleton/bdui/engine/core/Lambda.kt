@@ -192,22 +192,6 @@ class Lambda(
         val output: Lambda
     )
 
-    interface Scope : BeduinContext {
-
-        fun <T : Any?> rememberValue(
-            callId: String,
-            key: Any? = "",
-            func: Scope.() -> T
-        ): Value<T>
-
-        val <T> Value<T>.current: T? get() = current()
-
-        fun <T> Value<*>.current(): T?
-
-        fun <T> Value<*>.current(default: (emptyData: EmptyData) -> T): T
-
-    }
-
     class InvalidationPostponer {
         private val posts: MutableMap<ReadableValue.Invalidatable, List<String>> =
             mutableMapOf()

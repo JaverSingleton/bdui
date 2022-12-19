@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field.entity
 
 import ru.javersingleton.bdui.engine.ArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.field.Field
 import ru.javersingleton.bdui.engine.field.ResolvedData
 import ru.javersingleton.bdui.engine.field.ResolvedField
@@ -17,7 +17,7 @@ data class EmptyField(
     ) : this(id = id ?: newId(), withUserId = id != null)
 
     override fun resolve(
-        scope: Lambda.Scope,
+        scope: Scope,
         args: ArgumentsStorage
     ): Field<EmptyData> = scope.run {
         val resultValue = rememberValue(id, null) { EmptyData(id, withUserId) }

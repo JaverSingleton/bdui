@@ -25,7 +25,7 @@ class ColumnComponent(
     // TODO Переписать выставление состояние, сейчас не меняется layoutParams и позиция
     override fun onBindState(view: LinearLayout, state: ColumnState) {
         with(view) {
-            state.children.forEachIndexed { index, child ->
+            state.children.value.forEachIndexed { index, child ->
                 val targetChild = getOrCreate(child)
                 replaceIfNeeded(
                     index,

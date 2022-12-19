@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field.entity
 
 import ru.javersingleton.bdui.engine.ArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
 import ru.javersingleton.bdui.engine.field.*
@@ -10,7 +10,7 @@ import ru.javersingleton.bdui.engine.field.*
 data class ReferenceField(
     override val id: String,
     override val withUserId: Boolean,
-    private val refFieldName: String
+    val refFieldName: String
 ) : Field<ResolvedData> {
 
     constructor(
@@ -19,7 +19,7 @@ data class ReferenceField(
     ) : this(id = id ?: newId(), withUserId = id != null, refFieldName)
 
     @Suppress("UNCHECKED_CAST")
-    override fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<ResolvedData> = scope.run {
+    override fun resolve(scope: Scope, args: ArgumentsStorage): Field<ResolvedData> = scope.run {
         val resultValue: Value<ResolvedData> = rememberValue(id, setOf(args, refFieldName)) {
             val refPath = refFieldName.split(".")
             var result: Value<*>? = args[refPath[0]].current

@@ -1,6 +1,6 @@
 package ru.javersingleton.bdui.function.base
 
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.field.ResolvedData
 import ru.javersingleton.bdui.engine.field.entity.ArrayData
@@ -11,7 +11,7 @@ object CombineArraysFunction : Function {
 
     override val type: String = "CombineArrays"
 
-    override fun calculate(scope: Lambda.Scope, id: String, params: StructureData): Value<ResolvedData> =
+    override fun calculate(scope: Scope, id: String, params: StructureData): Value<ResolvedData> =
         scope.run {
             rememberValue(id, params) {
                 val values: ArrayData? = params.prop("arrays").current()

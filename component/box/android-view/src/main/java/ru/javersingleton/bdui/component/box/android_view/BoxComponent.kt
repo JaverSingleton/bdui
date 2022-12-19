@@ -24,7 +24,7 @@ class BoxComponent(
             state.onClick?.let { callback ->
                 setOnClickListener { callback() }
             }
-            state.children.forEachIndexed { index, child ->
+            state.children.value.forEachIndexed { index, child ->
                 val targetChild = getOrCreate(child)
                 replaceIfNeeded(
                     index,

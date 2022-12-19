@@ -1,6 +1,6 @@
 package ru.javersingleton.bdui.engine
 
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.core.Value
 
 class MutableArgumentsStorage : ArgumentsStorage {
@@ -11,7 +11,7 @@ class MutableArgumentsStorage : ArgumentsStorage {
         values[refName] ?: throw IllegalArgumentException("Field $refName not found")
 
     fun replace(
-        scope: Lambda.Scope,
+        scope: Scope,
         refs: Map<String, Value<*>>
     ) = scope.run {
         val targetValues = mutableMapOf<String, Value<Value<*>>>()

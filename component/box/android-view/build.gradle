@@ -6,13 +6,6 @@ plugins {
 
 android {
     compileSdk 32
-
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.get()
-    }
 }
 
 dependencies {

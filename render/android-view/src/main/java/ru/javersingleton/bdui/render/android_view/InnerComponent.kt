@@ -7,7 +7,6 @@ import ru.javersingleton.bdui.engine.field.entity.ComponentData
 class InnerComponent(
     private val context: BeduinViewContext
 ) {
-
     private var componentFactory: ComponentFactory<*>? = null
     private var _component: Component? = null
     private val component: Component get() = _component!!
@@ -25,6 +24,12 @@ class InnerComponent(
         _component = targetComponentFactory.createComponent(context)
 
         return component.createOrUpdateView(parent, state.value)
+    }
+
+    fun updateState(
+        state: ComponentData
+    ) {
+        component.updateState(state.value)
     }
 
 }
