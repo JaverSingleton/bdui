@@ -4,72 +4,62 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.LinearLayout
+import ru.javersingleton.bdui.component.column.android_view.R
 import ru.javersingleton.bdui.component.column.state.ColumnState
 import ru.javersingleton.bdui.render.android_view.BaseComponent
 import ru.javersingleton.bdui.render.android_view.BeduinViewContext
-import ru.javersingleton.bdui.render.android_view.InnerComponent
-import ru.javersingleton.bdui.render.android_view.replaceIfNeeded
+import ru.javersingleton.bdui.render.android_view.ContainerHelper
 
 class ColumnComponent(
     private val beduinContext: BeduinViewContext
-) : BaseComponent<ColumnState, LinearLayout>() {
+) : BaseComponent<ColumnState, LinearLayout>(),
+    ContainerHelper.LayoutParamsHelper<ColumnState.Child> {
 
     override val type: String = "Column"
-    private val children: MutableMap<String, ColumnChild> = mutableMapOf()
+    private lateinit var helper: ContainerHelper<ColumnState.Child>
 
-    override fun onCreateView(parent: ViewGroup): LinearLayout =
-        LinearLayout(parent.context).apply {
+    override fun onCreateView(parent: ViewGroup): LinearLayout{
+        val view = LinearLayout(parent.context).apply {
             orientation = LinearLayout.VERTICAL
         }
 
-    // TODO Переписать выставление состояние, сейчас не меняется layoutParams и позиция
+        helper = ContainerHelper(
+            beduinContext = beduinContext,
+            container = view,
+            layoutParamsHelper = this@ColumnComponent,
+            viewStorageTag = R.id.column_child_component
+        )
+
+        return view
+    }
+
     override fun onBindState(view: LinearLayout, state: ColumnState) {
-        with(view) {
-            state.children.value.forEachIndexed { index, child ->
-                val targetChild = getOrCreate(child)
-                replaceIfNeeded(
-                    index,
-                    targetChild.component.createOrUpdateView(view, child.component),
-                    targetChild.layoutParams.second
+        helper.setItems(
+            newItems = state.children.value,
+            componentData = { item -> item.component }
+        )
+    }
+
+    override fun generateLayoutParams(item: ColumnState.Child): ViewGroup.LayoutParams =
+        with(item.params) {
+            LinearLayout.LayoutParams(
+                parseSizeDp(width),
+                parseSizeDp(height)
+            ).apply {
+                setMargins(
+                    padding?.start ?: 0,
+                    padding?.top ?: 0,
+                    padding?.end ?: 0,
+                    padding?.bottom ?: 0,
                 )
             }
         }
-    }
 
-    private fun getOrCreate(childState: ColumnState.Child): ColumnChild {
-        val targetChild = children[childState.component.id]?.let { currentChild ->
-            if (currentChild.layoutParams.first == childState.params) {
-                currentChild
-            } else {
-                currentChild.copy(
-                    layoutParams = childState.params to createLayoutParams(childState.params)
-                )
-            }
-        } ?: ColumnChild(
-            layoutParams = childState.params to createLayoutParams(childState.params),
-            component = InnerComponent(beduinContext)
-        )
-        children[childState.component.id] = targetChild
-        return targetChild
-    }
+    override fun areLayoutParamsTheSame(
+        oldItem: ColumnState.Child,
+        newItem: ColumnState.Child
+    ): Boolean = oldItem.params == newItem.params
 
-}
-
-data class ColumnChild(
-    val layoutParams: Pair<ColumnState.Child.Params, LinearLayout.LayoutParams>,
-    val component: InnerComponent
-)
-
-fun createLayoutParams(params: ColumnState.Child.Params) = LinearLayout.LayoutParams(
-    parseSizeDp(params.width),
-    parseSizeDp(params.height)
-).apply {
-    setMargins(
-        params.padding?.start ?: 0,
-        params.padding?.top ?: 0,
-        params.padding?.end ?: 0,
-        params.padding?.bottom ?: 0,
-    )
 }
 
 fun parseSizeDp(value: String): Int = when (value) {

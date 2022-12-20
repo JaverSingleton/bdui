@@ -2,6 +2,10 @@ package ru.javersingleton.bdui.component.lazy_column.android_view
 
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
+import android.view.ViewGroup.MarginLayoutParams
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DiffUtil.DiffResult
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.javersingleton.bdui.component.lazy_column.state.LazyColumnState
@@ -34,9 +38,19 @@ class LazyColumnAdapter(
 ) : RecyclerView.Adapter<LazyColumnAdapter.ViewHolder>() {
 
     var items: List<LazyColumnState.Child> = listOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
+        set(newItems) {
+            val oldItems = field
+            field = newItems
+            calculateDiff(
+                oldItems,
+                newItems,
+                areItemsTheSame = { oldItem, newItem ->
+                    oldItem.component.id == newItem.component.id
+                },
+                areContentsTheSame = { oldItem, newItem ->
+                    oldItem == newItem
+                }
+            ).dispatchUpdatesTo(this)
         }
 
     private val decoder: MutableMap<Int, String> = mutableMapOf()
@@ -47,9 +61,9 @@ class LazyColumnAdapter(
         val emptyComponentData = componentFactory.createEmptyState(context)
         val component = componentFactory.createComponent(context)
         val view = component.createOrUpdateView(parent, emptyComponentData.value)
-        view.layoutParams = RecyclerView.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
+        view.layoutParams = LayoutParams(
+            LayoutParams.MATCH_PARENT,
+            LayoutParams.WRAP_CONTENT,
         )
         return ViewHolder(
             view,
@@ -58,9 +72,11 @@ class LazyColumnAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.component.updateState(items[position].component.value)
-//        holder.view.layoutParams = TODO
-        // TODO Добавить LayoutParams
+        val child = items[position]
+        holder.component.updateState(child.component.value)
+        if (holder.state?.params != child.params) {
+            holder.view.layoutParams = createLayoutParams(child.params)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -72,8 +88,60 @@ class LazyColumnAdapter(
     override fun getItemCount(): Int = items.size
 
     class ViewHolder(
-        view: View,
-        val component: Component
+        val view: View,
+        val component: Component,
+        val state: LazyColumnState.Child? = null,
     ) : RecyclerView.ViewHolder(view)
 
+    // TODO Вынести в общие модули
+    fun createLayoutParams(params: LazyColumnState.Child.Params) = MarginLayoutParams(
+        parseSizeDp(params.width),
+        parseSizeDp(params.height)
+    ).apply {
+        setMargins(
+            params.padding?.start ?: 0,
+            params.padding?.top ?: 0,
+            params.padding?.end ?: 0,
+            params.padding?.bottom ?: 0,
+        )
+    }
+
+    fun parseSizeDp(value: String): Int = when (value) {
+        "fillMax" -> LayoutParams.MATCH_PARENT
+        "wrapContent" -> LayoutParams.WRAP_CONTENT
+        // TODO Implement fix size supporting
+        else -> throw IllegalArgumentException("Couldn't parse size ")
+    }
+
 }
+
+fun <T> calculateDiff(
+    oldItems: List<T>,
+    newItems: List<T>,
+    areItemsTheSame: (oldItem: T, newItem: T) -> Boolean,
+    areContentsTheSame: (oldItem: T, newItem: T) -> Boolean
+): DiffResult = DiffUtil.calculateDiff(
+    object : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldItems.size
+
+        override fun getNewListSize(): Int = newItems.size
+
+        override fun areItemsTheSame(
+            oldItemPosition: Int,
+            newItemPosition: Int
+        ): Boolean = areItemsTheSame(
+            oldItems[oldItemPosition],
+            newItems[newItemPosition]
+        )
+
+        override fun areContentsTheSame(
+            oldItemPosition: Int,
+            newItemPosition: Int
+        ): Boolean = areContentsTheSame(
+            oldItems[oldItemPosition],
+            newItems[newItemPosition]
+        )
+
+    }
+)
