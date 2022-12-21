@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field
 
 import ru.javersingleton.bdui.engine.ArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.core.Value
 
 data class ResolvedField<T: ResolvedData>(
@@ -18,7 +18,7 @@ data class ResolvedField<T: ResolvedData>(
         dataWithUserId = mapOf(),
     )
 
-    override fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<T> = this
+    override fun resolve(scope: Scope, args: ArgumentsStorage): Field<T> = this
 
     override fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<T> = this
 

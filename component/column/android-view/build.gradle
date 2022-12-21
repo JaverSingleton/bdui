@@ -6,9 +6,13 @@ plugins {
 
 android {
     compileSdk 32
+    defaultConfig {
+        minSdk 20
+    }
 }
 
 dependencies {
+    implementation libs.recyclerView
     api project(path: ':engine')
     api project(path: ':component:column:state')
     implementation project(path: ':render:android-view')

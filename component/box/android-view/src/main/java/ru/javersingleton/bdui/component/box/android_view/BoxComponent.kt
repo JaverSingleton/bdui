@@ -1,74 +1,61 @@
 package ru.javersingleton.bdui.component.box.android_view
 
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import ru.javersingleton.bdui.component.box.state.BoxState
-import ru.javersingleton.bdui.render.android_view.BaseComponent
-import ru.javersingleton.bdui.render.android_view.BeduinViewContext
-import ru.javersingleton.bdui.render.android_view.InnerComponent
-import ru.javersingleton.bdui.render.android_view.replaceIfNeeded
+import ru.javersingleton.bdui.render.android_view.*
 
 class BoxComponent(
     private val beduinContext: BeduinViewContext
-) : BaseComponent<BoxState, FrameLayout>() {
+) : BaseComponent<BoxState, FrameLayout>(), ContainerHelper.LayoutParamsHelper<BoxState.Child> {
 
     override val type: String = "Box"
-    private val children: MutableMap<String, BoxChild> = mutableMapOf()
+    private lateinit var helper: ContainerHelper<BoxState.Child>
 
-    override fun onCreateView(parent: ViewGroup): FrameLayout = FrameLayout(parent.context)
+    override fun onCreateView(parent: ViewGroup): FrameLayout {
+        val view = FrameLayout(parent.context)
+        helper = ContainerHelper(
+            beduinContext = beduinContext,
+            container = view,
+            layoutParamsHelper = this,
+            viewStorageTag = R.id.box_child_component
+        )
+        return view
+    }
 
-    // TODO Переписать выставление состояние, сейчас не меняется layoutParams и позиция
     override fun onBindState(view: FrameLayout, state: BoxState) {
-        with(view) {
+        view.setOnClickListener(
             state.onClick?.let { callback ->
-                setOnClickListener { callback() }
+                View.OnClickListener { callback() }
             }
-            state.children.forEachIndexed { index, child ->
-                val targetChild = getOrCreate(child)
-                replaceIfNeeded(
-                    index,
-                    targetChild.component.createOrUpdateView(view, child.component),
-                    targetChild.layoutParams.second
+        )
+        helper.setItems(
+            state.children.value,
+            { it.component }
+        )
+    }
+
+    override fun generateLayoutParams(item: BoxState.Child) =
+        with(item.params) {
+            LinearLayout.LayoutParams(
+                parseSizeDp(width),
+                parseSizeDp(height)
+            ).apply {
+                setMargins(
+                    padding?.start ?: 0,
+                    padding?.top ?: 0,
+                    padding?.end ?: 0,
+                    padding?.bottom ?: 0,
                 )
             }
         }
-    }
 
-    private fun getOrCreate(childState: BoxState.Child): BoxChild {
-        val targetChild = children[childState.component.id]?.let { currentChild ->
-            if (currentChild.layoutParams.first == childState.params) {
-                currentChild
-            } else {
-                currentChild.copy(
-                    layoutParams = childState.params to createLayoutParams(childState.params)
-                )
-            }
-        } ?: BoxChild(
-            layoutParams = childState.params to createLayoutParams(childState.params),
-            component = InnerComponent(beduinContext)
-        )
-        children[childState.component.id] = targetChild
-        return targetChild
-    }
-
-}
-
-data class BoxChild(
-    val layoutParams: Pair<BoxState.Child.Params, LinearLayout.LayoutParams>,
-    val component: InnerComponent
-)
-
-fun createLayoutParams(params: BoxState.Child.Params) = LinearLayout.LayoutParams(
-    parseSizeDp(params.width),
-    parseSizeDp(params.height)
-).apply {
-    setMargins(
-        params.padding?.start ?: 0,
-        params.padding?.top ?: 0,
-        params.padding?.end ?: 0,
-        params.padding?.bottom ?: 0,
-    )
+    override fun areLayoutParamsTheSame(
+        oldItem: BoxState.Child,
+        newItem: BoxState.Child
+    ): Boolean = oldItem.params == newItem.params
 }
 
 fun parseSizeDp(value: String): Int = when (value) {

@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field.entity
 
 import ru.javersingleton.bdui.engine.ArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
 import ru.javersingleton.bdui.engine.field.*
@@ -18,7 +18,7 @@ data class StructureField(
         fields: Map<String, Field<*>>
     ) : this(id = id ?: newId(), withUserId = id != null, fields)
 
-    override fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<StructureData> =
+    override fun resolve(scope: Scope, args: ArgumentsStorage): Field<StructureData> =
         scope.run {
             val targetFields = fields.map { (name, field) -> name to field.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {

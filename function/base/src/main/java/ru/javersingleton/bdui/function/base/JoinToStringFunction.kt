@@ -1,6 +1,6 @@
 package ru.javersingleton.bdui.function.base
 
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.field.ResolvedData
 import ru.javersingleton.bdui.engine.field.entity.ArrayData
@@ -14,7 +14,7 @@ object JoinToStringFunction : Function {
 
 
     override fun calculate(
-        scope: Lambda.Scope,
+        scope: Scope,
         id: String,
         params: StructureData
     ): Value<ResolvedData> =

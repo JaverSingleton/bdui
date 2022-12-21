@@ -16,4 +16,5 @@ android {
 }
 
 dependencies {
+    implementation libs.bundles.compose
 }

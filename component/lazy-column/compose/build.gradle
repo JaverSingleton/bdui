@@ -19,5 +19,6 @@ dependencies {
     implementation libs.bundles.compose
     api project(path: ':engine')
     api project(path: ':component:common')
+    api project(path: ':component:lazy-column:state')
     implementation project(path: ':render:compose')
 }

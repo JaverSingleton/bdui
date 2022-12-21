@@ -1,0 +1,29 @@
+{
+  "components": {},
+  "state": {
+    "id": "root2",
+    "componentType": "LazyColumn",
+    "children": [
+      {
+        "id": "addButton",
+        "componentType": "Button",
+        "text": "Add Button",
+        "onClick": {
+          "interactionType": "StatePatch",
+          "patch": {
+            "id": "root2",
+            "children": {
+              "functionType": "CombineArrays",
+              "arrays": [
+                {
+                  "componentType": "Button",
+                  "text": "New button"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ]
+  }
+}

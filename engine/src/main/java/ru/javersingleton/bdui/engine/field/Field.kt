@@ -1,12 +1,12 @@
 package ru.javersingleton.bdui.engine.field
 
 import ru.javersingleton.bdui.engine.ArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import java.util.*
 
 interface Field<T : ResolvedData> {
 
-    fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<T>
+    fun resolve(scope: Scope, args: ArgumentsStorage): Field<T>
 
     fun mergeDeeply(targetFieldId: String, targetField: Field<*>): Field<T>
 

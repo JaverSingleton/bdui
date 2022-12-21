@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field.entity
 
 import ru.javersingleton.bdui.engine.ArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.currentQuiet
 import ru.javersingleton.bdui.engine.field.Field
@@ -12,7 +12,7 @@ import ru.javersingleton.bdui.engine.field.newId
 data class ArrayField(
     override val id: String,
     override val withUserId: Boolean,
-    private val fields: List<Field<*>>,
+    val fields: List<Field<*>>,
 ) : Field<ArrayData> {
 
     constructor(
@@ -24,7 +24,7 @@ data class ArrayField(
         fields
     )
 
-    override fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<ArrayData> =
+    override fun resolve(scope: Scope, args: ArgumentsStorage): Field<ArrayData> =
         scope.run {
             val targetFields = fields.map { field -> field.resolve(this, args) }
             if (targetFields.hasUnresolvedFields()) {

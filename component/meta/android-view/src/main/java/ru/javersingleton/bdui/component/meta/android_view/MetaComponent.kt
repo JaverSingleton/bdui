@@ -21,4 +21,10 @@ class MetaComponent(
         return rootComponent.createOrUpdateView(parent, componentState!!.childComponent)
     }
 
+    override fun updateState(state: Value<*>) {
+        @Suppress("UNCHECKED_CAST")
+        val componentState = (state as Value<MetaState>).currentQuiet
+        rootComponent.updateState(componentState!!.childComponent)
+    }
+
 }

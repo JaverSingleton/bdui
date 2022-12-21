@@ -11,19 +11,14 @@
         "componentType": "Box",
         "children": [
           {
-            "componentType": "Column",
-            "children": [
-              {
-                "componentType": "Button",
-                "text": "{{title1}}",
-                "onClick": "{{onClick1}}"
-              },
-              {
-                "componentType": "Button",
-                "text": "{{title2}}",
-                "onClick": "{{onClick2}}"
-              }
-            ]
+            "componentType": "Button",
+            "text": "{{title1}}",
+            "onClick": "{{onClick1}}"
+          },
+          {
+            "componentType": "Button",
+            "text": "{{title2}}",
+            "onClick": "{{onClick2}}"
           }
         ]
       }
@@ -31,14 +26,32 @@
   },
   "state": {
     "id": "root1",
-    "componentType": "TwoButtons",
-    "title1": "Button1",
-    "onClick1": {
-      "interactionType": "StatePatch",
-      "patch": {
-        "id": "root1",
-        "title2": "Clicked Button1"
+    "componentType": "Column",
+    "children": [
+      {
+        "id": "twoButtons2",
+        "componentType": "TwoButtons",
+        "title1": "Button1",
+        "onClick1": {
+          "interactionType": "StatePatch",
+          "patch": {
+            "id": "twoButtons2",
+            "title1": "Clicked Button2"
+          }
+        }
+      },
+      {
+        "id": "twoButtons1",
+        "componentType": "TwoButtons",
+        "title1": "Button2",
+        "onClick1": {
+          "interactionType": "StatePatch",
+          "patch": {
+            "id": "twoButtons1",
+            "title1": "Clicked Button1"
+          }
+        }
       }
-    }
+    ]
   }
 }

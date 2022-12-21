@@ -12,5 +12,6 @@ android {
 }
 
 dependencies {
+    implementation libs.recyclerView
     api project(path: ':engine')
 }

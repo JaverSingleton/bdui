@@ -1,17 +1,17 @@
 package ru.javersingleton.bdui.engine
 
 import android.util.Log
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.field.*
 import ru.javersingleton.bdui.engine.field.entity.*
 import ru.javersingleton.bdui.engine.register.ByTypeStrategy
+import ru.javersingleton.bdui.engine.core.Scope as CoreScope
 
 abstract class ComponentStateFactory<T : Any?> : ByTypeStrategy.Element<String> {
 
-    internal fun calculate(
+    fun calculate(
         componentType: String,
-        scope: Lambda.Scope,
+        scope: CoreScope,
         args: StructureData
     ): T {
         Log.d("Beduin", "OnStateCreate: componentType=$componentType")
@@ -21,9 +21,9 @@ abstract class ComponentStateFactory<T : Any?> : ByTypeStrategy.Element<String> 
     abstract fun Scope.create(componentType: String): T
 
     class Scope(
-        private val scope: Lambda.Scope,
+        private val scope: CoreScope,
         val args: StructureData,
-    ) : Lambda.Scope by scope {
+    ) : CoreScope by scope {
 
         @Suppress("unused")
         fun Value<*>.asComponent(): ComponentData? = current()

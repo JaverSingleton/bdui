@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.javersingleton.bdui.component.lazy_column.state.LazyColumnState
+import ru.javersingleton.bdui.component.lazy_column.state.LazyColumnStateFactory
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.render.compose.ComponentRender
 import ru.javersingleton.bdui.render.compose.InnerComponent
@@ -68,7 +70,7 @@ private fun LazyItemScope.toModifier(params: LazyColumnState.Child.Params): Modi
     }
     if (params.padding != null) {
         result = result.padding(
-            params.padding.run {
+            params.padding!!.run {
                 PaddingValues(
                     start = start.dp,
                     end = end.dp,

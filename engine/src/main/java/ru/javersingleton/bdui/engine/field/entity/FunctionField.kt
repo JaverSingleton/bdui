@@ -1,7 +1,7 @@
 package ru.javersingleton.bdui.engine.field.entity
 
 import ru.javersingleton.bdui.engine.ArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
+import ru.javersingleton.bdui.engine.core.Scope
 import ru.javersingleton.bdui.engine.field.Field
 import ru.javersingleton.bdui.engine.field.ResolvedData
 import ru.javersingleton.bdui.engine.field.ResolvedField
@@ -10,8 +10,8 @@ import ru.javersingleton.bdui.engine.field.newId
 data class FunctionField(
     override val id: String,
     override val withUserId: Boolean,
-    private val functionType: String,
-    private val params: Field<StructureData>,
+    val functionType: String,
+    val params: Field<StructureData>,
 ) : Field<ResolvedData> {
 
     constructor(
@@ -20,7 +20,7 @@ data class FunctionField(
         params: Field<StructureData>
     ) : this(id = id ?: newId(), withUserId = id != null, functionType, params)
 
-    override fun resolve(scope: Lambda.Scope, args: ArgumentsStorage): Field<ResolvedData> =
+    override fun resolve(scope: Scope, args: ArgumentsStorage): Field<ResolvedData> =
         scope.run {
             val params = params.resolve(this, args)
             if (params !is ResolvedField<StructureData>) {

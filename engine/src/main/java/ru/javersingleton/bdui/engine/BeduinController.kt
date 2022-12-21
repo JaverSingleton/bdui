@@ -1,9 +1,6 @@
 package ru.javersingleton.bdui.engine
 
-import ru.javersingleton.bdui.engine.core.Lambda
-import ru.javersingleton.bdui.engine.core.LambdaValue
-import ru.javersingleton.bdui.engine.core.Value
-import ru.javersingleton.bdui.engine.core.asLazyValue
+import ru.javersingleton.bdui.engine.core.*
 import ru.javersingleton.bdui.engine.field.Field
 import ru.javersingleton.bdui.engine.field.ResolvedField
 import ru.javersingleton.bdui.engine.field.entity.ComponentData
@@ -51,7 +48,7 @@ class BeduinController(
     }
 
     private fun prepareComponentRoot(
-        scope: Lambda.Scope,
+        scope: Scope,
         id: String,
         componentField: ComponentField
     ): Value<ComponentData> = scope.run {

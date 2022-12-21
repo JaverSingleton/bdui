@@ -2,7 +2,6 @@ package ru.javersingleton.bdui.component.meta.state
 
 import ru.javersingleton.bdui.engine.ComponentStateFactory
 import ru.javersingleton.bdui.engine.MutableArgumentsStorage
-import ru.javersingleton.bdui.engine.core.Lambda
 import ru.javersingleton.bdui.engine.core.Value
 import ru.javersingleton.bdui.engine.core.asLazyValue
 import ru.javersingleton.bdui.engine.field.ResolvedField
@@ -35,7 +34,7 @@ object MetaStateFactory : ComponentStateFactory<MetaState>() {
     }
 
     private fun prepareComponentRoot(
-        scope: Lambda.Scope,
+        scope: Scope,
         id: String,
         componentField: ComponentField,
         stateField: StructureField,
